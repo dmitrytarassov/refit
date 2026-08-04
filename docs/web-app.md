@@ -4,6 +4,8 @@ An SPA on Vite + React 19 (React Compiler via babel-plugin) on top of `lib`. **N
 
 Run: `bun run dev`, build: `bun run build`, lint: `bun run lint`.
 
+Deploy: GitHub Pages via `.github/workflows/deploy.yml` (push to `main` → build → `actions/deploy-pages`, site at `https://dmitrytarassov.github.io/refit/`). The workflow passes `BASE_PATH=/refit/` to the build; `vite.config.ts` reads it into `base`, and `BrowserRouter` gets `basename={import.meta.env.BASE_URL}` — both are required for a project-pages subpath, or the site loads blank / links escape to the domain root.
+
 The bundle is sliced into chunks: heavy dependencies don't load until needed. `@garmin/fitsdk` is pulled in via dynamic `import()` inside `decodeActivity` (`use-fit-processing`) and `use-enhance-download`; recharts with all the dashboard cards — via `React.lazy(ActivityDashboard)` in `DashboardPanel` (rendered only in the `ready` status, fallback — "Loading dashboard…"); Leaflet is another lazy boundary inside `ActivityDashboard` (`RouteMapCard`, fallback `null`).
 
 ## Navigation
