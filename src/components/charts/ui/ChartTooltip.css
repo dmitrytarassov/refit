@@ -1,0 +1,36 @@
+.chart-tooltip {
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgb(15 18 32 / 0.12);
+
+  .chart-tooltip-time {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .chart-tooltip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .chart-tooltip-name {
+    opacity: 0.75;
+  }
+
+  .chart-tooltip-value {
+    margin-left: auto;
+    padding-left: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+}

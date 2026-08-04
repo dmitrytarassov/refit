@@ -1,0 +1,52 @@
+.help-tip {
+  position: relative;
+  display: inline-flex;
+
+  & .help-tip-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--text-muted);
+    cursor: help;
+
+    &:hover {
+      color: var(--text-secondary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+    }
+  }
+
+  & .help-tip-bubble {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: -8px;
+    z-index: 10;
+    width: 260px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-card);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.12s ease;
+  }
+
+  &:hover .help-tip-bubble,
+  & .help-tip-trigger:focus-visible + .help-tip-bubble {
+    opacity: 1;
+    visibility: visible;
+  }
+}

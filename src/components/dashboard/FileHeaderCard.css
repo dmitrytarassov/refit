@@ -1,0 +1,115 @@
+.file-header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  .file-header-card-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .file-header-card-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--success-tint);
+    color: var(--success);
+  }
+
+  .file-header-card-text {
+    min-width: 0;
+  }
+
+  .file-header-card-name {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .file-header-card-meta {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .file-header-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .file-header-card-secondary {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+  }
+
+  .file-header-card-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    color: var(--ink-on);
+
+    &:hover {
+      background: var(--ink-hover);
+      border-color: var(--ink-hover);
+    }
+
+    &:active {
+      background: var(--ink-active);
+      border-color: var(--ink-active);
+    }
+  }
+
+  .file-header-card-kebab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.dashboard-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+
+  & .dashboard-mid-row,
+  & .dashboard-bottom-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+
+    @media (max-width: 1100px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+.dashboard-processing,
+.dashboard-error {
+  color: var(--text-secondary);
+  padding: 24px;
+}
+
+.dashboard-error {
+  color: var(--danger-text);
+}

@@ -1,0 +1,13 @@
+.power-curve-plot {
+  min-width: 0;
+}
+
+.power-curve-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}

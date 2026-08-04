@@ -1,0 +1,13 @@
+.heart-rate-chart-plot {
+  min-width: 0;
+}
+
+.heart-rate-chart-empty {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}

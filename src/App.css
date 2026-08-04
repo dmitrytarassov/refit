@@ -1,0 +1,21 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  align-items: stretch;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-main {
+  min-width: 0;
+  padding: 24px;
+}

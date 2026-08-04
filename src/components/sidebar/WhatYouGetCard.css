@@ -1,0 +1,51 @@
+.what-you-get-card {
+  padding: 20px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  .what-you-get-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  .what-you-get-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .what-you-get-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .what-you-get-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--ink-tint);
+    color: var(--ink-fg);
+  }
+
+  .what-you-get-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .what-you-get-item-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}

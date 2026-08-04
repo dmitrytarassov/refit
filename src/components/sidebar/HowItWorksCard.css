@@ -1,0 +1,53 @@
+.how-it-works-card {
+  padding: 20px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  .how-it-works-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  .how-it-works-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .how-it-works-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .how-it-works-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--ink-on);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .how-it-works-step-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .how-it-works-step-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}

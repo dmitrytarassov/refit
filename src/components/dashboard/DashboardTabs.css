@@ -1,0 +1,30 @@
+.dashboard-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+
+  .dashboard-tabs-tab {
+    padding: 10px 14px;
+    margin-bottom: -1px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    cursor: default;
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: -2px;
+    }
+  }
+
+  .dashboard-tabs-active {
+    color: var(--ink-fg);
+    border-bottom-color: var(--ink);
+  }
+}
