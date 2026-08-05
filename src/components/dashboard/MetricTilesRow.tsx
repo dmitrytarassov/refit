@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 
+import { METRIC_HELP } from "./metric-help";
 import { MetricTile } from "./ui/MetricTile";
 
 import { useActivitySummary } from "../../hooks/use-activity-summary";
@@ -30,6 +31,7 @@ export function MetricTilesRow({
         value={metrics.avgPower != null ? String(metrics.avgPower) : "—"}
         unit={metrics.avgPower != null ? "W" : undefined}
         muted={metrics.avgPower == null}
+        help={METRIC_HELP.avgPower}
       />
       <MetricTile
         label="Normalized Power"
@@ -40,17 +42,20 @@ export function MetricTilesRow({
         }
         unit={metrics.normalizedPower != null ? "W" : undefined}
         muted={metrics.normalizedPower == null}
+        help={METRIC_HELP.normalizedPower}
       />
       <MetricTile
         label="Est. FTP"
         value={ftp != null ? String(ftp.watts) : "—"}
         unit={ftp != null ? "W" : undefined}
         muted={ftp == null}
+        help={METRIC_HELP.ftp}
       />
       <MetricTile
         label="TSS"
         value={tss != null ? String(tss) : "—"}
         muted={tss == null}
+        help={METRIC_HELP.tss}
       />
     </section>
   );

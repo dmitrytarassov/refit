@@ -1,4 +1,5 @@
 .metric-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -7,6 +8,12 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   min-width: 0;
+
+  .metric-tile-help {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
 
   .metric-tile-label {
     font-size: 13px;

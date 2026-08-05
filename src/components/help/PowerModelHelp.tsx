@@ -20,9 +20,13 @@ F_inertia = m · a
         push negative watts into pedals. Power is also zero at cadence 0
         (coasting) and below 0.5 m/s (standing). Air density ρ comes from the
         barometric formula using the record&rsquo;s temperature and altitude (a
-        ±3–5% effect on the aero term). Acceleration a is a central difference
-        of speed, capped at 3 m/s², and not computed across pauses or data gaps
-        (Δt &gt; 10 s). Mass m is bike + rider.
+        ±3–5% effect on the aero term). The device speed series is cleaned first
+        with a two-sided Hampel filter (±5-record window, 5σ, σ = max(1.4826 ·
+        MAD, 0.5 m/s); outliers replaced with the window median) — a single
+        glitched sample would otherwise spike both the aero term and the
+        derivative. Acceleration a is a central difference of the filtered
+        speed, capped at 3 m/s², and not computed across pauses or data gaps (Δt
+        &gt; 10 s). Mass m is bike + rider.
       </p>
 
       <h4>CdA — riding position</h4>

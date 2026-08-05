@@ -14,7 +14,8 @@ import { ThemeContext } from "./theme/theme-context";
 
 function App(): ReactElement {
   const theme = useThemeState();
-  const { state, processFile, updateSettings } = useFitProcessing();
+  const { state, processFile, processUrl, updateSettings, reset } =
+    useFitProcessing();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
 
@@ -45,7 +46,12 @@ function App(): ReactElement {
           busy={state.status === "processing"}
         />
         <main className="app-main">
-          <DashboardPanel state={state} onSettingsChange={updateSettings} />
+          <DashboardPanel
+            state={state}
+            onSettingsChange={updateSettings}
+            onLoadExample={processUrl}
+            onReset={reset}
+          />
         </main>
       </div>
     );

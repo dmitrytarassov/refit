@@ -20,7 +20,7 @@
 
 ## Metrics (FTP is estimated from the recording as a lower bound — see docs/ftp-estimation.md; manual FTP in settings — later)
 
-- [ ] Intensity Factor — the tile was removed (2026-08-04) in favor of Est. FTP; think about where to bring IF back (tooltip on TSS? Training Load?). IF = NP / FTP is already trivial on top of `useFTP`.
+- [x] Intensity Factor — back as a tile on the Power tab (2026-08-05), computed as NP / estimated FTP in `PowerTab`.
 - [x] TSS — computed (`useTSS` on top of the estimated FTP); since FTP is a lower bound, TSS is an upper estimate.
 - [x] Power Zones — panel is live (`usePowerZones`): Coggan zones from the estimated FTP, % of time in each zone.
 - [ ] Power Curve: the "Your Best" line — comparison against best efforts from past rides; requires history storage (localStorage/IndexedDB, ~30 numbers per ride, max aggregation), will land together with History. The "This Ride" curve is already done.
@@ -28,8 +28,8 @@
 
 ## UI
 
-- [ ] Power / Performance / Intervals / Map / Data Quality tabs — currently inactive stubs. Nearest candidate is Data Quality: a detailed cleaning report (the data from `cleanTrack` is already there). Map — the track on a map with rejected/smoothed points highlighted; a basic route map already exists on Overview (`RouteMapCard`, 2026-08-04), the tab is left with the detail view (point highlighting, before/after cleaning comparison).
-- [ ] "View Raw Data" — mock button; a viewer for raw FIT messages (fileId, session, records).
-- [ ] Kebab menu on the file card — mock; options: reset file, copy report, processing settings.
-- [ ] Header navigation: Dashboard, History, Help and Settings are live (`?view=…`); the avatar is a static mock. Help (2026-08-04) — formulas for all calculations, keep in sync with docs when algorithms change. Settings (2026-08-04) — power calculation defaults; candidates to add: mass, `--smooth`, manual FTP.
-- [ ] Processing settings before "Enhance & Download": `--smooth` and bike/rider mass are still hardcoded (smooth off, mass from defaults). Riding position (CdA) and Crr (surface/tires/pressure) are done (2026-08-04): `PowerSettingsBar` under the file card, persisted to the database (ride row + last-used values), metrics recomputed on the fly.
+- [ ] Intervals tab — the only inactive stub left (Power / Performance / Map / Data Quality are live since 2026-08-05, state in `?tab`). Map tab still owes the detail view: rejected/smoothed points highlighted, before/after cleaning comparison.
+- [x] "View Raw Data" — navigates to the Data Quality tab (2026-08-05): `FileDataCard` shows mesg counts, fileId/session key-values, decode errors. A per-record viewer for `recordMesgs` — later, if needed.
+- [x] Kebab menu on the file card — replaced (2026-08-05) with a direct "clear dashboard" eraser icon (`reset()` in `use-fit-processing`); the other kebab ideas (copy report) dropped for now.
+- [x] Header navigation: Dashboard, History, Help and Settings are live (`?view=…`); the avatar mock replaced with GitHub + Telegram icon links (2026-08-05). Help (2026-08-04) — formulas for all calculations, keep in sync with docs when algorithms change. Settings (2026-08-04) — power calculation defaults; candidates to add: mass, `--smooth`, manual FTP.
+- [ ] Processing settings before "Download enhanced": `--smooth` and bike/rider mass are still hardcoded (smooth off, mass from defaults). Riding position (CdA) and Crr (surface/tires/pressure) are done (2026-08-04): `PowerSettingsBar` under the file card, persisted to the database (ride row + last-used values), metrics recomputed on the fly.

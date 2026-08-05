@@ -47,7 +47,9 @@ async function decodeActivity(
 export function useFitProcessing(): {
   state: ProcessingState;
   processFile: (file: File) => void;
+  processUrl: (url: string, fileName: string) => void;
   updateSettings: (settings: RideSettings) => void;
+  reset: () => void;
 } {
   const [searchParams, setSearchParams] = useSearchParams();
   const recordParam = searchParams.get("record");
@@ -78,6 +80,38 @@ export function useFitProcessing(): {
           message: error instanceof Error ? error.message : String(error),
         });
       });
+  };
+
+  const processUrl = (url: string, fileName: string): void => {
+    setState({ status: "processing", fileName });
+    fetch(url)
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to load ${fileName}: HTTP ${response.status}`,
+          );
+        }
+        const buffer = await response.arrayBuffer();
+        const settings = await getLastSettings();
+        setState({
+          status: "ready",
+          activity: await decodeActivity(buffer, fileName, settings),
+        });
+      })
+      .catch((error: unknown) => {
+        setState({
+          status: "error",
+          message: error instanceof Error ? error.message : String(error),
+        });
+      });
+  };
+
+  const reset = (): void => {
+    loadedRecordRef.current = null;
+    setState({ status: "idle" });
+    if (recordParam != null) {
+      setSearchParams({}, { replace: true });
+    }
   };
 
   const updateSettings = (settings: RideSettings): void => {
@@ -142,5 +176,5 @@ export function useFitProcessing(): {
       });
   }, [recordParam]);
 
-  return { state, processFile, updateSettings };
+  return { state, processFile, processUrl, updateSettings, reset };
 }

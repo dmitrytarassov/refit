@@ -16,11 +16,12 @@ react-router-dom, but without `<Routes>`: the only path is `/`, and "pages" swit
 | --- | --- |
 | `/` | dashboard: sidebar with UploadZone + ride panel |
 | `/?record=id` | the same main page, but the file is taken from IndexedDB by id |
+| `/?record=id&tab=…` | dashboard tabs: `power`, `performance`, `map`, `data-quality` (`tab` is absent for Overview) |
 | `/?view=history` | the History page (table of saved rides) |
 | `/?view=help` | the Help page — formulas for all calculations (cleaning, power, metrics) |
 | `/?view=settings` | the Settings page — default power calculation settings (`settings` store) |
 
-Navigation is client-side (`<Link>` in `AppHeader` and `HistoryPage`), no page reload; back/forward work through `useFitProcessing` reacting to `?record` changes. `AppHeader` — Dashboard/History links, theme switcher (`ThemeToggle` writes `data-theme` on `<html>`, palette — [theme.md](theme.md)).
+Navigation is client-side (`<Link>` in `AppHeader` and `HistoryPage`), no page reload; back/forward work through `useFitProcessing` reacting to `?record` changes. `AppHeader` — Dashboard/History/Help/Settings links, theme switcher (`ThemeToggle` writes `data-theme` on `<html>`, palette — [theme.md](theme.md)), and external icon links: GitHub (repo) and Telegram (@refit_app).
 
 ## Data flow
 
@@ -30,10 +31,11 @@ The central hook is `use-fit-processing.ts`:
 2. `decodeFit` → `cleanTrack` → `estimatePower` → `sessionPowerStats` — assembling an `Activity` object (`src/types/activity.ts`: fit, records, verdicts, report, powers, powerStats, settings). Calculation settings (`RideSettings`: position + Crr parameters) come from the ride's row, otherwise the last saved ones from the `settings` store, otherwise the `POWER_DEFAULTS` defaults; mass is always from defaults for now.
 3. If no file with that name is in the database — `saveRide`; the URL gets `?record=id` (`setSearchParams` with `replace`).
 4. The hook watches `?record` (`useSearchParams`): when an id appears or changes, the buffer is taken from the database and run through the same `decodeActivity`; a ref with the current id guards against re-processing a just-saved file; leaving `?record` resets the state to `idle`.
+5. `reset()` (the eraser icon in `FileHeaderCard`) clears the dashboard: state to `idle`, `?record` removed from the URL. The saved ride stays in History — it only clears the view.
 
 State is the discriminated union `ProcessingState` (`idle | processing | error | ready`), which `DashboardPanel` uses to pick what to render.
 
-The **Enhance & Download** button (`FileHeaderCard` → `use-enhance-download.ts`): `applyEnhancements` (no smoothing) + `encodeFit`, download via a blob link as `<name>.enhanced.fit`. Note: the CLI writes `<name>.out.fit` — the suffixes differ.
+The **Download enhanced** button (`FileHeaderCard` → `use-enhance-download.ts`): `applyEnhancements` (no smoothing) + `encodeFit`, download via a blob link as `<name>.enhanced.fit`. Note: the CLI writes `<name>.out.fit` — the suffixes differ.
 
 ## Structure
 
@@ -41,15 +43,15 @@ The **Enhance & Download** button (`FileHeaderCard` → `use-enhance-download.ts
 | --- | --- |
 | `components/layout/` | `AppHeader`, `ThemeToggle` |
 | `components/sidebar/` | `SidebarPanel`: heading, `UploadZone`, How it works / What you get promo cards |
-| `components/dashboard/` | `DashboardPanel` (routing by `ProcessingState`, lazy boundary), `ActivityDashboard` (content of a ready ride), `FileHeaderCard`, `DashboardTabs`, `MetricTilesRow`, `EmptyState` |
+| `components/dashboard/` | `DashboardPanel` (routing by `ProcessingState`, lazy boundary), `ActivityDashboard` (header cards + tabs, switches content by `?tab`), `OverviewTab` (tiles, charts, bottom row, map), `PowerTab` (power tiles incl. Intensity Factor + power chart with zones + power curve), `PerformanceTab` (HR/cadence/elevation charts + Training Load), `MapTab` (full-width route map), `DataQualityTab` (`DataQualityCard` + `FileDataCard` — raw mesg counts, fileId/session key-values, decode errors; the "View Raw Data" button in `FileHeaderCard` navigates here), `DashboardTabs` (state in `?tab` via `useSearchParams`; only Intervals is a stub), `FileHeaderCard`, `MetricTilesRow`, `EmptyState`. Computed metric tiles (Avg/NP/Max Power, Est. FTP, IF, TSS) carry a `?` HelpTip in the corner with a one-line "how it's computed" — texts live in `metric-help.ts`, shared by Overview and Power; self-evident tiles (Duration, Distance) have none. Keep the texts in sync with docs/Help/README when formulas change (+ example buttons from `example-files.ts`: the demo ride is served from `public/examples/`, the Garmin sample is fetched from their GitHub at click time; both open via `processUrl` and are **not** saved to History) |
 | `components/charts/` | Recharts cards: Power, HeartRate, Cadence, Elevation + `PowerZonesPanel` |
 | `components/bottom/` | `PowerCurveCard`, `DataQualityCard`, `TrainingLoadCard` |
 | `components/history/` | `HistoryPage` — table built from `RideRow` columns, no FIT parsing |
 | `components/help/` | `HelpPage` + sections `TrackCleaningHelp` / `PowerModelHelp` / `MetricsHelp` — static reference with formulas; content is a digest of [track-cleaning.md](track-cleaning.md), [power-estimation.md](power-estimation.md), [ftp-estimation.md](ftp-estimation.md); update together with the docs when algorithms change |
 | `components/power-settings/` | `PowerSettingsBar` (strip below `FileHeaderCard`: selected position/surface/tires/pressure + a gear icon) and `PowerSettingsPanel` (selects, reused on Settings); changing a value → `updateSettings` from `use-fit-processing` |
 | `components/settings/` | `SettingsPage` — power calculation defaults for new rides: `usePowerSettings` + the shared `PowerSettingsPanel` |
-| `components/map/` | `RouteMapCard` — full-width route map below the cards: Leaflet + OSM tiles, polyline over accepted points; in dark theme tiles are dimmed with a CSS filter. `MapPinchZoom` — pinch zoom on a trackpad (ctrl+wheel, `zoomSnap={0}`); regular two-finger scroll is not intercepted. The "Leaflet" prefix in the attribution is hidden, the OSM copyright is kept (a condition of their tile policy) |
-| `components/**/ui/` | styled-only components: `ChartCard`, `ChartTooltip`, `MetricTile`, `QualityRing`, `HelpTip` |
+| `components/map/` | `RouteMapCard` — full-width route map below the cards: Leaflet + OSM tiles, polyline over accepted points; the cleaned route is drawn in the palette's `success` green; a "Show Original" switch in the card header (shown only when cleaning rejected points) overlays the raw track in red (`heartRate`) underneath it; in dark theme tiles are dimmed with a CSS filter. `MapPinchZoom` — pinch zoom on a trackpad (ctrl+wheel, `zoomSnap={0}`); regular two-finger scroll is not intercepted. The "Leaflet" prefix in the attribution is hidden, the OSM copyright is kept (a condition of their tile policy) |
+| `components/**/ui/` | styled-only components: `ChartCard`, `ChartTooltip`, `MetricTile`, `QualityRing`, `HelpTip`, `ToggleSwitch`, `AppLogo` (inline-SVG wordmark; theme colors via `--logo-*` CSS variables switched on `data-theme`) |
 | `hooks/` | all fetching and computation (see below) |
 | `db/` | IndexedDB layer — [history-storage.md](history-storage.md) |
 | `types/` | `Activity`, `ProcessingState`, chart, metric, and theme types |
@@ -65,7 +67,7 @@ Components are pure render; computation lives in hooks:
 
 | Hook | What it does |
 | --- | --- |
-| `use-fit-processing` | file or `?record=id` → `Activity`, saving to history; `updateSettings` — recompute power/metrics on settings change and autosave ([history-storage.md](history-storage.md)) |
+| `use-fit-processing` | file or `?record=id` → `Activity`, saving to history; `processUrl` — fetch + decode a file by URL without saving (example rides); `updateSettings` — recompute power/metrics on settings change and autosave ([history-storage.md](history-storage.md)) |
 | `use-activity-summary` | meta (sport, date, device) and metrics for the tiles |
 | `use-power-series`, `use-record-series` | power/HR/cadence/elevation time series with downsampling |
 | `use-power-settings` | last calculation settings from the `settings` store: read on mount, write on change |
@@ -79,6 +81,5 @@ Components are pure render; computation lives in hooks:
 
 ## Stubs (laid out, not implemented)
 
-- `DashboardTabs` tabs other than Overview: Power, Performance, Intervals, Map, Data Quality (`aria-disabled`).
+- The Intervals tab in `DashboardTabs` (`aria-disabled`).
 - `TrainingLoadCard` — a "needs several rides" placeholder.
-- The "View Raw Data" button, the kebab menu in `FileHeaderCard`, the avatar in the header.

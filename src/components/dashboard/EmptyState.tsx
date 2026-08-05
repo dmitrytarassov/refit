@@ -1,8 +1,14 @@
+import { deferCall } from "just-defer-call";
 import type { ReactElement } from "react";
 
 import "./EmptyState.css";
+import { EXAMPLE_FILES } from "./example-files";
 
-export function EmptyState(): ReactElement {
+interface EmptyStateProps {
+  onLoadExample: (url: string, fileName: string) => void;
+}
+
+export function EmptyState({ onLoadExample }: EmptyStateProps): ReactElement {
   return (
     <section className="empty-state">
       <svg
@@ -25,6 +31,24 @@ export function EmptyState(): ReactElement {
       <p className="empty-state-subtitle">
         Upload a .fit file to see your ride analysis.
       </p>
+      <div className="empty-state-examples">
+        <span className="empty-state-examples-label">Or try an example:</span>
+        <div className="empty-state-examples-buttons">
+          {EXAMPLE_FILES.map((file) => (
+            <button
+              key={file.fileName}
+              type="button"
+              className="empty-state-example-button"
+              onClick={deferCall(onLoadExample, file.url, file.fileName)}
+            >
+              {file.label}
+            </button>
+          ))}
+        </div>
+        <span className="empty-state-examples-note">
+          Examples are not saved to History.
+        </span>
+      </div>
     </section>
   );
 }

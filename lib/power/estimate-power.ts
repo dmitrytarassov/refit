@@ -1,6 +1,7 @@
 import { pointPowerW } from "./point-power";
 import type { PowerConfig } from "./power-config";
 
+import { hampelSpeeds } from "../filters/hampel-speed";
 import type { FitRecord } from "../track/fit-record";
 
 /**
@@ -15,7 +16,10 @@ export function estimatePower(
   const times = records.map((r) =>
     r.timestamp ? r.timestamp.getTime() / 1000 : undefined,
   );
-  const speeds = records.map((r) => r.enhancedSpeed ?? r.speed);
+  // Device speed is not touched by the GPS cleaning pipeline, and a single
+  // glitched sample spikes both the aero term (~v³) and the acceleration
+  // derivative — filter the series before any of it is used.
+  const speeds = hampelSpeeds(records.map((r) => r.enhancedSpeed ?? r.speed));
 
   return records.map((r, i) => {
     const speed = speeds[i];

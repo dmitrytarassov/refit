@@ -1,4 +1,6 @@
+import { Eraser } from "lucide-react";
 import type { ReactElement } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { useActivitySummary } from "../../hooks/use-activity-summary";
 import { useEnhanceDownload } from "../../hooks/use-enhance-download";
@@ -7,13 +9,21 @@ import "./FileHeaderCard.css";
 
 interface FileHeaderCardProps {
   activity: Activity;
+  onReset: () => void;
 }
 
 export function FileHeaderCard({
   activity,
+  onReset,
 }: FileHeaderCardProps): ReactElement {
   const { meta } = useActivitySummary(activity);
   const download = useEnhanceDownload(activity);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openRawData = (): void => {
+    const next = new URLSearchParams(searchParams);
+    next.set("tab", "data-quality");
+    setSearchParams(next);
+  };
   const metaParts = [meta.sport, meta.dateLabel, meta.deviceLabel].filter(
     (part): part is string => part != null,
   );
@@ -43,7 +53,11 @@ export function FileHeaderCard({
         </div>
       </div>
       <div className="file-header-card-actions">
-        <button type="button" className="file-header-card-secondary">
+        <button
+          type="button"
+          className="file-header-card-secondary"
+          onClick={openRawData}
+        >
           View Raw Data
         </button>
         <button
@@ -66,24 +80,16 @@ export function FileHeaderCard({
             <path d="m7 10 5 5 5-5" />
             <path d="M4 19h16" />
           </svg>
-          Enhance &amp; Download
+          Download enhanced
         </button>
         <button
           type="button"
-          className="file-header-card-kebab"
-          aria-label="More options"
+          className="file-header-card-clear"
+          aria-label="Clear dashboard"
+          title="Clear dashboard"
+          onClick={onReset}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="5" r="1.8" />
-            <circle cx="12" cy="12" r="1.8" />
-            <circle cx="12" cy="19" r="1.8" />
-          </svg>
+          <Eraser size={16} aria-hidden="true" />
         </button>
       </div>
     </section>

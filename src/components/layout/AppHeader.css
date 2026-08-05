@@ -13,16 +13,6 @@
     gap: 8px;
   }
 
-  .app-header-logo {
-    color: var(--ink-fg);
-    flex-shrink: 0;
-  }
-
-  .app-header-wordmark {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
 
   .app-header-nav {
     display: flex;
@@ -64,17 +54,19 @@
     margin-left: auto;
   }
 
-  .app-header-avatar {
+  .app-header-icon-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 50%;
-    background: var(--ink-tint);
-    color: var(--ink-fg);
-    font-size: 12px;
-    font-weight: 600;
+    border-radius: 8px;
+    color: var(--text-secondary);
+
+    &:hover {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+    }
     user-select: none;
   }
 }

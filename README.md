@@ -11,7 +11,7 @@ bun install
 bun run dev
 ```
 
-Drop a `.fit` file onto the upload zone and get a dashboard: power / heart rate / cadence / elevation charts, a full-width route map (Leaflet + OSM), power curve, Coggan power zones, estimated FTP, TSS, and a data-quality report of the cleaning pipeline. **Enhance & Download** writes the cleaned and power-enriched file back as `<name>.enhanced.fit`.
+Drop a `.fit` file onto the upload zone and get a dashboard: power / heart rate / cadence / elevation charts, a full-width route map (Leaflet + OSM), power curve, Coggan power zones, estimated FTP, TSS, and a data-quality report of the cleaning pipeline. **Download enhanced** writes the cleaned and power-enriched file back as `<name>.enhanced.fit`.
 
 - **History** — every processed ride is saved locally to IndexedDB (file + precomputed metrics); no accounts, no server.
 - **Ride settings** — riding position (CdA) and rolling-resistance parameters (surface / tires / pressure) are editable per ride under the file card; metrics recompute and persist on the fly. The last used values become defaults for the next ride (also editable on the **Settings** page).
@@ -89,7 +89,7 @@ F_inertia = m · a
 η         = 0.975                   (chain + bearings)
 ```
 
-Negative results are clamped to 0; power is zero at cadence 0 (coasting) and below 0.5 m/s. Air density ρ comes from the barometric formula over the record's temperature and altitude. Acceleration is a central difference of speed, capped at 3 m/s², not computed across gaps (Δt > 10 s).
+Negative results are clamped to 0; power is zero at cadence 0 (coasting) and below 0.5 m/s. Air density ρ comes from the barometric formula over the record's temperature and altitude. The device speed series is first cleaned with a two-sided Hampel filter (±5-record window, 5σ, σ = max(1.4826 · MAD, 0.5 m/s); outliers replaced with the window median) — one glitched sample would otherwise spike both the aero term and the derivative. Acceleration is a central difference of the filtered speed, capped at 3 m/s², not computed across gaps (Δt > 10 s).
 
 CdA by position: tops 0.40, hoods 0.32, drops 0.28, aero 0.23 m². Rolling resistance:
 
@@ -126,6 +126,13 @@ cli/   — argument parsing and orchestration on top of lib
 src/   — Vite + React web app on top of lib
 docs/  — documentation, start with docs/architecture.md
 ```
+
+### Example files
+
+The empty dashboard offers two sample rides (opened without saving to History):
+
+- **Demo ride — Magene C406** (`public/examples/`) — the author's own real outdoor recording, shipped with the app for demo purposes.
+- **Garmin example** — `WithGearChangeData.fit` from Garmin's [fit-javascript-sdk](https://github.com/garmin/fit-javascript-sdk/tree/main/test/data) (© Garmin International, Inc., [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt)). It is **not** redistributed in this repository — the app fetches it from Garmin's GitHub at click time.
 
 Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends on nothing above it.
 

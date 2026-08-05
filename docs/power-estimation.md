@@ -28,7 +28,9 @@ A negative total (descending, braking) is clamped to 0 — you can't push negati
 
 **Air density** ρ (`air-density.ts`) — barometric formula from the point's temperature and altitude; gives a noticeable ±3–5% on the aero component compared to a constant.
 
-**Acceleration** a — central difference of speed over neighboring records, with safeguards: not computed across data gaps and pauses (Δt > 10 s), magnitude capped at 3 m/s².
+**Speed cleaning** — device speed is not touched by the GPS cleaning pipeline, and a single glitched sample spikes both the aero term (~v³) and the acceleration derivative (a 2000 W artifact from one bad second). Before any use, the speed series goes through a two-sided Hampel filter (`lib/filters/hampel-speed.ts`): a sample deviating from the ±5-record window median by more than 5 robust sigmas (σ = max(1.4826 · MAD, 0.5 m/s)) is replaced with that median. A real 1-s sprint surge survives; recording glitches do not. On a clean series the filter is a no-op (verified on the reference file: avg/NP/max unchanged).
+
+**Acceleration** a — central difference of (filtered) speed over neighboring records, with safeguards: not computed across data gaps and pauses (Δt > 10 s), magnitude capped at 3 m/s².
 
 ## Parameters (function arguments)
 

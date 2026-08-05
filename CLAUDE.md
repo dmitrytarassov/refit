@@ -40,7 +40,7 @@ Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends 
 ## Documentation (mandatory)
 
 - **Every code change ends with a documentation pass.** After any edit, update the affected `docs/*.md` (and CLAUDE.md if layout or conventions changed); if a change introduces a new subsystem, write a new doc in `docs/` and link it from the table in `docs/architecture.md`.
-- **Formulas live in three places** — `docs/*.md`, the web Help page (`src/components/help/`), and `README.md`. Changing any algorithm or constant (cleaning thresholds, power model, CdA/Crr tables, NP/FTP/TSS/zones) means updating all three in the same change.
+- **Formulas live in four places** — `docs/*.md`, the web Help page (`src/components/help/`), `README.md`, and the metric-tile tooltips (`src/components/dashboard/metric-help.ts`). Changing any algorithm or constant (cleaning thresholds, power model, CdA/Crr tables, NP/FTP/TSS/zones) means updating all of them in the same change.
 - Link between docs instead of duplicating content.
 - A task is not done while docs contradict the code.
 

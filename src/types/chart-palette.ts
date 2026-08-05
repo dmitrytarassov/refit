@@ -4,10 +4,12 @@ export interface ChartPalette {
   grid: string;
   axis: string;
   heartRate: string;
+  success: string;
   cadence: string;
   power: string;
   elevation: string;
   tooltipBg: string;
   tooltipBorder: string;
   tooltipText: string;
+  accent: string;
 }

@@ -1,55 +1,52 @@
 import type { ReactElement } from "react";
-import { Suspense, lazy } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { DashboardTabs } from "./DashboardTabs";
+import { DataQualityTab } from "./DataQualityTab";
 import { FileHeaderCard } from "./FileHeaderCard";
-import { MetricTilesRow } from "./MetricTilesRow";
+import { MapTab } from "./MapTab";
+import { OverviewTab } from "./OverviewTab";
+import { PerformanceTab } from "./PerformanceTab";
+import { PowerTab } from "./PowerTab";
 
 import type { Activity } from "../../types/activity";
 import type { RideSettings } from "../../types/ride-settings";
-import { DataQualityCard } from "../bottom/DataQualityCard";
-import { PowerCurveCard } from "../bottom/PowerCurveCard";
-import { TrainingLoadCard } from "../bottom/TrainingLoadCard";
-import { CadenceChartCard } from "../charts/CadenceChartCard";
-import { ElevationChartCard } from "../charts/ElevationChartCard";
-import { HeartRateChartCard } from "../charts/HeartRateChartCard";
-import { PowerChartCard } from "../charts/PowerChartCard";
 import { PowerSettingsBar } from "../power-settings/PowerSettingsBar";
-
-const RouteMapCard = lazy(() =>
-  import("../map/RouteMapCard").then((m) => ({ default: m.RouteMapCard })),
-);
 
 export function ActivityDashboard({
   activity,
   onSettingsChange,
+  onReset,
 }: {
   activity: Activity;
   onSettingsChange: (settings: RideSettings) => void;
+  onReset: () => void;
 }): ReactElement {
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  let content: ReactElement;
+  if (tab === "power") {
+    content = <PowerTab activity={activity} />;
+  } else if (tab === "performance") {
+    content = <PerformanceTab activity={activity} />;
+  } else if (tab === "map") {
+    content = <MapTab activity={activity} />;
+  } else if (tab === "data-quality") {
+    content = <DataQualityTab activity={activity} />;
+  } else {
+    content = <OverviewTab activity={activity} />;
+  }
+
   return (
     <div className="dashboard-panel">
-      <FileHeaderCard activity={activity} />
+      <FileHeaderCard activity={activity} onReset={onReset} />
       <PowerSettingsBar
         settings={activity.settings}
         onChange={onSettingsChange}
       />
       <DashboardTabs />
-      <MetricTilesRow activity={activity} />
-      <PowerChartCard activity={activity} />
-      <div className="dashboard-mid-row">
-        <HeartRateChartCard activity={activity} />
-        <CadenceChartCard activity={activity} />
-        <ElevationChartCard activity={activity} />
-      </div>
-      <div className="dashboard-bottom-row">
-        <PowerCurveCard activity={activity} />
-        <TrainingLoadCard />
-        <DataQualityCard activity={activity} />
-      </div>
-      <Suspense fallback={null}>
-        <RouteMapCard activity={activity} />
-      </Suspense>
+      {content}
     </div>
   );
 }

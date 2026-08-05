@@ -14,12 +14,16 @@ const ActivityDashboard = lazy(() =>
 export function DashboardPanel({
   state,
   onSettingsChange,
+  onLoadExample,
+  onReset,
 }: {
   state: ProcessingState;
   onSettingsChange: (settings: RideSettings) => void;
+  onLoadExample: (url: string, fileName: string) => void;
+  onReset: () => void;
 }): ReactElement {
   if (state.status === "idle") {
-    return <EmptyState />;
+    return <EmptyState onLoadExample={onLoadExample} />;
   }
   if (state.status === "processing") {
     return <p className="dashboard-processing">Processing {state.fileName}…</p>;
@@ -39,6 +43,7 @@ export function DashboardPanel({
       <ActivityDashboard
         activity={state.activity}
         onSettingsChange={onSettingsChange}
+        onReset={onReset}
       />
     </Suspense>
   );

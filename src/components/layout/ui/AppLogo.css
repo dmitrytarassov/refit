@@ -1,0 +1,15 @@
+.app-logo {
+  --logo-accent: #2a3572;
+  --logo-text: #000000;
+  --logo-ring: #c0891f;
+  --logo-pulse: #2a3572;
+
+  flex-shrink: 0;
+}
+
+html[data-theme="dark"] .app-logo {
+  --logo-accent: #3d4a9e;
+  --logo-text: #ffffff;
+  --logo-ring: #d9a33c;
+  --logo-pulse: #ffffff;
+}
