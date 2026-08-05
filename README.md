@@ -144,3 +144,7 @@ bun run dev       # web app with HMR
 bun run build     # type-check + production build
 bun run lint      # eslint
 ```
+
+## License
+
+[MIT](LICENSE). The Garmin sample referenced by the example button is © Garmin and stays under their [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt) — it is fetched from Garmin's repository at runtime, not distributed here.
