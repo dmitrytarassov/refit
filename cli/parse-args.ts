@@ -25,7 +25,7 @@ export function parseArgs(argv: string[]): CliOptions {
         "  --smooth                       replace accepted positions with Kalman/RTS-smoothed ones\n" +
         "  --power                        estimate and embed cycling power\n" +
         "  --bike-mass <kg>               (default 8)\n" +
-        "  --rider-mass <kg>              (default 81)\n" +
+        "  --rider-mass <kg>              (default 82)\n" +
         "  --cda auto|tops|hoods|drops|aero   (default auto: drops above 33 km/h, else hoods)\n" +
         "  --surface good-asphalt|rough-asphalt|gravel  (default good-asphalt)\n" +
         "  --tires road|endurance|gravel|mtb            (default road)\n" +
@@ -64,7 +64,7 @@ export function parseArgs(argv: string[]): CliOptions {
 
   const power: PowerConfig | null = flags.has("power")
     ? {
-        mass: { bikeKg: num("bike-mass", 8), riderKg: num("rider-mass", 81) },
+        mass: { bikeKg: num("bike-mass", 8), riderKg: num("rider-mass", 82) },
         cda: oneOf(
           "cda",
           ["auto", "tops", "hoods", "drops", "aero"] as const,

@@ -32,7 +32,7 @@ Writes `<name>.out.fit` next to the input and prints a cleaning/power report.
 | `--smooth` | — | off | replace accepted coordinates with smoothed ones (Kalman/RTS) |
 | `--power` | — | off | estimate power and write it into the file |
 | `--bike-mass` | kg | 8 | bike mass |
-| `--rider-mass` | kg | 81 | rider mass |
+| `--rider-mass` | kg | 82 | rider mass |
 | `--cda` | `auto` \| `tops` \| `hoods` \| `drops` \| `aero` | `auto` | riding position; `auto`: > 33 km/h → `drops`, else `hoods` |
 | `--surface` | `good-asphalt` \| `rough-asphalt` \| `gravel` | `good-asphalt` | surface (Crr base) |
 | `--tires` | `road` \| `endurance` \| `gravel` \| `mtb` | `road` | tire type (Crr multiplier) |

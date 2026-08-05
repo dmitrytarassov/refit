@@ -3,7 +3,7 @@
 There is no auth — everything is stored locally in the browser, in IndexedDB (`src/db/`). Database `refit` (renamed from `dot-fit` on 2026-08-04; the old database's data was not migrated — history saved before the rename remains in the orphaned `dot-fit` database), version 2, two stores:
 
 - `rides` — rides (autoIncrement `id`, index on `fileName`);
-- `settings` — key-value: the `power` key holds the last selected calculation settings (`RideSettings`: `cda` position + `crr` surface/tires/pressure) — the next loaded ride is initialized with them; the `ftp` key holds the manual FTP in watts (absent when not set — deleting the value removes the key, [ftp-estimation.md](ftp-estimation.md)).
+- `settings` — key-value: the `power` key holds the last selected calculation settings (`RideSettings`: `cda` position + `crr` surface/tires/pressure) — the next loaded ride is initialized with them; the `ftp` key holds the manual FTP in watts (absent when not set — deleting the value removes the key, [ftp-estimation.md](ftp-estimation.md)); the `mass` key holds `MassConfig { riderKg, bikeKg }` (absent → defaults 82/8 are used and the dashboard shows a reminder).
 
 ## Row (`RideRow`)
 

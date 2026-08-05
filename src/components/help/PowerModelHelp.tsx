@@ -26,7 +26,8 @@ F_inertia = m · a
         glitched sample would otherwise spike both the aero term and the
         derivative. Acceleration a is a central difference of the filtered
         speed, capped at 3 m/s², and not computed across pauses or data gaps (Δt
-        &gt; 10 s). Mass m is bike + rider.
+        &gt; 10 s). Mass m is bike + rider — set yours in Settings; without it
+        the defaults (82 kg rider, 8 kg bike) are used.
       </p>
 
       <h4>CdA — riding position</h4>

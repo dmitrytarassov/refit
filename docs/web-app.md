@@ -28,7 +28,7 @@ Navigation is client-side (`<Link>` in `AppHeader` and `HistoryPage`), no page r
 The central hook is `use-fit-processing.ts`:
 
 1. `UploadZone` (drag-n-drop or file picker) hands a `File` to `processFile`.
-2. `decodeFit` → `cleanTrack` → `estimatePower` → `sessionPowerStats` — assembling an `Activity` object (`src/types/activity.ts`: fit, records, verdicts, report, powers, powerStats, settings). Calculation settings (`RideSettings`: position + Crr parameters) come from the ride's row, otherwise the last saved ones from the `settings` store, otherwise the `POWER_DEFAULTS` defaults; mass is always from defaults for now.
+2. `decodeFit` → `cleanTrack` → `estimatePower` → `sessionPowerStats` — assembling an `Activity` object (`src/types/activity.ts`: fit, records, verdicts, report, powers, powerStats, settings). Calculation settings (`RideSettings`: position + Crr parameters) come from the ride's row, otherwise the last saved ones from the `settings` store, otherwise the `POWER_DEFAULTS` defaults. Mass comes from the `settings` store (`mass` key, set on the Settings page); when absent, defaults (rider 82 kg, bike 8 kg) are used and `DefaultMassAlert` on the dashboard asks the user to set theirs. Changing mass in Settings applies from the next ride load (the current ride is not recomputed live).
 3. If no file with that name is in the database — `saveRide`; the URL gets `?record=id` (`setSearchParams` with `replace`).
 4. The hook watches `?record` (`useSearchParams`): when an id appears or changes, the buffer is taken from the database and run through the same `decodeActivity`; a ref with the current id guards against re-processing a just-saved file; leaving `?record` resets the state to `idle`.
 5. The eraser icon (`ClearButton` in `FileHeaderCard`): for a saved ride (`?record` present) it opens a popup — "Also delete this ride from History?" with Delete (`discard()`: `deleteRide` + reset) and Keep (`reset()` only — the ride stays in History). Example rides are not saved, so the eraser clears the dashboard immediately without asking. `reset()` sets the state to `idle` and removes `?record` from the URL.
@@ -49,7 +49,7 @@ The **Download enhanced** button (`FileHeaderCard` → `DownloadMenu` → `use-e
 | `components/history/` | `HistoryPage` — table built from `RideRow` columns, no FIT parsing |
 | `components/help/` | `HelpPage` + sections `TrackCleaningHelp` / `PowerModelHelp` / `MetricsHelp` — static reference with formulas; content is a digest of [track-cleaning.md](track-cleaning.md), [power-estimation.md](power-estimation.md), [ftp-estimation.md](ftp-estimation.md); update together with the docs when algorithms change |
 | `components/power-settings/` | `PowerSettingsBar` (strip below `FileHeaderCard`: selected position/surface/tires/pressure + a gear icon) and `PowerSettingsPanel` (selects, reused on Settings); changing a value → `updateSettings` from `use-fit-processing` |
-| `components/settings/` | `SettingsPage` — power calculation defaults for new rides (`usePowerSettings` + the shared `PowerSettingsPanel`) and the manual FTP field (`useManualFtp`, clearable) |
+| `components/settings/` | `SettingsPage` — power calculation defaults for new rides (`usePowerSettings` + the shared `PowerSettingsPanel`), rider/bike weight (`useMassSettings`, clearable, defaults 82/8) and the manual FTP field (`useManualFtp`, clearable) |
 | `components/map/` | `RouteMapCard` — full-width route map below the cards: Leaflet + OSM tiles, polyline over accepted points; the cleaned route is drawn in the palette's `success` green; a "Show Original" switch in the card header (shown only when cleaning rejected points) overlays the raw track in red (`heartRate`) underneath it; in dark theme tiles are dimmed with a CSS filter. `MapPinchZoom` — pinch zoom on a trackpad (ctrl+wheel, `zoomSnap={0}`); regular two-finger scroll is not intercepted. The "Leaflet" prefix in the attribution is hidden, the OSM copyright is kept (a condition of their tile policy) |
 | `components/**/ui/` | styled-only components: `ChartCard`, `ChartTooltip`, `MetricTile`, `QualityRing`, `HelpTip`, `ToggleSwitch`, `AppLogo` (inline-SVG wordmark; theme colors via `--logo-*` CSS variables switched on `data-theme`) |
 | `hooks/` | all fetching and computation (see below) |
@@ -75,6 +75,7 @@ Components are pure render; computation lives in hooks:
 | `use-route-points` | accepted point coordinates in degrees for the map (with downsampling) |
 | `use-ftp` | the FTP the app runs on: manual from Settings wins, otherwise the estimate from the curve; returns `{ watts, source }` ([ftp-estimation.md](ftp-estimation.md)) |
 | `use-manual-ftp` | manual FTP from the `settings` store: read on mount, save/delete on change |
+| `use-mass-settings` | rider/bike mass from the `settings` store (null → defaults 82/8); powers the Settings inputs and `DefaultMassAlert` |
 | `use-power-zones`, `use-tss` | zones and TSS on top of FTP |
 | `use-enhance-download` | encodes and downloads the enhanced file |
 | `use-ride-history` | ride list for History + `remove(id)` (optimistic delete, [history-storage.md](history-storage.md)) |

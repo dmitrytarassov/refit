@@ -1,0 +1,14 @@
+.default-mass-alert {
+  margin: 0;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--brass-text);
+  background: var(--brass-tint);
+  border: 1px solid var(--brass);
+  border-radius: 10px;
+
+  a {
+    color: inherit;
+    font-weight: 600;
+  }
+}

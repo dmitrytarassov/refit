@@ -77,7 +77,7 @@ Example: good asphalt + road tires + high pressure = 0.0045 × 1.0 × 0.9 ≈ 0.
 - **Wind** is the main irreducible error source: we know speed relative to the ground, aero depends on speed relative to the air.
 - **Drafting** — riding in a group cuts the aero component by 30–40%; the model can't see it.
 - On a solo ride in calm weather, expected accuracy is ±10–15% — the level of Strava's "estimated power".
-- Reference: a ride of 43 km / 28 km/h average / 89 kg total mass → avg 139 W, NP 178 W, max 712 W — plausible values for flat terrain.
+- Reference: a ride of 43 km / 28 km/h average / 90 kg total mass → avg 140 W, NP 178 W, max 720 W — plausible values for flat terrain.
 
 ## Ideas for later
 

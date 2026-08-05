@@ -91,5 +91,12 @@
       font-size: 13px;
       color: var(--text-muted);
     }
+
+    .settings-mass-clear {
+      position: static;
+      transform: none;
+      align-self: flex-end;
+      margin-bottom: 7px;
+    }
   }
 }

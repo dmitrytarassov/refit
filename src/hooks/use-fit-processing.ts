@@ -3,12 +3,14 @@ import { useSearchParams } from "react-router-dom";
 
 import { cleanTrack } from "../../lib/pipeline/clean-track";
 import { estimatePower } from "../../lib/power/estimate-power";
+import type { MassConfig } from "../../lib/power/mass-config";
 import { sessionPowerStats } from "../../lib/power/session-stats";
 import type { FitRecord } from "../../lib/track/fit-record";
 import { buildRideRow } from "../db/build-ride-row";
 import { deleteRide } from "../db/delete-ride";
 import { findRideByFileName } from "../db/find-ride-by-file-name";
 import { getLastSettings } from "../db/get-last-settings";
+import { getMassSettings } from "../db/get-mass-settings";
 import { getRide } from "../db/get-ride";
 import { saveLastSettings } from "../db/save-last-settings";
 import { saveRide } from "../db/save-ride";
@@ -22,6 +24,7 @@ async function decodeActivity(
   buffer: ArrayBuffer,
   fileName: string,
   settings: RideSettings,
+  mass: MassConfig | null,
 ): Promise<Activity> {
   const { decodeFit } = await import("../../lib/fit/decode-fit");
   const fit = decodeFit(new Uint8Array(buffer));
@@ -29,6 +32,7 @@ async function decodeActivity(
   const { verdicts, report } = cleanTrack(records);
   const powers = estimatePower(records, {
     ...POWER_DEFAULTS,
+    mass: mass ?? POWER_DEFAULTS.mass,
     cda: settings.cda,
     crr: settings.crr,
   });
@@ -67,8 +71,16 @@ export function useFitProcessing(): {
     file
       .arrayBuffer()
       .then(async (buffer) => {
-        const settings = await getLastSettings();
-        const activity = await decodeActivity(buffer, file.name, settings);
+        const [settings, mass] = await Promise.all([
+          getLastSettings(),
+          getMassSettings(),
+        ]);
+        const activity = await decodeActivity(
+          buffer,
+          file.name,
+          settings,
+          mass,
+        );
         const existing = await findRideByFileName(file.name);
         const id =
           existing?.id ?? (await saveRide(buildRideRow(activity, buffer)));
@@ -94,10 +106,13 @@ export function useFitProcessing(): {
           );
         }
         const buffer = await response.arrayBuffer();
-        const settings = await getLastSettings();
+        const [settings, mass] = await Promise.all([
+          getLastSettings(),
+          getMassSettings(),
+        ]);
         setState({
           status: "ready",
-          activity: await decodeActivity(buffer, fileName, settings),
+          activity: await decodeActivity(buffer, fileName, settings, mass),
         });
       })
       .catch((error: unknown) => {
@@ -129,24 +144,27 @@ export function useFitProcessing(): {
       return;
     }
     const { activity } = state;
-    const powers = estimatePower(activity.records, {
-      ...POWER_DEFAULTS,
-      cda: settings.cda,
-      crr: settings.crr,
-    });
-    const powerStats = sessionPowerStats(activity.records, powers);
-    const next: Activity = { ...activity, powers, powerStats, settings };
-    setState({ status: "ready", activity: next });
-    void saveLastSettings(settings);
-    const id = loadedRecordRef.current;
-    if (id == null) {
-      return;
-    }
-    void getRide(Number(id)).then((row) => {
-      if (row == null) {
+    void getMassSettings().then((mass) => {
+      const powers = estimatePower(activity.records, {
+        ...POWER_DEFAULTS,
+        mass: mass ?? POWER_DEFAULTS.mass,
+        cda: settings.cda,
+        crr: settings.crr,
+      });
+      const powerStats = sessionPowerStats(activity.records, powers);
+      const next: Activity = { ...activity, powers, powerStats, settings };
+      setState({ status: "ready", activity: next });
+      void saveLastSettings(settings);
+      const id = loadedRecordRef.current;
+      if (id == null) {
         return;
       }
-      return updateRide({ ...buildRideRow(next, row.file), id: Number(id) });
+      void getRide(Number(id)).then((row) => {
+        if (row == null) {
+          return;
+        }
+        return updateRide({ ...buildRideRow(next, row.file), id: Number(id) });
+      });
     });
   };
 
@@ -172,10 +190,20 @@ export function useFitProcessing(): {
           });
           return;
         }
-        const settings = row.settings ?? (await getLastSettings());
+        const [settings, mass] = await Promise.all([
+          row.settings != null
+            ? Promise.resolve(row.settings)
+            : getLastSettings(),
+          getMassSettings(),
+        ]);
         setState({
           status: "ready",
-          activity: await decodeActivity(row.file, row.fileName, settings),
+          activity: await decodeActivity(
+            row.file,
+            row.fileName,
+            settings,
+            mass,
+          ),
         });
       })
       .catch((error: unknown) => {

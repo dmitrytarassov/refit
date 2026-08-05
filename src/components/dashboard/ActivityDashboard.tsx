@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { DashboardTabs } from "./DashboardTabs";
 import { DataQualityTab } from "./DataQualityTab";
+import { DefaultMassAlert } from "./DefaultMassAlert";
 import { FileHeaderCard } from "./FileHeaderCard";
 import { MapTab } from "./MapTab";
 import { OverviewTab } from "./OverviewTab";
@@ -51,6 +52,7 @@ export function ActivityDashboard({
         settings={activity.settings}
         onChange={onSettingsChange}
       />
+      <DefaultMassAlert />
       <DashboardTabs />
       {content}
     </div>
