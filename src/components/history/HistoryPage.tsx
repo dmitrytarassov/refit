@@ -1,4 +1,7 @@
+import { deferCall } from "just-defer-call";
+import { Trash2 } from "lucide-react";
 import type { ReactElement } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { formatDistance, formatDuration } from "../../fit/format-metrics";
@@ -6,7 +9,17 @@ import { useRideHistory } from "../../hooks/use-ride-history";
 import "./HistoryPage.css";
 
 export function HistoryPage(): ReactElement {
-  const { rides, loading } = useRideHistory();
+  const { rides, loading, remove } = useRideHistory();
+  const [armedId, setArmedId] = useState<number | null>(null);
+
+  const handleDelete = (id: number): void => {
+    if (armedId === id) {
+      setArmedId(null);
+      remove(id);
+    } else {
+      setArmedId(id);
+    }
+  };
 
   let body: ReactElement;
   if (loading) {
@@ -30,6 +43,7 @@ export function HistoryPage(): ReactElement {
             <th>Normalized Power</th>
             <th>Est. FTP</th>
             <th>TSS</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -57,6 +71,30 @@ export function HistoryPage(): ReactElement {
               </td>
               <td>{ride.ftpWatts != null ? `${ride.ftpWatts} W` : "—"}</td>
               <td>{ride.tss ?? "—"}</td>
+              <td>
+                {ride.id != null && (
+                  <button
+                    type="button"
+                    className={
+                      armedId === ride.id
+                        ? "history-delete is-armed"
+                        : "history-delete"
+                    }
+                    aria-label={
+                      armedId === ride.id
+                        ? `Confirm deleting ${ride.fileName}`
+                        : `Delete ${ride.fileName}`
+                    }
+                    onClick={deferCall(handleDelete, ride.id)}
+                  >
+                    {armedId === ride.id ? (
+                      "Delete?"
+                    ) : (
+                      <Trash2 size={15} aria-hidden="true" />
+                    )}
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

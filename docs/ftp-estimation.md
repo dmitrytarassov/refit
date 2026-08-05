@@ -26,7 +26,7 @@ If the recording has no 20-minute interval (a short ride) — no estimate (`null
 
 - This is a **lower bound**, not FTP: if the rider took it easy, real FTP may be noticeably higher. The closer the recorded efforts were to the limit, the more accurate the estimate.
 - The input watts are themselves estimated (±10–15%, see [power-estimation.md](power-estimation.md)) — the FTP estimate inherits that error.
-- Once a user profile appears, a manual FTP must take priority over the estimate; the `useFTP` hook will remain the single place where that decision is made.
+- Manual FTP (2026-08-05): the Settings page stores the user's FTP in the `settings` IndexedDB store (`ftp` key, [history-storage.md](history-storage.md)); `useFTP` prefers it over the estimate and reports the source (`RideFtp { watts, source: "manual" | "estimated", method? }`). The UI shows which one is in use — the FTP tile label ("FTP (manual)" vs "Est. FTP") and the Power Zones caption. Clearing the value in Settings falls back to the estimate. `useFTP` remains the single place where that decision is made.
 
 ## Consumers
 

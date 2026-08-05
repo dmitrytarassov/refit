@@ -17,10 +17,12 @@ export function ActivityDashboard({
   activity,
   onSettingsChange,
   onReset,
+  onDiscard,
 }: {
   activity: Activity;
   onSettingsChange: (settings: RideSettings) => void;
   onReset: () => void;
+  onDiscard: () => void;
 }): ReactElement {
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
@@ -40,7 +42,11 @@ export function ActivityDashboard({
 
   return (
     <div className="dashboard-panel">
-      <FileHeaderCard activity={activity} onReset={onReset} />
+      <FileHeaderCard
+        activity={activity}
+        onReset={onReset}
+        onDiscard={onDiscard}
+      />
       <PowerSettingsBar
         settings={activity.settings}
         onChange={onSettingsChange}

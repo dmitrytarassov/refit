@@ -21,7 +21,9 @@ export function PowerZonesPanel({
       <header className="power-zones-header">
         <h3>Power Zones</h3>
         <span className="power-zones-caption">
-          {ftp != null ? `@ FTP ${ftp.watts} W` : "No power data"}
+          {ftp != null
+            ? `@ FTP ${ftp.watts} W (${ftp.source})`
+            : "No power data"}
         </span>
       </header>
       <ul>

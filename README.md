@@ -11,7 +11,7 @@ bun install
 bun run dev
 ```
 
-Drop a `.fit` file onto the upload zone and get a dashboard: power / heart rate / cadence / elevation charts, a full-width route map (Leaflet + OSM), power curve, Coggan power zones, estimated FTP, TSS, and a data-quality report of the cleaning pipeline. **Download enhanced** writes the cleaned and power-enriched file back as `<name>.enhanced.fit`.
+Drop a `.fit` file onto the upload zone and get a dashboard: power / heart rate / cadence / elevation charts, a full-width route map (Leaflet + OSM), power curve, Coggan power zones, estimated FTP, TSS, and a data-quality report of the cleaning pipeline. **Download enhanced** lets you pick what gets written (cleaned coordinates, estimated power) and saves `<name>.enhanced.fit`; if the ride has power from a real power meter, the original values are kept unless you explicitly opt in.
 
 - **History** — every processed ride is saved locally to IndexedDB (file + precomputed metrics); no accounts, no server.
 - **Ride settings** — riding position (CdA) and rolling-resistance parameters (surface / tires / pressure) are editable per ride under the file card; metrics recompute and persist on the fly. The last used values become defaults for the next ride (also editable on the **Settings** page).
@@ -114,7 +114,7 @@ FTP ≥ max( 0.95 · P₂₀,
 TSS = t · (NP / FTP)² / 36            t — timer time, seconds
 ```
 
-FTP is estimated as a **lower bound** (a normal ride is not an all-out test), so TSS is an upper bound; rides without a 20-minute interval get no estimate. Power zones are Coggan's, with boundaries at 55 / 75 / 90 / 105 / 120 / 150% of estimated FTP; pauses (Δt > 10 s) are excluded from zone time. The Data Quality score is `accepted GPS points / all GPS points · 100%`.
+FTP is estimated as a **lower bound** (a normal ride is not an all-out test), so TSS is an upper bound; rides without a 20-minute interval get no estimate. A manual FTP set on the Settings page overrides the estimate everywhere, and the UI labels which source is in use. Power zones are Coggan's, with boundaries at 55 / 75 / 90 / 105 / 120 / 150% of estimated FTP; pauses (Δt > 10 s) are excluded from zone time. The Data Quality score is `accepted GPS points / all GPS points · 100%`.
 
 Details: [docs/ftp-estimation.md](docs/ftp-estimation.md).
 

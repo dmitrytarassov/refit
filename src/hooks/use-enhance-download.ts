@@ -1,18 +1,30 @@
 import type { Activity } from "../types/activity";
+import type { DownloadOptions } from "../types/download-options";
 
-export function useEnhanceDownload(activity: Activity): () => void {
-  return async () => {
+export function useEnhanceDownload(activity: Activity): {
+  hasDevicePower: boolean;
+  download: (options: DownloadOptions) => void;
+} {
+  const hasDevicePower = activity.records.some(
+    (record) => typeof record.power === "number",
+  );
+
+  const download = async ({
+    coordinates,
+    power,
+  }: DownloadOptions): Promise<void> => {
     const [{ applyEnhancements }, { encodeFit }] = await Promise.all([
       import("../../lib/pipeline/apply-enhancements"),
       import("../../lib/fit/encode-fit"),
     ]);
-    applyEnhancements(activity.fit.ordered, {
-      verdicts: activity.verdicts,
+    const ordered = structuredClone(activity.fit.ordered);
+    applyEnhancements(ordered, {
+      verdicts: coordinates ? activity.verdicts : new Map(),
       smooth: false,
-      powers: activity.powers,
-      powerStats: activity.powerStats,
+      powers: power ? activity.powers : null,
+      powerStats: power ? activity.powerStats : null,
     });
-    const bytes = new Uint8Array(encodeFit(activity.fit.ordered));
+    const bytes = new Uint8Array(encodeFit(ordered));
     const blob = new Blob([bytes], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -21,4 +33,6 @@ export function useEnhanceDownload(activity: Activity): () => void {
     anchor.click();
     URL.revokeObjectURL(url);
   };
+
+  return { hasDevicePower, download };
 }

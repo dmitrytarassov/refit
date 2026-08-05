@@ -14,7 +14,7 @@ import { ThemeContext } from "./theme/theme-context";
 
 function App(): ReactElement {
   const theme = useThemeState();
-  const { state, processFile, processUrl, updateSettings, reset } =
+  const { state, processFile, processUrl, updateSettings, reset, discard } =
     useFitProcessing();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
@@ -51,6 +51,7 @@ function App(): ReactElement {
             onSettingsChange={updateSettings}
             onLoadExample={processUrl}
             onReset={reset}
+            onDiscard={discard}
           />
         </main>
       </div>

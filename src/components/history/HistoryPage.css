@@ -32,6 +32,32 @@
     }
   }
 
+  .history-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--danger);
+      background: var(--danger-tint);
+    }
+
+    &.is-armed {
+      color: var(--danger-text);
+      background: var(--danger-tint);
+    }
+  }
+
   .history-ride-link {
     color: var(--text-primary);
     text-decoration: none;

@@ -5,7 +5,9 @@ export const METRIC_HELP = {
     "Coggan NP: 30-second rolling average of power, raised to the 4th power, averaged, 4th root. Weighs surges the way physiology feels them.",
   maxPower:
     "Highest single-record estimated power, after the speed series has been cleaned of recording glitches.",
-  ftp: "Lower-bound estimate from this ride's power curve: the max of 0.95 × best 20 min, Critical Power (Monod, 5/20-min points) and best hour. Needs at least a 20-minute interval.",
+  ftp: "Lower-bound estimate from this ride's power curve: the max of 0.95 × best 20 min, Critical Power (Monod, 5/20-min points) and best hour. Needs at least a 20-minute interval. You can override it with your real FTP in Settings.",
+  ftpManual:
+    "Your FTP as set on the Settings page. It overrides the per-ride estimate in zones, TSS and Intensity Factor.",
   tss: "Timer time × (NP / FTP)² / 36. Our FTP is a lower bound, so treat TSS as an upper estimate.",
   intensityFactor:
     "NP / estimated FTP. Our FTP is a lower bound, so IF is an upper estimate.",

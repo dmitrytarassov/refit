@@ -16,11 +16,13 @@ export function DashboardPanel({
   onSettingsChange,
   onLoadExample,
   onReset,
+  onDiscard,
 }: {
   state: ProcessingState;
   onSettingsChange: (settings: RideSettings) => void;
   onLoadExample: (url: string, fileName: string) => void;
   onReset: () => void;
+  onDiscard: () => void;
 }): ReactElement {
   if (state.status === "idle") {
     return <EmptyState onLoadExample={onLoadExample} />;
@@ -44,6 +46,7 @@ export function DashboardPanel({
         activity={state.activity}
         onSettingsChange={onSettingsChange}
         onReset={onReset}
+        onDiscard={onDiscard}
       />
     </Suspense>
   );

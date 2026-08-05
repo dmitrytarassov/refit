@@ -1,23 +1,25 @@
-import { Eraser } from "lucide-react";
 import type { ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { ClearButton } from "./ClearButton";
+import { DownloadMenu } from "./DownloadMenu";
+
 import { useActivitySummary } from "../../hooks/use-activity-summary";
-import { useEnhanceDownload } from "../../hooks/use-enhance-download";
 import type { Activity } from "../../types/activity";
 import "./FileHeaderCard.css";
 
 interface FileHeaderCardProps {
   activity: Activity;
   onReset: () => void;
+  onDiscard: () => void;
 }
 
 export function FileHeaderCard({
   activity,
   onReset,
+  onDiscard,
 }: FileHeaderCardProps): ReactElement {
   const { meta } = useActivitySummary(activity);
-  const download = useEnhanceDownload(activity);
   const [searchParams, setSearchParams] = useSearchParams();
   const openRawData = (): void => {
     const next = new URLSearchParams(searchParams);
@@ -60,37 +62,8 @@ export function FileHeaderCard({
         >
           View Raw Data
         </button>
-        <button
-          type="button"
-          className="file-header-card-primary"
-          onClick={download}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 3v12" />
-            <path d="m7 10 5 5 5-5" />
-            <path d="M4 19h16" />
-          </svg>
-          Download enhanced
-        </button>
-        <button
-          type="button"
-          className="file-header-card-clear"
-          aria-label="Clear dashboard"
-          title="Clear dashboard"
-          onClick={onReset}
-        >
-          <Eraser size={16} aria-hidden="true" />
-        </button>
+        <DownloadMenu key={activity.fileName} activity={activity} />
+        <ClearButton onReset={onReset} onDiscard={onDiscard} />
       </div>
     </section>
   );

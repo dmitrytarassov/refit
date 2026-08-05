@@ -45,11 +45,13 @@ export function MetricTilesRow({
         help={METRIC_HELP.normalizedPower}
       />
       <MetricTile
-        label="Est. FTP"
+        label={ftp?.source === "manual" ? "FTP (manual)" : "Est. FTP"}
         value={ftp != null ? String(ftp.watts) : "—"}
         unit={ftp != null ? "W" : undefined}
         muted={ftp == null}
-        help={METRIC_HELP.ftp}
+        help={
+          ftp?.source === "manual" ? METRIC_HELP.ftpManual : METRIC_HELP.ftp
+        }
       />
       <MetricTile
         label="TSS"

@@ -104,12 +104,14 @@
     width: 34px;
     height: 34px;
     padding: 0;
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
+    background: var(--brass-tint);
+    border: 1px solid var(--brass);
+    border-radius: 8px;
+    color: var(--brass-text);
 
     &:hover {
-      background: var(--surface-subtle);
+      background: var(--brass);
+      color: var(--ink-on);
     }
   }
 }

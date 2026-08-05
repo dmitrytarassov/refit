@@ -1,0 +1,58 @@
+.clear-button {
+  position: relative;
+  display: inline-flex;
+
+  .clear-button-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+    min-width: 230px;
+    padding: 14px 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+
+    p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+  }
+
+  .clear-button-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .clear-button-delete {
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--danger);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--danger-text);
+    }
+  }
+
+  .clear-button-keep {
+    padding: 7px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+    }
+  }
+}

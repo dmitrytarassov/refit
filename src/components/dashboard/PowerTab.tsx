@@ -39,10 +39,12 @@ export function PowerTab({ activity }: { activity: Activity }): ReactElement {
           help={METRIC_HELP.maxPower}
         />
         <MetricTile
-          label="Est. FTP"
+          label={ftp?.source === "manual" ? "FTP (manual)" : "Est. FTP"}
           value={ftp != null ? String(ftp.watts) : "—"}
           unit="W"
-          help={METRIC_HELP.ftp}
+          help={
+            ftp?.source === "manual" ? METRIC_HELP.ftpManual : METRIC_HELP.ftp
+          }
         />
         <MetricTile
           label="Intensity Factor"

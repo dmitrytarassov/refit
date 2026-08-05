@@ -6,6 +6,7 @@ import { estimatePower } from "../../lib/power/estimate-power";
 import { sessionPowerStats } from "../../lib/power/session-stats";
 import type { FitRecord } from "../../lib/track/fit-record";
 import { buildRideRow } from "../db/build-ride-row";
+import { deleteRide } from "../db/delete-ride";
 import { findRideByFileName } from "../db/find-ride-by-file-name";
 import { getLastSettings } from "../db/get-last-settings";
 import { getRide } from "../db/get-ride";
@@ -50,6 +51,7 @@ export function useFitProcessing(): {
   processUrl: (url: string, fileName: string) => void;
   updateSettings: (settings: RideSettings) => void;
   reset: () => void;
+  discard: () => void;
 } {
   const [searchParams, setSearchParams] = useSearchParams();
   const recordParam = searchParams.get("record");
@@ -114,6 +116,14 @@ export function useFitProcessing(): {
     }
   };
 
+  const discard = (): void => {
+    const id = loadedRecordRef.current;
+    if (id != null) {
+      void deleteRide(Number(id));
+    }
+    reset();
+  };
+
   const updateSettings = (settings: RideSettings): void => {
     if (state.status !== "ready") {
       return;
@@ -176,5 +186,5 @@ export function useFitProcessing(): {
       });
   }, [recordParam]);
 
-  return { state, processFile, processUrl, updateSettings, reset };
+  return { state, processFile, processUrl, updateSettings, reset, discard };
 }

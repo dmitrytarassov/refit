@@ -18,7 +18,7 @@
 
 - [x] Cut the bundle with code splitting (2026-08-04): entry ~254 KB (82 KB gzip) instead of ~1043 KB in one chunk. Garmin SDK — dynamic `import()` in `decodeActivity` / `useEnhanceDownload` (chunk loads after file selection); recharts and all the cards — `React.lazy(ActivityDashboard)` on the ready branch of `DashboardPanel`.
 
-## Metrics (FTP is estimated from the recording as a lower bound — see docs/ftp-estimation.md; manual FTP in settings — later)
+## Metrics (FTP: manual value from Settings wins, otherwise estimated from the recording as a lower bound — see docs/ftp-estimation.md; manual FTP done 2026-08-05)
 
 - [x] Intensity Factor — back as a tile on the Power tab (2026-08-05), computed as NP / estimated FTP in `PowerTab`.
 - [x] TSS — computed (`useTSS` on top of the estimated FTP); since FTP is a lower bound, TSS is an upper estimate.
@@ -31,5 +31,5 @@
 - [ ] Intervals tab — the only inactive stub left (Power / Performance / Map / Data Quality are live since 2026-08-05, state in `?tab`). Map tab still owes the detail view: rejected/smoothed points highlighted, before/after cleaning comparison.
 - [x] "View Raw Data" — navigates to the Data Quality tab (2026-08-05): `FileDataCard` shows mesg counts, fileId/session key-values, decode errors. A per-record viewer for `recordMesgs` — later, if needed.
 - [x] Kebab menu on the file card — replaced (2026-08-05) with a direct "clear dashboard" eraser icon (`reset()` in `use-fit-processing`); the other kebab ideas (copy report) dropped for now.
-- [x] Header navigation: Dashboard, History, Help and Settings are live (`?view=…`); the avatar mock replaced with GitHub + Telegram icon links (2026-08-05). Help (2026-08-04) — formulas for all calculations, keep in sync with docs when algorithms change. Settings (2026-08-04) — power calculation defaults; candidates to add: mass, `--smooth`, manual FTP.
+- [x] Header navigation: Dashboard, History, Help and Settings are live (`?view=…`); the avatar mock replaced with GitHub + Telegram icon links (2026-08-05). Help (2026-08-04) — formulas for all calculations, keep in sync with docs when algorithms change. Settings (2026-08-04) — power calculation defaults; manual FTP added 2026-08-05; candidates to add: mass, `--smooth`.
 - [ ] Processing settings before "Download enhanced": `--smooth` and bike/rider mass are still hardcoded (smooth off, mass from defaults). Riding position (CdA) and Crr (surface/tires/pressure) are done (2026-08-04): `PowerSettingsBar` under the file card, persisted to the database (ride row + last-used values), metrics recomputed on the fly.

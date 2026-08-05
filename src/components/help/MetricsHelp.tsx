@@ -16,11 +16,13 @@ export function MetricsHelp(): ReactElement {
 
       <h4>Estimated FTP</h4>
       <p>
-        There is no user profile, so FTP is estimated from the ride itself as a{" "}
-        <strong>lower bound</strong>: a normal ride is not an all-out test, so
-        the honest claim is &laquo;FTP is not below X&raquo;. Three candidates
-        are computed from the power curve (best average power per duration) and
-        the maximum wins:
+        If you set your FTP on the Settings page, it is used as-is everywhere
+        (zones, TSS, Intensity Factor) — the FTP tile and the zones caption show
+        which source is in use. Otherwise FTP is estimated from the ride itself
+        as a <strong>lower bound</strong>: a normal ride is not an all-out test,
+        so the honest claim is &laquo;FTP is not below X&raquo;. Three
+        candidates are computed from the power curve (best average power per
+        duration) and the maximum wins:
       </p>
       <pre className="help-formula">{`FTP ≥ max( 0.95 · P₂₀,
            (1200 · P₂₀ − 300 · P₅) / 900,   — Critical Power (Monod, 5- and 20-min points)
