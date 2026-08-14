@@ -3,6 +3,10 @@
   gap: 20px;
   min-width: 0;
 
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+
   .power-chart-plot {
     flex: 1;
     min-width: 0;

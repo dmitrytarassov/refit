@@ -39,7 +39,7 @@ Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends 
 
 ## Documentation (mandatory)
 
-- **Every code change ends with a documentation pass.** After any edit, update the affected `docs/*.md` (and CLAUDE.md if layout or conventions changed); if a change introduces a new subsystem, write a new doc in `docs/` and link it from the table in `docs/architecture.md`.
+- **Every code change ends with a documentation pass.** After any edit, update the affected `docs/*.md` (and CLAUDE.md if layout or conventions changed); if a change introduces a new subsystem, write a new doc in `docs/` and link it from the table in `docs/architecture.md`, from `public/llms.txt` (Docs section), and from the `SOURCES` list in `scripts/build-llms-full.ts`.
 - **Formulas live in four places** — `docs/*.md`, the web Help page (`src/components/help/`), `README.md`, and the metric-tile tooltips (`src/components/dashboard/metric-help.ts`). Changing any algorithm or constant (cleaning thresholds, power model, CdA/Crr tables, NP/FTP/TSS/zones) means updating all of them in the same change.
 - Link between docs instead of duplicating content.
 - A task is not done while docs contradict the code.

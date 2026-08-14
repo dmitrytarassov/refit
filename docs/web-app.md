@@ -4,7 +4,7 @@ An SPA on Vite + React 19 (React Compiler via babel-plugin) on top of `lib`. **N
 
 Run: `bun run dev`, build: `bun run build`, lint: `bun run lint`.
 
-Deploy: GitHub Pages via `.github/workflows/deploy.yml` (push to `main` → build → `actions/deploy-pages`, site at `https://dmitrytarassov.github.io/refit/`). The workflow passes `BASE_PATH=/refit/` to the build; `vite.config.ts` reads it into `base`, and `BrowserRouter` gets `basename={import.meta.env.BASE_URL}` — both are required for a project-pages subpath, or the site loads blank / links escape to the domain root.
+Deploy: GitHub Pages via `.github/workflows/deploy.yml` (push to `main` → build → `actions/deploy-pages`, site at `https://dmitrytarassov.github.io/refit/`). The site serves two LLM-discovery files: `/llms.txt` (hand-written overview + doc links, lives in `public/`) and `/llms-full.txt` (README + all docs in one file, generated into `dist/` by `scripts/build-llms-full.ts` as the last build step). The workflow passes `BASE_PATH=/refit/` to the build; `vite.config.ts` reads it into `base`, and `BrowserRouter` gets `basename={import.meta.env.BASE_URL}` — both are required for a project-pages subpath, or the site loads blank / links escape to the domain root.
 
 The bundle is sliced into chunks: heavy dependencies don't load until needed. `@garmin/fitsdk` is pulled in via dynamic `import()` inside `decodeActivity` (`use-fit-processing`) and `use-enhance-download`; recharts with all the dashboard cards — via `React.lazy(ActivityDashboard)` in `DashboardPanel` (rendered only in the `ready` status, fallback — "Loading dashboard…"); Leaflet is another lazy boundary inside `ActivityDashboard` (`RouteMapCard`, fallback `null`).
 
@@ -17,7 +17,7 @@ react-router-dom, but without `<Routes>`: the only path is `/`, and "pages" swit
 | `/` | dashboard: sidebar with UploadZone + ride panel |
 | `/?record=id` | the same main page, but the file is taken from IndexedDB by id |
 | `/?record=id&tab=…` | dashboard tabs: `power`, `performance`, `map`, `data-quality` (`tab` is absent for Overview) |
-| `/?view=history` | the History page (table of saved rides) |
+| `/?view=history` | the History page (table of saved rides; ride cards on mobile) |
 | `/?view=help` | the Help page — formulas for all calculations (cleaning, power, metrics) |
 | `/?view=settings` | the Settings page — default power calculation settings (`settings` store) |
 
@@ -41,12 +41,12 @@ The **Download enhanced** button (`FileHeaderCard` → `DownloadMenu` → `use-e
 
 | Directory | Contents |
 | --- | --- |
-| `components/layout/` | `AppHeader`, `ThemeToggle` |
-| `components/sidebar/` | `SidebarPanel`: heading, `UploadZone`, How it works / What you get promo cards |
+| `components/layout/` | `AppHeader`, `ThemeToggle`, mobile navigation (≤640px): `MobileNav` (open/close state) renders `MobileNavBar` — a fixed bottom bar with Home/History/Settings icons + a burger button — and `MobileNavDrawer` — a bottom sheet with all links as text (Dashboard, History, Settings, Help, GitHub, Telegram) plus `ThemeToggle` in its footer. On mobile the header is hidden entirely — the bottom bar + drawer replace it |
+| `components/sidebar/` | `SidebarPanel` (brand block + `UploadZone`; on mobile the brand title and tagline sit in one row) and `SidebarInfoCards` (How it works / What you get promo cards) — separate grid children of `.app-body` (areas `sidebar` / `extras`), so on mobile the cards move below the main content |
 | `components/dashboard/` | `DashboardPanel` (routing by `ProcessingState`, lazy boundary), `ActivityDashboard` (header cards + tabs, switches content by `?tab`), `OverviewTab` (tiles, charts, bottom row, map), `PowerTab` (power tiles incl. Intensity Factor + power chart with zones + power curve), `PerformanceTab` (HR/cadence/elevation charts + Training Load), `MapTab` (full-width route map), `DataQualityTab` (`DataQualityCard` + `FileDataCard` — raw mesg counts, fileId/session key-values, decode errors; the "View Raw Data" button in `FileHeaderCard` navigates here), `DashboardTabs` (state in `?tab` via `useSearchParams`; only Intervals is a stub), `FileHeaderCard`, `MetricTilesRow`, `EmptyState`. Computed metric tiles (Avg/NP/Max Power, Est. FTP, IF, TSS) carry a `?` HelpTip in the corner with a one-line "how it's computed" — texts live in `metric-help.ts`, shared by Overview and Power; self-evident tiles (Duration, Distance) have none. Keep the texts in sync with docs/Help/README when formulas change (+ example buttons from `example-files.ts`: the demo ride is served from `public/examples/`, the Garmin sample is fetched from their GitHub at click time; both open via `processUrl` and are **not** saved to History) |
 | `components/charts/` | Recharts cards: Power, HeartRate, Cadence, Elevation + `PowerZonesPanel` |
 | `components/bottom/` | `PowerCurveCard`, `DataQualityCard`, `TrainingLoadCard` |
-| `components/history/` | `HistoryPage` — table built from `RideRow` columns, no FIT parsing |
+| `components/history/` | `HistoryPage` — two render variants from `RideRow` columns, no FIT parsing: `HistoryTable` (desktop) and, on mobile (≤640px), `HistoryCardList` of `HistoryRideCard`s — non-interactive `RouteThumb` SVG polyline (from the stored `track`, empty placeholder for rides saved before the field existed), one-line file name middle-truncated with `shortenString` from `just-shorten` (12 chars each side, extension stays visible; CSS ellipsis as fallback), date · time, distance / avg speed / avg power |
 | `components/help/` | `HelpPage` + sections `TrackCleaningHelp` / `PowerModelHelp` / `MetricsHelp` — static reference with formulas; content is a digest of [track-cleaning.md](track-cleaning.md), [power-estimation.md](power-estimation.md), [ftp-estimation.md](ftp-estimation.md); update together with the docs when algorithms change |
 | `components/power-settings/` | `PowerSettingsBar` (strip below `FileHeaderCard`: selected position/surface/tires/pressure + a gear icon) and `PowerSettingsPanel` (selects, reused on Settings); changing a value → `updateSettings` from `use-fit-processing` |
 | `components/settings/` | `SettingsPage` — power calculation defaults for new rides (`usePowerSettings` + the shared `PowerSettingsPanel`), rider/bike weight (`useMassSettings`, clearable, defaults 82/8) and the manual FTP field (`useManualFtp`, clearable) |
@@ -61,12 +61,21 @@ The **Download enhanced** button (`FileHeaderCard` → `DownloadMenu` → `use-e
 
 CSS — plain files next to the component (`Component.tsx` + `Component.css`), no CSS-in-JS.
 
+### Breakpoints
+
+- **`max-width: 640px` — mobile.** The canonical mobile breakpoint; use it for any phone-layout change (e.g. `MetricTilesRow` tile grid, the Power chart card collapsing to one column: chart first, zones panel below it; `AppHeader` hidden entirely in favor of the bottom `MobileNavBar` + `MobileNavDrawer`, with `.app-shell` padded 56px at the bottom for the fixed bar; `SidebarInfoCards` reordered below the main content via grid areas).
+- `max-width: 900px` — the sidebar column collapses (`App.css`, `SidebarPanel.css`).
+- `max-width: 1280px` — intermediate grid step inside the dashboard: the metric tiles (`MetricTilesRow.css`) and the mid/bottom chart card rows (`DashboardPanel.css` — 3 columns above, 2 columns from here down to mobile, 1 column at mobile).
+
+New responsive rules must reuse these values — don't introduce new breakpoints without updating this list.
+
 ## Hooks
 
 Components are pure render; computation lives in hooks:
 
 | Hook | What it does |
 | --- | --- |
+| `use-is-mobile` | `true` below the mobile breakpoint (`MOBILE_MEDIA_QUERY` from `styles/mobile-breakpoint.ts`, matchMedia + `useSyncExternalStore`); used only by `HistoryPage` to mount just one of table/cards — the CSS media toggles stay as well |
 | `use-fit-processing` | file or `?record=id` → `Activity`, saving to history; `processUrl` — fetch + decode a file by URL without saving (example rides); `updateSettings` — recompute power/metrics on settings change and autosave ([history-storage.md](history-storage.md)) |
 | `use-activity-summary` | meta (sport, date, device) and metrics for the tiles |
 | `use-power-series`, `use-record-series` | power/HR/cadence/elevation time series with downsampling |

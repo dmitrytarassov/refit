@@ -11,5 +11,6 @@ export interface RideRow {
   ftpWatts?: number;
   tss?: number;
   settings?: RideSettings;
+  track?: Array<[number, number]>;
   file: ArrayBuffer;
 }

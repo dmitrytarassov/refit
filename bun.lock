@@ -6,6 +6,7 @@
       "dependencies": {
         "@garmin/fitsdk": "^21.208.0",
         "just-defer-call": "^1.0.5",
+        "just-shorten": "^1.0.2",
         "leaflet": "^1.9.4",
         "lucide-react": "^1.28.0",
         "react": "^19.2.8",
@@ -652,6 +653,8 @@
     "jsx-ast-utils": ["jsx-ast-utils@3.3.5", "", { "dependencies": { "array-includes": "^3.1.6", "array.prototype.flat": "^1.3.1", "object.assign": "^4.1.4", "object.values": "^1.1.6" } }, "sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ=="],
 
     "just-defer-call": ["just-defer-call@1.0.5", "", {}, "sha512-X4lOQ/XgRamdyKO6rqAylqfPzYznqTIKT9q4V0s4LbLygwV77e/CIL1ZZwuSo/Lwn6DFShAbtMBDI7fKnK5J9Q=="],
+
+    "just-shorten": ["just-shorten@1.0.2", "", {}, "sha512-qm2hyMBkRFsqBxqUf3hudnnHzvwZIMwYRl1OKKiN8axqMzYhQbmqsU+imnfjNXFGpNmDBHjA84k/JnqQcg0clA=="],
 
     "keyv": ["keyv@4.5.4", "", { "dependencies": { "json-buffer": "3.0.1" } }, "sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw=="],
 

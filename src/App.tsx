@@ -6,7 +6,9 @@ import { DashboardPanel } from "./components/dashboard/DashboardPanel";
 import { HelpPage } from "./components/help/HelpPage";
 import { HistoryPage } from "./components/history/HistoryPage";
 import { AppHeader } from "./components/layout/AppHeader";
+import { MobileNav } from "./components/layout/MobileNav";
 import { SettingsPage } from "./components/settings/SettingsPage";
+import { SidebarInfoCards } from "./components/sidebar/SidebarInfoCards";
 import { SidebarPanel } from "./components/sidebar/SidebarPanel";
 import { useFitProcessing } from "./hooks/use-fit-processing";
 import { useThemeState } from "./hooks/use-theme-state";
@@ -18,6 +20,10 @@ function App(): ReactElement {
     useFitProcessing();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
+  const activeView =
+    view === "history" || view === "help" || view === "settings"
+      ? view
+      : "dashboard";
 
   let content: ReactElement;
   if (view === "history") {
@@ -54,6 +60,7 @@ function App(): ReactElement {
             onDiscard={discard}
           />
         </main>
+        <SidebarInfoCards />
       </div>
     );
   }
@@ -61,14 +68,9 @@ function App(): ReactElement {
   return (
     <ThemeContext.Provider value={theme}>
       <div className="app-shell">
-        <AppHeader
-          activeView={
-            view === "history" || view === "help" || view === "settings"
-              ? view
-              : "dashboard"
-          }
-        />
+        <AppHeader activeView={activeView} />
         {content}
+        <MobileNav activeView={activeView} />
       </div>
     </ThemeContext.Provider>
   );

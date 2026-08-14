@@ -7,13 +7,13 @@ There is no auth — everything is stored locally in the browser, in IndexedDB (
 
 ## Row (`RideRow`)
 
-Metrics live in separate columns so History doesn't parse FIT on every render: `fileName`, `createdAt` (ms, first track record), `durationSec`, `distanceM`, `avgPower`, `normalizedPower`, `ftpWatts` (estimate, [ftp-estimation.md](ftp-estimation.md)), `tss`, `settings` (this ride's calculation settings), plus the file itself (`file: ArrayBuffer`).
+Metrics live in separate columns so History doesn't parse FIT on every render: `fileName`, `createdAt` (ms, first track record), `durationSec`, `distanceM`, `avgPower`, `normalizedPower`, `ftpWatts` (estimate, [ftp-estimation.md](ftp-estimation.md)), `tss`, `settings` (this ride's calculation settings), `track` (optional, `[lat, lon]` degrees of the cleaned route downsampled to ≤200 points — feeds the mobile History card's `RouteThumb`; rows saved before the field existed don't have it until their row is rewritten by a settings change), plus the file itself (`file: ArrayBuffer`).
 
 ## Flow
 
 - **New ride**: after parsing and enrichment (`useFitProcessing`) — if no file with that `fileName` exists yet, `buildRideRow` computes the columns and `saveRide` writes the row; the URL gets `?record=id` (`setSearchParams` with `replace`, no reload).
 - **`/?record=id`**: `useFitProcessing` reacts to the parameter (`useSearchParams`) — the file is taken from the database (`getRide`) and run through the same pipeline whether it's a first page load or a client-side navigation; the dashboard doesn't care where the buffer came from.
-- **`/?view=history`**: the History page (`HistoryPage` + `useRideHistory` → `listRides`, the file is not loaded into the list) — a table with columns from the database, clicking a file is a client-side navigation (`<Link>`) to `/?record=id`.
+- **`/?view=history`**: the History page (`HistoryPage` + `useRideHistory` → `listRides`, the file is not loaded into the list) — a table with columns from the database (ride cards with a route thumbnail on mobile), clicking a file/card is a client-side navigation (`<Link>`) to `/?record=id`.
 - **Deleting a ride** — two entry points: the trash button in the History table (two-step inline confirm — first click arms the button, second deletes; optimistic list update) and the dashboard eraser's "Delete" option for the currently open ride. Both go through `deleteRide` erasing the row from the `rides` store. No undo — the file is gone from the database. A stale `/?record=id` link to a deleted ride shows the existing "Ride #N not found in history" error.
 - **Changing calculation settings** (`PowerSettingsBar` → `updateSettings` in `useFitProcessing`): power and metrics are recomputed in place (no re-decode), the ride row is overwritten (`updateRide`) with the new metrics and settings — History immediately shows current numbers; the same settings are written to the `settings` store as the latest.
 

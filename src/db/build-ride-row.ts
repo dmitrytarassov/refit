@@ -3,6 +3,8 @@ import type { RideRow } from "./ride-row";
 import { computeTss } from "../../lib/power/compute-tss";
 import { estimateFtp } from "../../lib/power/estimate-ftp";
 import { powerCurve } from "../../lib/power/power-curve";
+import { downsamplePoints } from "../fit/downsample-points";
+import { routePoints } from "../fit/route-points";
 import type { Activity } from "../types/activity";
 
 export function buildRideRow(
@@ -35,6 +37,7 @@ export function buildRideRow(
         ? computeTss(timerSec, np, ftp.watts)
         : undefined,
     settings: activity.settings,
+    track: downsamplePoints(routePoints(activity), 200),
     file,
   };
 }

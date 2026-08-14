@@ -1,0 +1,19 @@
+.sidebar-info-cards {
+  grid-area: extras;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 24px 24px;
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 900px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    border-bottom: none;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+}
