@@ -22,9 +22,12 @@ F_inertia = m · a
         barometric formula using the record&rsquo;s temperature and altitude (a
         ±3–5% effect on the aero term). The device speed series is cleaned first
         with a two-sided Hampel filter (±5-record window, 5σ, σ = max(1.4826 ·
-        MAD, 0.5 m/s); outliers replaced with the window median) — a single
-        glitched sample would otherwise spike both the aero term and the
-        derivative. Acceleration a is a central difference of the filtered
+        MAD, 0.5 m/s); outliers replaced with the window median), then a
+        3-point rolling median that flattens one-second speed dips too small
+        for the sigma threshold but big enough to fake a power spike through
+        the acceleration term — monotonic runs (real sprints) pass through
+        unchanged. A single glitched sample would otherwise spike both the
+        aero term and the derivative. Acceleration a is a central difference of the filtered
         speed, capped at 3 m/s², and not computed across pauses or data gaps (Δt
         &gt; 10 s). Mass m is rider + bike + gear + bottles — set yours in
         Settings; without it the defaults (82 kg rider, 8 kg bike, 2 kg gear —

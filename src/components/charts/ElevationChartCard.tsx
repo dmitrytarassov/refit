@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
+import { CombinedChart } from "./CombinedChart";
 import { ChartCard } from "./ui/ChartCard";
 import { ChartTooltip } from "./ui/ChartTooltip";
 
@@ -31,7 +32,10 @@ export function ElevationChartCard({
   const palette = CHART_PALETTE[mode];
 
   return (
-    <ChartCard title="Elevation">
+    <ChartCard
+      title="Elevation"
+      expanded={<CombinedChart activity={activity} initial="elevation" />}
+    >
       {elevation.length === 0 ? (
         <p className="elevation-chart-empty">No elevation data</p>
       ) : (

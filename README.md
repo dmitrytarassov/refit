@@ -91,7 +91,7 @@ F_inertia = m · a
 η         = 0.975                   (chain + bearings)
 ```
 
-Negative results are clamped to 0; power is zero at cadence 0 (coasting) and below 0.5 m/s. Air density ρ comes from the barometric formula over the record's temperature and altitude. The device speed series is first cleaned with a two-sided Hampel filter (±5-record window, 5σ, σ = max(1.4826 · MAD, 0.5 m/s); outliers replaced with the window median) — one glitched sample would otherwise spike both the aero term and the derivative. Acceleration is a central difference of the filtered speed, capped at 3 m/s², not computed across gaps (Δt > 10 s).
+Negative results are clamped to 0; power is zero at cadence 0 (coasting) and below 0.5 m/s. Air density ρ comes from the barometric formula over the record's temperature and altitude. The device speed series is first cleaned with a two-sided Hampel filter (±5-record window, 5σ, σ = max(1.4826 · MAD, 0.5 m/s); outliers replaced with the window median), then a 3-point rolling median that flattens one-sample V-dips too small for the sigma threshold yet big enough to fake an inertia spike — monotonic runs (real sprints) pass through unchanged. One glitched sample would otherwise spike both the aero term and the derivative. Acceleration is a central difference of the filtered speed, capped at 3 m/s², not computed across gaps (Δt > 10 s).
 
 CdA by position: tops 0.40, hoods 0.32, drops 0.28, aero 0.23 m². Rolling resistance:
 

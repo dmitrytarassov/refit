@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
+import { CombinedChart } from "./CombinedChart";
 import { PowerZonesPanel } from "./PowerZonesPanel";
 import { ChartCard } from "./ui/ChartCard";
 import { ChartTooltip } from "./ui/ChartTooltip";
@@ -65,7 +66,11 @@ export function PowerChartCard({
   );
 
   return (
-    <ChartCard title="Power" aside={legend}>
+    <ChartCard
+      title="Power"
+      aside={legend}
+      expanded={<CombinedChart activity={activity} initial="power" />}
+    >
       <div className="power-chart-body">
         <div className="power-chart-plot">
           {points.length === 0 ? (

@@ -2,6 +2,7 @@ import { pointPowerW } from "./point-power";
 import type { PowerConfig } from "./power-config";
 
 import { hampelSpeeds } from "../filters/hampel-speed";
+import { median3 } from "../filters/median3";
 import type { FitRecord } from "../track/fit-record";
 
 /**
@@ -18,8 +19,12 @@ export function estimatePower(
   );
   // Device speed is not touched by the GPS cleaning pipeline, and a single
   // glitched sample spikes both the aero term (~v³) and the acceleration
-  // derivative — filter the series before any of it is used.
-  const speeds = hampelSpeeds(records.map((r) => r.enhancedSpeed ?? r.speed));
+  // derivative — filter the series before any of it is used. The 3-point
+  // median after Hampel kills one-sample V-dips that stay under the sigma
+  // threshold yet blow up the central-difference acceleration.
+  const speeds = median3(
+    hampelSpeeds(records.map((r) => r.enhancedSpeed ?? r.speed)),
+  );
 
   return records.map((r, i) => {
     const speed = speeds[i];

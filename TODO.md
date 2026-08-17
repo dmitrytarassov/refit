@@ -24,7 +24,7 @@
 - [x] TSS — computed (`useTSS` on top of the estimated FTP); since FTP is a lower bound, TSS is an upper estimate.
 - [x] Power Zones — panel is live (`usePowerZones`): Coggan zones from the estimated FTP, % of time in each zone.
 - [ ] Power Curve: the "Your Best" line — comparison against best efforts from past rides; requires history storage (localStorage/IndexedDB, ~30 numbers per ride, max aggregation), will land together with History. The "This Ride" curve is already done.
-- [ ] Training Load — mock card; will fill in after TSS/IF (+ calories from the device's session mesg, if present).
+- [ ] Training Load — will fill in after TSS/IF (+ calories from the device's session mesg, if present). The mock card was removed from the UI on 2026-08-17 (replaced by the Speed chart in Overview and Performance); `TrainingLoadCard` stays in `components/bottom/`, bring it back when implemented.
 
 ## UI
 

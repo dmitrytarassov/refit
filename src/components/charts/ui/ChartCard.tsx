@@ -9,15 +9,18 @@ import { ChartCardExpanded } from "./ChartCardExpanded";
 interface ChartCardProps {
   title: string;
   aside?: ReactNode;
+  /** Modal content override — when set, the expanded view renders this instead of children (and drops the aside). */
+  expanded?: ReactNode;
   children: ReactNode;
 }
 
 export function ChartCard({
   title,
   aside,
+  expanded,
   children,
 }: ChartCardProps): ReactElement {
-  const [expanded, setExpanded] = useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   return (
     <section className="chart-card">
@@ -34,13 +37,13 @@ export function ChartCard({
         </button>
       </header>
       <div className="chart-card-body">{children}</div>
-      {expanded && (
+      {isExpanded && (
         <ChartCardExpanded
           title={title}
-          aside={aside}
+          aside={expanded != null ? undefined : aside}
           onClose={deferCall(setExpanded, false)}
         >
-          {children}
+          {expanded ?? children}
         </ChartCardExpanded>
       )}
     </section>

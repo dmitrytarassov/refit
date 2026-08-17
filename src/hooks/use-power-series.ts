@@ -19,6 +19,9 @@ export function usePowerSeries(activity: Activity): PowerPoint[] {
       return;
     }
     const point: PowerPoint = { t: (r.timestamp.getTime() - t0) / 1000 };
+    if (r.distance != null) {
+      point.d = r.distance;
+    }
     if (original != null) {
       point.original = original;
     }

@@ -8,6 +8,7 @@ export interface ChartPalette {
   cadence: string;
   power: string;
   elevation: string;
+  speed: string;
   tooltipBg: string;
   tooltipBorder: string;
   tooltipText: string;

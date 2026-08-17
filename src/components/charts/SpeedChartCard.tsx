@@ -19,35 +19,35 @@ import { formatDuration } from "../../fit/format-metrics";
 import { useRecordSeries } from "../../hooks/use-record-series";
 import { useTheme } from "../../hooks/use-theme";
 import type { Activity } from "../../types/activity";
-import "./CadenceChartCard.css";
+import "./SpeedChartCard.css";
 
-interface CadenceChartCardProps {
+interface SpeedChartCardProps {
   activity: Activity;
 }
 
-export function CadenceChartCard({
+export function SpeedChartCard({
   activity,
-}: CadenceChartCardProps): ReactElement {
-  const { cadence } = useRecordSeries(activity);
+}: SpeedChartCardProps): ReactElement {
+  const { speed } = useRecordSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
 
   return (
     <ChartCard
-      title="Cadence"
-      expanded={<CombinedChart activity={activity} initial="cadence" />}
+      title="Speed"
+      expanded={<CombinedChart activity={activity} initial="speed" />}
     >
-      {cadence.length === 0 ? (
-        <p className="cadence-chart-empty">No cadence data</p>
+      {speed.length === 0 ? (
+        <p className="speed-chart-empty">No speed data</p>
       ) : (
-        <div className="cadence-chart-plot">
+        <div className="speed-chart-plot">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={cadence}
+              data={speed}
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
             >
               <defs>
-                <ChartFillGradient id="cadence-fill" color={palette.cadence} />
+                <ChartFillGradient id="speed-fill" color={palette.speed} />
               </defs>
               <CartesianGrid
                 vertical={false}
@@ -63,22 +63,22 @@ export function CadenceChartCard({
                 minTickGap={32}
               />
               <YAxis
-                unit=" rpm"
-                width={64}
+                unit=" km/h"
+                width={72}
                 tick={{ fill: palette.axis, fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
-                content={(props) => <ChartTooltip {...props} unit="rpm" />}
+                content={(props) => <ChartTooltip {...props} unit="km/h" />}
                 cursor={{ stroke: palette.grid }}
               />
               <Area
                 dataKey="value"
-                name="Cadence"
-                stroke={palette.cadence}
+                name="Speed"
+                stroke={palette.speed}
                 strokeWidth={1.5}
-                fill="url(#cadence-fill)"
+                fill="url(#speed-fill)"
                 dot={false}
                 isAnimationActive={false}
               />

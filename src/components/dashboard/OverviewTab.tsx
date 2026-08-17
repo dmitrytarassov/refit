@@ -6,11 +6,11 @@ import { MetricTilesRow } from "./MetricTilesRow";
 import type { Activity } from "../../types/activity";
 import { DataQualityCard } from "../bottom/DataQualityCard";
 import { PowerCurveCard } from "../bottom/PowerCurveCard";
-import { TrainingLoadCard } from "../bottom/TrainingLoadCard";
 import { CadenceChartCard } from "../charts/CadenceChartCard";
 import { ElevationChartCard } from "../charts/ElevationChartCard";
 import { HeartRateChartCard } from "../charts/HeartRateChartCard";
 import { PowerChartCard } from "../charts/PowerChartCard";
+import { SpeedChartCard } from "../charts/SpeedChartCard";
 
 const RouteMapCard = lazy(() =>
   import("../map/RouteMapCard").then((m) => ({ default: m.RouteMapCard })),
@@ -25,14 +25,12 @@ export function OverviewTab({
     <>
       <MetricTilesRow activity={activity} />
       <PowerChartCard activity={activity} />
-      <div className="dashboard-mid-row">
+      <div className="dashboard-card-grid">
         <HeartRateChartCard activity={activity} />
         <CadenceChartCard activity={activity} />
         <ElevationChartCard activity={activity} />
-      </div>
-      <div className="dashboard-bottom-row">
         <PowerCurveCard activity={activity} />
-        <TrainingLoadCard />
+        <SpeedChartCard activity={activity} />
         <DataQualityCard activity={activity} />
       </div>
       <Suspense fallback={null}>

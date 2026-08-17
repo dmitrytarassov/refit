@@ -6,9 +6,21 @@
   line-height: 1.5;
   box-shadow: 0 4px 12px rgb(15 18 32 / 0.12);
 
+  .chart-tooltip-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
   .chart-tooltip-time {
     font-weight: 600;
-    margin-bottom: 4px;
+  }
+
+  .chart-tooltip-distance {
+    opacity: 0.75;
+    font-variant-numeric: tabular-nums;
   }
 
   .chart-tooltip-row {

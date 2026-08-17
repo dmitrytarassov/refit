@@ -15,6 +15,7 @@ import { usePowerCurve } from "../../hooks/use-power-curve";
 import { useTheme } from "../../hooks/use-theme";
 import type { Activity } from "../../types/activity";
 import { ChartCard } from "../charts/ui/ChartCard";
+import { ChartFillGradient } from "../charts/ui/ChartFillGradient";
 import { ChartTooltip } from "../charts/ui/ChartTooltip";
 import { HelpTip } from "../common/ui/HelpTip";
 import "./PowerCurveCard.css";
@@ -51,24 +52,10 @@ export function PowerCurveCard({
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
             >
               <defs>
-                <linearGradient
+                <ChartFillGradient
                   id="power-curve-fill"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="0%"
-                    stopColor={palette.power}
-                    stopOpacity={0.45}
-                  />
-                  <stop
-                    offset="100%"
-                    stopColor={palette.power}
-                    stopOpacity={0.03}
-                  />
-                </linearGradient>
+                  color={palette.power}
+                />
               </defs>
               <CartesianGrid
                 vertical={false}

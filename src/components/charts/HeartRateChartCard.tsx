@@ -9,7 +9,9 @@ import {
   YAxis,
 } from "recharts";
 
+import { CombinedChart } from "./CombinedChart";
 import { ChartCard } from "./ui/ChartCard";
+import { ChartFillGradient } from "./ui/ChartFillGradient";
 import { ChartTooltip } from "./ui/ChartTooltip";
 
 import { CHART_PALETTE } from "../../charts/chart-palette";
@@ -31,7 +33,10 @@ export function HeartRateChartCard({
   const palette = CHART_PALETTE[mode];
 
   return (
-    <ChartCard title="Heart Rate">
+    <ChartCard
+      title="Heart Rate"
+      expanded={<CombinedChart activity={activity} initial="heartRate" />}
+    >
       {heartRate.length === 0 ? (
         <p className="heart-rate-chart-empty">No heart rate data</p>
       ) : (
@@ -42,24 +47,10 @@ export function HeartRateChartCard({
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
             >
               <defs>
-                <linearGradient
+                <ChartFillGradient
                   id="heart-rate-fill"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="0%"
-                    stopColor={palette.heartRate}
-                    stopOpacity={0.45}
-                  />
-                  <stop
-                    offset="100%"
-                    stopColor={palette.heartRate}
-                    stopOpacity={0.03}
-                  />
-                </linearGradient>
+                  color={palette.heartRate}
+                />
               </defs>
               <CartesianGrid
                 vertical={false}

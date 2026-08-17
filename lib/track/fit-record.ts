@@ -11,5 +11,6 @@ export interface FitRecord {
   temperature?: number; // Celsius
   cadence?: number; // rpm
   power?: number; // watts
+  distance?: number; // m, cumulative
   [key: string]: unknown;
 }
