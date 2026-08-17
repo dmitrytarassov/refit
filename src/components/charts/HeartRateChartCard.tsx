@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -36,11 +36,31 @@ export function HeartRateChartCard({
         <p className="heart-rate-chart-empty">No heart rate data</p>
       ) : (
         <div className="heart-rate-chart-plot">
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
               data={heartRate}
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
             >
+              <defs>
+                <linearGradient
+                  id="heart-rate-fill"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor={palette.heartRate}
+                    stopOpacity={0.45}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={palette.heartRate}
+                    stopOpacity={0.03}
+                  />
+                </linearGradient>
+              </defs>
               <CartesianGrid
                 vertical={false}
                 stroke={palette.grid}
@@ -65,15 +85,16 @@ export function HeartRateChartCard({
                 content={(props) => <ChartTooltip {...props} unit="bpm" />}
                 cursor={{ stroke: palette.grid }}
               />
-              <Line
+              <Area
                 dataKey="value"
                 name="Heart Rate"
                 stroke={palette.heartRate}
                 strokeWidth={1.5}
+                fill="url(#heart-rate-fill)"
                 dot={false}
                 isAnimationActive={false}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       )}

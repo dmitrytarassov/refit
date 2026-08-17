@@ -1,14 +1,14 @@
 import { deferCall } from "just-defer-call";
+import { shortenString } from "just-shorten";
 import { Trash2 } from "lucide-react";
 import type { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 import type { RideRow } from "../../db/ride-row";
 import { formatDistance, formatDuration } from "../../fit/format-metrics";
-import {shortenString} from "just-shorten";
 
 interface HistoryTableProps {
-  rides: RideRow[];
+  rides: Array<Omit<RideRow, "file">>;
   armedId: number | null;
   onDelete: (id: number) => void;
 }

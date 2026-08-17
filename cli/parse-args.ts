@@ -26,6 +26,8 @@ export function parseArgs(argv: string[]): CliOptions {
         "  --power                        estimate and embed cycling power\n" +
         "  --bike-mass <kg>               (default 8)\n" +
         "  --rider-mass <kg>              (default 82)\n" +
+        "  --gear-mass <kg>               (default 2)\n" +
+        "  --bottles <ml,ml,...>          bottle volumes, counted full (default none)\n" +
         "  --cda auto|tops|hoods|drops|aero   (default auto: drops above 33 km/h, else hoods)\n" +
         "  --surface good-asphalt|rough-asphalt|gravel  (default good-asphalt)\n" +
         "  --tires road|endurance|gravel|mtb            (default road)\n" +
@@ -44,6 +46,19 @@ export function parseArgs(argv: string[]): CliOptions {
       throw new Error(`--${name}: expected a positive number, got "${v}"`);
     }
     return n;
+  };
+  const numList = (name: string): number[] | undefined => {
+    const v = flags.get(name);
+    if (v === undefined) {
+      return undefined;
+    }
+    const values = String(v).split(",").map(Number);
+    if (values.some((n) => !Number.isFinite(n) || n <= 0)) {
+      throw new Error(
+        `--${name}: expected comma-separated positive numbers, got "${v}"`,
+      );
+    }
+    return values;
   };
   const oneOf = <T extends string>(
     name: string,
@@ -64,7 +79,12 @@ export function parseArgs(argv: string[]): CliOptions {
 
   const power: PowerConfig | null = flags.has("power")
     ? {
-        mass: { bikeKg: num("bike-mass", 8), riderKg: num("rider-mass", 82) },
+        mass: {
+          bikeKg: num("bike-mass", 8),
+          riderKg: num("rider-mass", 82),
+          gearKg: num("gear-mass", 2),
+          bottlesMl: numList("bottles"),
+        },
         cda: oneOf(
           "cda",
           ["auto", "tops", "hoods", "drops", "aero"] as const,

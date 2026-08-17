@@ -15,6 +15,14 @@
     right: 8px;
   }
 
+  .metric-tile-corner {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
   .metric-tile-label {
     font-size: 13px;
     color: var(--text-secondary);

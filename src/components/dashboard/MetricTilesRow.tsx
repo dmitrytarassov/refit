@@ -24,7 +24,11 @@ export function MetricTilesRow({
 
   return (
     <section className="metric-tiles-row" aria-label="Ride metrics">
-      <MetricTile label="Duration" value={metrics.durationLabel} />
+      <MetricTile
+        label="Moving Time"
+        value={metrics.movingLabel}
+        corner={metrics.durationLabel}
+      />
       <MetricTile label="Distance" value={distanceValue} unit={distanceUnit} />
       <MetricTile
         label="Avg Power"

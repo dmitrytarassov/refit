@@ -9,6 +9,7 @@
 
   .power-chart-plot {
     flex: 1;
+    height: 300px;
     min-width: 0;
   }
 

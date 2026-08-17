@@ -8,15 +8,38 @@
   .chart-card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
     margin-bottom: 12px;
 
     h2 {
-      margin: 0;
+      margin: 0 auto 0 0;
       font-size: 15px;
       font-weight: 600;
       color: var(--text-primary);
+    }
+  }
+
+  .chart-card-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: -2px;
     }
   }
 

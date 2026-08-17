@@ -10,7 +10,7 @@ import { formatDistance } from "../../fit/format-metrics";
 import { formatSpeed } from "../../fit/format-speed";
 
 interface HistoryRideCardProps {
-  ride: RideRow;
+  ride: Omit<RideRow, "file">;
 }
 
 export function HistoryRideCard({ ride }: HistoryRideCardProps): ReactElement {

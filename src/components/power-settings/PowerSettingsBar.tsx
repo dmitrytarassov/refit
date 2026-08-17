@@ -4,9 +4,13 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 
 import "./PowerSettingsBar.css";
+import { BottleListEditor } from "./BottleListEditor";
 import { PowerSettingsPanel } from "./PowerSettingsPanel";
+import { RideMassFields } from "./RideMassFields";
 import { formatSettingValue } from "./format-setting-value";
 
+import { DEFAULT_GEAR_KG } from "../../../lib/power/gear-defaults";
+import { POWER_DEFAULTS } from "../../fit/power-defaults";
 import type { RideSettings } from "../../types/ride-settings";
 
 interface PowerSettingsBarProps {
@@ -19,6 +23,9 @@ export function PowerSettingsBar({
   onChange,
 }: PowerSettingsBarProps): ReactElement {
   const [open, setOpen] = useState(false);
+  const mass = settings.mass ?? POWER_DEFAULTS.mass;
+  const bottles = mass.bottlesMl ?? [];
+  const bottlesLiters = bottles.reduce((sum, ml) => sum + ml, 0) / 1000;
 
   return (
     <section className="power-settings-bar">
@@ -40,6 +47,21 @@ export function PowerSettingsBar({
             <dt>Pressure</dt>
             <dd>{formatSettingValue(settings.crr.pressure)}</dd>
           </div>
+          <div>
+            <dt>Weights</dt>
+            <dd>
+              {mass.riderKg} + {mass.bikeKg} + {mass.gearKg ?? DEFAULT_GEAR_KG}{" "}
+              kg
+            </dd>
+          </div>
+          <div>
+            <dt>Bottles</dt>
+            <dd>
+              {bottles.length > 0
+                ? `${bottles.length} (${bottlesLiters.toFixed(1)} L)`
+                : "—"}
+            </dd>
+          </div>
         </dl>
         <button
           type="button"
@@ -51,7 +73,21 @@ export function PowerSettingsBar({
           <Settings size={16} aria-hidden="true" />
         </button>
       </div>
-      {open && <PowerSettingsPanel settings={settings} onChange={onChange} />}
+      {open && (
+        <>
+          <PowerSettingsPanel settings={settings} onChange={onChange} />
+          <RideMassFields settings={settings} onChange={onChange} />
+          <div className="power-settings-bottles">
+            <span>Bottles</span>
+            <BottleListEditor
+              bottles={bottles}
+              onChange={(next) => {
+                onChange({ ...settings, mass: { ...mass, bottlesMl: next } });
+              }}
+            />
+          </div>
+        </>
+      )}
     </section>
   );
 }

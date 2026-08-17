@@ -1,0 +1,66 @@
+.bottle-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  .bottle-list-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px 4px 4px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    input {
+      width: 64px;
+      padding: 4px 6px;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+    }
+  }
+
+  .bottle-list-unit {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .bottle-list-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+    }
+  }
+
+  .bottle-list-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: none;
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+  }
+}

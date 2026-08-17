@@ -39,6 +39,7 @@ export function useActivitySummary(activity: Activity): {
     ? (stamps[stamps.length - 1].getTime() - stamps[0].getTime()) / 1000
     : 0;
   const durationSeconds: number = session?.totalElapsedTime ?? spanSeconds;
+  const movingSeconds: number = session?.totalTimerTime ?? durationSeconds;
 
   const distances = activity.records
     .map((r) => r.distance)
@@ -48,6 +49,7 @@ export function useActivitySummary(activity: Activity): {
 
   const metrics: ActivityMetrics = {
     durationLabel: formatDuration(durationSeconds),
+    movingLabel: formatDuration(movingSeconds),
     distanceLabel: formatDistance(distanceMeters),
     avgPower: activity.powerStats?.avgPower,
     normalizedPower: activity.powerStats?.normalizedPower,

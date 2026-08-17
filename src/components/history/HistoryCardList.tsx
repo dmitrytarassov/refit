@@ -5,7 +5,7 @@ import { HistoryRideCard } from "./HistoryRideCard";
 import type { RideRow } from "../../db/ride-row";
 
 interface HistoryCardListProps {
-  rides: RideRow[];
+  rides: Array<Omit<RideRow, "file">>;
 }
 
 export function HistoryCardList({ rides }: HistoryCardListProps): ReactElement {

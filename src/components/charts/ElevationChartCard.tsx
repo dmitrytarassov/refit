@@ -36,7 +36,7 @@ export function ElevationChartCard({
         <p className="elevation-chart-empty">No elevation data</p>
       ) : (
         <div className="elevation-chart-plot">
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={elevation}
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}

@@ -16,6 +16,8 @@ The output is written next to the input file as `<name>.out.fit`. Argument parsi
 | `--power` | — | off | compute power and write it into the file |
 | `--bike-mass` | kg | 8 | bike mass |
 | `--rider-mass` | kg | 82 | rider mass |
+| `--gear-mass` | kg | 2 | gear mass — everything the rider carries (helmet, shoes, phone, bike computer…) |
+| `--bottles` | ml,ml,… | none | bottle volumes, counted full for the whole ride (1 L ≈ 1 kg) |
 | `--cda` | `auto` \| `tops` \| `hoods` \| `drops` \| `aero` | `auto` | riding position; `auto`: > 33 km/h → `drops`, otherwise `hoods` |
 | `--surface` | `good-asphalt` \| `rough-asphalt` \| `gravel` | `good-asphalt` | surface (base Crr) |
 | `--tires` | `road` \| `endurance` \| `gravel` \| `mtb` | `road` | tire type (Crr multiplier) |

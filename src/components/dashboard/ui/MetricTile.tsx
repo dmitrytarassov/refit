@@ -9,6 +9,7 @@ interface MetricTileProps {
   unit?: string;
   muted?: boolean;
   help?: string;
+  corner?: string;
 }
 
 export function MetricTile({
@@ -17,6 +18,7 @@ export function MetricTile({
   unit,
   muted,
   help,
+  corner,
 }: MetricTileProps): ReactElement {
   return (
     <div className={muted ? "metric-tile metric-tile-muted" : "metric-tile"}>
@@ -25,6 +27,7 @@ export function MetricTile({
           <HelpTip text={help} />
         </span>
       )}
+      {corner != null && <span className="metric-tile-corner">{corner}</span>}
       <span className="metric-tile-label">{label}</span>
       <span className="metric-tile-value">
         {value}

@@ -36,7 +36,7 @@ export function CadenceChartCard({
         <p className="cadence-chart-empty">No cadence data</p>
       ) : (
         <div className="cadence-chart-plot">
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={cadence}
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}

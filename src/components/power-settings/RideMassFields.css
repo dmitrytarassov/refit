@@ -1,0 +1,31 @@
+.ride-mass-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    input {
+      width: 100px;
+      padding: 6px 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+    }
+  }
+}

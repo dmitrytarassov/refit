@@ -71,7 +71,7 @@ export function PowerChartCard({
           {points.length === 0 ? (
             <p className="power-chart-empty">No power data</p>
           ) : (
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height="100%">
               <LineChart
                 data={points}
                 margin={{ top: 8, right: 8, bottom: 0, left: 0 }}

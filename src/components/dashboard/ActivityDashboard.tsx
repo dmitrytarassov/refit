@@ -52,7 +52,7 @@ export function ActivityDashboard({
         settings={activity.settings}
         onChange={onSettingsChange}
       />
-      <DefaultMassAlert />
+      <DefaultMassAlert settings={activity.settings} />
       <DashboardTabs />
       {content}
     </div>

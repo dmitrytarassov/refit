@@ -38,7 +38,7 @@ Config — `PowerConfig` (`lib/power/power-config.ts`): `estimatePower(records, 
 
 ### Mass — two arguments
 
-`MassConfig { bikeKg, riderKg }` — bike and rider separately. The formulas use the sum (`total-mass.ts`).
+`MassConfig { bikeKg, riderKg, gearKg?, bottlesMl? }` — bike, rider, gear (everything the rider carries: helmet, shoes, phone, bike computer…; defaults to 2 kg when unset — `DEFAULT_GEAR_KG` in `gear-defaults.ts`), and bottle volumes in ml (counted full for the whole ride, 1 L ≈ 1 kg; default none). The formulas use the sum (`total-mass.ts`).
 
 ### CdA — position selector
 
