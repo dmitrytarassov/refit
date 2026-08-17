@@ -8,6 +8,6 @@ export function formatDuration(seconds: number): string {
   return h > 0 ? `${h}:${mm}:${ss}` : `${m}:${ss}`;
 }
 
-export function formatDistance(meters: number): string {
-  return `${(meters / 1000).toFixed(1)} km`;
+export function formatDistance(meters: number, unit = "km"): string {
+  return `${(meters / 1000).toFixed(1)} ${unit}`;
 }

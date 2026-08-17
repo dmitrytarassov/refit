@@ -3,6 +3,8 @@ import { History, Home, Menu, Settings } from "lucide-react";
 import type { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
+import { useT } from "../../hooks/use-translation";
+
 interface MobileNavBarProps {
   activeView: "dashboard" | "history" | "help" | "settings";
   onOpenMenu: () => void;
@@ -12,8 +14,9 @@ export function MobileNavBar({
   activeView,
   onOpenMenu,
 }: MobileNavBarProps): ReactElement {
+  const { t } = useT();
   return (
-    <nav className="mobile-nav-bar" aria-label="Mobile">
+    <nav className="mobile-nav-bar" aria-label={t.nav.mobile}>
       <Link
         to="/"
         className={
@@ -22,7 +25,7 @@ export function MobileNavBar({
             : "mobile-nav-item"
         }
         aria-current={activeView === "dashboard" ? "page" : undefined}
-        aria-label="Dashboard"
+        aria-label={t.nav.dashboard}
       >
         <Home size={22} aria-hidden="true" />
       </Link>
@@ -34,7 +37,7 @@ export function MobileNavBar({
             : "mobile-nav-item"
         }
         aria-current={activeView === "history" ? "page" : undefined}
-        aria-label="History"
+        aria-label={t.nav.history}
       >
         <History size={22} aria-hidden="true" />
       </Link>
@@ -46,7 +49,7 @@ export function MobileNavBar({
             : "mobile-nav-item"
         }
         aria-current={activeView === "settings" ? "page" : undefined}
-        aria-label="Settings"
+        aria-label={t.nav.settings}
       >
         <Settings size={22} aria-hidden="true" />
       </Link>
@@ -54,7 +57,7 @@ export function MobileNavBar({
         type="button"
         className="mobile-nav-item"
         onClick={onOpenMenu}
-        aria-label="Menu"
+        aria-label={t.nav.menu}
       >
         <Menu size={22} aria-hidden="true" />
       </button>

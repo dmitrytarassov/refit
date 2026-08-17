@@ -1,4 +1,4 @@
-export const METRIC_HELP = {
+export const METRIC_HELP_EN = {
   avgPower:
     "Physics-based estimate from speed, grade, mass and air drag — no power meter needed. Coasting zeros included. Expect ±10–15% on a calm solo ride; see Help for the full model.",
   normalizedPower:
@@ -11,4 +11,7 @@ export const METRIC_HELP = {
   tss: "Timer time × (NP / FTP)² / 36. Our FTP is a lower bound, so treat TSS as an upper estimate.",
   intensityFactor:
     "NP / estimated FTP. Our FTP is a lower bound, so IF is an upper estimate.",
-} as const;
+  powerCurve:
+    "Your best average power for every effort duration in this ride. The 5s point is your hardest 5-second burst, the 20m point your best sustained effort. Short efforts are always much higher: sprint power fades within seconds, while aerobic power can be held for hours — that is why the curve drops steeply on the left and flattens to the right.",
+  gear: "Everything the rider carries: helmet, shoes, phone, bike computer and so on.",
+};

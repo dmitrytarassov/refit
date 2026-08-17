@@ -1,16 +1,17 @@
 import type { ReactElement } from "react";
 
-import { METRIC_HELP } from "./metric-help";
 import { MetricTile } from "./ui/MetricTile";
 import "./PowerTab.css";
 
 import { useFTP } from "../../hooks/use-ftp";
+import { useT } from "../../hooks/use-translation";
 import { useTSS } from "../../hooks/use-tss";
 import type { Activity } from "../../types/activity";
 import { PowerCurveCard } from "../bottom/PowerCurveCard";
 import { PowerChartCard } from "../charts/PowerChartCard";
 
 export function PowerTab({ activity }: { activity: Activity }): ReactElement {
+  const { t } = useT();
   const ftp = useFTP(activity);
   const tss = useTSS(activity);
   const stats = activity.powerStats;
@@ -21,40 +22,44 @@ export function PowerTab({ activity }: { activity: Activity }): ReactElement {
     <>
       <div className="power-tab-tiles">
         <MetricTile
-          label="Avg Power"
+          label={t.dashboard.tiles.avgPower}
           value={stats != null ? String(stats.avgPower) : "—"}
-          unit="W"
-          help={METRIC_HELP.avgPower}
+          unit={t.common.units.w}
+          help={t.metricHelp.avgPower}
         />
         <MetricTile
-          label="Normalized Power"
+          label={t.dashboard.tiles.normalizedPower}
           value={np != null ? String(np) : "—"}
-          unit="W"
-          help={METRIC_HELP.normalizedPower}
+          unit={t.common.units.w}
+          help={t.metricHelp.normalizedPower}
         />
         <MetricTile
-          label="Max Power"
+          label={t.dashboard.tiles.maxPower}
           value={stats != null ? String(stats.maxPower) : "—"}
-          unit="W"
-          help={METRIC_HELP.maxPower}
+          unit={t.common.units.w}
+          help={t.metricHelp.maxPower}
         />
         <MetricTile
-          label={ftp?.source === "manual" ? "FTP (manual)" : "Est. FTP"}
+          label={
+            ftp?.source === "manual"
+              ? t.dashboard.tiles.ftpManual
+              : t.dashboard.tiles.estFtp
+          }
           value={ftp != null ? String(ftp.watts) : "—"}
-          unit="W"
+          unit={t.common.units.w}
           help={
-            ftp?.source === "manual" ? METRIC_HELP.ftpManual : METRIC_HELP.ftp
+            ftp?.source === "manual" ? t.metricHelp.ftpManual : t.metricHelp.ftp
           }
         />
         <MetricTile
-          label="Intensity Factor"
+          label={t.dashboard.tiles.intensityFactor}
           value={intensity != null ? intensity.toFixed(2) : "—"}
-          help={METRIC_HELP.intensityFactor}
+          help={t.metricHelp.intensityFactor}
         />
         <MetricTile
-          label="TSS"
+          label={t.dashboard.tiles.tss}
           value={tss != null ? String(Math.round(tss)) : "—"}
-          help={METRIC_HELP.tss}
+          help={t.metricHelp.tss}
         />
       </div>
       <PowerChartCard activity={activity} />

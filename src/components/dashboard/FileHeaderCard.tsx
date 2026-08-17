@@ -5,6 +5,7 @@ import { ClearButton } from "./ClearButton";
 import { DownloadMenu } from "./DownloadMenu";
 
 import { useActivitySummary } from "../../hooks/use-activity-summary";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./FileHeaderCard.css";
 
@@ -19,6 +20,7 @@ export function FileHeaderCard({
   onReset,
   onDiscard,
 }: FileHeaderCardProps): ReactElement {
+  const { t } = useT();
   const { meta } = useActivitySummary(activity);
   const [searchParams, setSearchParams] = useSearchParams();
   const openRawData = (): void => {
@@ -60,7 +62,7 @@ export function FileHeaderCard({
           className="file-header-card-secondary"
           onClick={openRawData}
         >
-          View Raw Data
+          {t.dashboard.viewRawData}
         </button>
         <DownloadMenu key={activity.fileName} activity={activity} />
         <ClearButton onReset={onReset} onDiscard={onDiscard} />

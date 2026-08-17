@@ -5,6 +5,7 @@ import { useState } from "react";
 import "./DownloadMenu.css";
 
 import { useEnhanceDownload } from "../../hooks/use-enhance-download";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import { ToggleSwitch } from "../common/ui/ToggleSwitch";
 
@@ -18,6 +19,7 @@ export function DownloadMenu({
   const [coordinates, setCoordinates] = useState(true);
   const [power, setPower] = useState(!hasDevicePower);
 
+  const { t } = useT();
   const save = (): void => {
     setOpen(false);
     download({ coordinates, power });
@@ -46,24 +48,23 @@ export function DownloadMenu({
           <path d="m7 10 5 5 5-5" />
           <path d="M4 19h16" />
         </svg>
-        Download enhanced
+        {t.dashboard.download.button}
       </button>
       {open && (
         <div className="download-menu-panel">
           <ToggleSwitch
-            label="Cleaned coordinates"
+            label={t.dashboard.download.coordinates}
             checked={coordinates}
             onChange={setCoordinates}
           />
           <ToggleSwitch
-            label="Estimated power"
+            label={t.dashboard.download.power}
             checked={power}
             onChange={setPower}
           />
           {hasDevicePower && (
             <p className="download-menu-note">
-              This file has power from a sensor — estimated power is off by
-              default to keep the original values.
+              {t.dashboard.download.sensorNote}
             </p>
           )}
           <button
@@ -72,7 +73,7 @@ export function DownloadMenu({
             onClick={save}
             disabled={!coordinates && !power}
           >
-            Save .fit
+            {t.dashboard.download.save}
           </button>
         </div>
       )}

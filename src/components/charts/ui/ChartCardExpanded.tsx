@@ -1,7 +1,9 @@
 import { X } from "lucide-react";
 import type { ReactElement, ReactNode } from "react";
 import { useEffect } from "react";
+
 import "./ChartCardExpanded.css";
+import { useT } from "../../../hooks/use-translation";
 
 interface ChartCardExpandedProps {
   title: string;
@@ -16,6 +18,7 @@ export function ChartCardExpanded({
   onClose,
   children,
 }: ChartCardExpandedProps): ReactElement {
+  const { t } = useT();
   useEffect(() => {
     const onKey = (event: KeyboardEvent): void => {
       if (event.key === "Escape") {
@@ -32,7 +35,7 @@ export function ChartCardExpanded({
         type="button"
         className="chart-card-modal-backdrop"
         onClick={onClose}
-        aria-label="Close"
+        aria-label={t.nav.close}
       />
       <section className="chart-card-modal-panel" aria-label={title}>
         <header className="chart-card-header">
@@ -42,7 +45,7 @@ export function ChartCardExpanded({
             type="button"
             className="chart-card-icon-button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t.nav.close}
           >
             <X size={16} aria-hidden="true" />
           </button>

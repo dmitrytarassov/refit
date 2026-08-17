@@ -6,17 +6,20 @@ import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import { AppLogo } from "./ui/AppLogo";
 
+import { useT } from "../../hooks/use-translation";
+
 interface AppHeaderProps {
   activeView: "dashboard" | "history" | "help" | "settings";
 }
 
 export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
+  const { t } = useT();
   return (
     <header className="app-header">
       <div className="app-header-brand">
         <AppLogo />
       </div>
-      <nav className="app-header-nav" aria-label="Main">
+      <nav className="app-header-nav" aria-label={t.nav.main}>
         <Link
           to="/"
           className={
@@ -26,7 +29,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           }
           aria-current={activeView === "dashboard" ? "page" : undefined}
         >
-          Dashboard
+          {t.nav.dashboard}
         </Link>
         <Link
           to="/?view=history"
@@ -37,7 +40,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           }
           aria-current={activeView === "history" ? "page" : undefined}
         >
-          History
+          {t.nav.history}
         </Link>
         <Link
           to="/?view=settings"
@@ -48,7 +51,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           }
           aria-current={activeView === "settings" ? "page" : undefined}
         >
-          Settings
+          {t.nav.settings}
         </Link>
         <Link
           to="/?view=help"
@@ -59,7 +62,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           }
           aria-current={activeView === "help" ? "page" : undefined}
         >
-          Help
+          {t.nav.help}
         </Link>
       </nav>
       <div className="app-header-actions">
@@ -69,7 +72,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           href="https://github.com/dmitrytarassov/refit"
           target="_blank"
           rel="noreferrer"
-          aria-label="GitHub repository"
+          aria-label={t.nav.github}
         >
           <svg
             viewBox="0 0 16 16"
@@ -86,7 +89,7 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           href="https://t.me/refit_app"
           target="_blank"
           rel="noreferrer"
-          aria-label="Telegram channel"
+          aria-label={t.nav.telegram}
         >
           <Send size={18} aria-hidden="true" />
         </a>

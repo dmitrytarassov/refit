@@ -7,10 +7,10 @@ import "./PowerSettingsBar.css";
 import { BottleListEditor } from "./BottleListEditor";
 import { PowerSettingsPanel } from "./PowerSettingsPanel";
 import { RideMassFields } from "./RideMassFields";
-import { formatSettingValue } from "./format-setting-value";
 
 import { DEFAULT_GEAR_KG } from "../../../lib/power/gear-defaults";
 import { POWER_DEFAULTS } from "../../fit/power-defaults";
+import { useT } from "../../hooks/use-translation";
 import type { RideSettings } from "../../types/ride-settings";
 
 interface PowerSettingsBarProps {
@@ -22,6 +22,7 @@ export function PowerSettingsBar({
   settings,
   onChange,
 }: PowerSettingsBarProps): ReactElement {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
   const mass = settings.mass ?? POWER_DEFAULTS.mass;
   const bottles = mass.bottlesMl ?? [];
@@ -32,33 +33,33 @@ export function PowerSettingsBar({
       <div className="power-settings-row">
         <dl className="power-settings-summary">
           <div>
-            <dt>Position</dt>
-            <dd>{formatSettingValue(settings.cda)}</dd>
+            <dt>{t.powerSettings.fields.positionShort}</dt>
+            <dd>{t.powerSettings.values[settings.cda]}</dd>
           </div>
           <div>
-            <dt>Surface</dt>
-            <dd>{formatSettingValue(settings.crr.surface)}</dd>
+            <dt>{t.powerSettings.fields.surface}</dt>
+            <dd>{t.powerSettings.values[settings.crr.surface]}</dd>
           </div>
           <div>
-            <dt>Tires</dt>
-            <dd>{formatSettingValue(settings.crr.tires)}</dd>
+            <dt>{t.powerSettings.fields.tires}</dt>
+            <dd>{t.powerSettings.values[settings.crr.tires]}</dd>
           </div>
           <div>
-            <dt>Pressure</dt>
-            <dd>{formatSettingValue(settings.crr.pressure)}</dd>
+            <dt>{t.powerSettings.fields.pressure}</dt>
+            <dd>{t.powerSettings.values[settings.crr.pressure]}</dd>
           </div>
           <div>
-            <dt>Weights</dt>
+            <dt>{t.powerSettings.fields.weights}</dt>
             <dd>
               {mass.riderKg} + {mass.bikeKg} + {mass.gearKg ?? DEFAULT_GEAR_KG}{" "}
-              kg
+              {t.common.units.kg}
             </dd>
           </div>
           <div>
-            <dt>Bottles</dt>
+            <dt>{t.powerSettings.fields.bottles}</dt>
             <dd>
               {bottles.length > 0
-                ? `${bottles.length} (${bottlesLiters.toFixed(1)} L)`
+                ? `${bottles.length} (${bottlesLiters.toFixed(1)} ${t.common.units.l})`
                 : "—"}
             </dd>
           </div>
@@ -66,7 +67,7 @@ export function PowerSettingsBar({
         <button
           type="button"
           className="power-settings-gear"
-          aria-label="Power estimation settings"
+          aria-label={t.powerSettings.aria}
           aria-expanded={open}
           onClick={deferCall(setOpen, !open)}
         >
@@ -78,7 +79,7 @@ export function PowerSettingsBar({
           <PowerSettingsPanel settings={settings} onChange={onChange} />
           <RideMassFields settings={settings} onChange={onChange} />
           <div className="power-settings-bottles">
-            <span>Bottles</span>
+            <span>{t.powerSettings.fields.bottles}</span>
             <BottleListEditor
               bottles={bottles}
               onChange={(next) => {

@@ -1,0 +1,15 @@
+export const NAV_EN = {
+  dashboard: "Dashboard",
+  history: "History",
+  settings: "Settings",
+  help: "Help",
+  github: "GitHub repository",
+  telegram: "Telegram channel",
+  main: "Main",
+  mobile: "Mobile",
+  menu: "Menu",
+  closeMenu: "Close menu",
+  close: "Close",
+  switchToLight: "Switch to light theme",
+  switchToDark: "Switch to dark theme",
+};

@@ -5,16 +5,14 @@ import { MetricsHelp } from "./MetricsHelp";
 import { PowerModelHelp } from "./PowerModelHelp";
 import { TrackCleaningHelp } from "./TrackCleaningHelp";
 
+import { useT } from "../../hooks/use-translation";
+
 export function HelpPage(): ReactElement {
+  const { t } = useT();
   return (
     <section className="help-page">
-      <h2>How the numbers are made</h2>
-      <p className="help-intro">
-        Everything on the dashboard is computed locally in your browser from the
-        raw .fit records — nothing is sent anywhere. Below are the exact models
-        and formulas: how the GPS track is cleaned, how power is estimated, and
-        how the summary metrics are derived.
-      </p>
+      <h2>{t.help.title}</h2>
+      <p className="help-intro">{t.help.intro}</p>
       <TrackCleaningHelp />
       <PowerModelHelp />
       <MetricsHelp />

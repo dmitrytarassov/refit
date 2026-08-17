@@ -1,3 +1,5 @@
+import { useT } from "./use-translation";
+
 import { formatDistance, formatDuration } from "../fit/format-metrics";
 import type { Activity } from "../types/activity";
 import type { ActivityMeta } from "../types/activity-meta";
@@ -7,6 +9,7 @@ export function useActivitySummary(activity: Activity): {
   meta: ActivityMeta;
   metrics: ActivityMetrics;
 } {
+  const { t } = useT();
   const fileId = activity.fit.messages.fileIdMesgs?.[0];
   const session = activity.fit.messages.sessionMesgs?.[0];
 
@@ -22,7 +25,7 @@ export function useActivitySummary(activity: Activity): {
   const meta: ActivityMeta = {
     fileName: activity.fileName,
     sport: session?.sport != null ? String(session.sport) : undefined,
-    dateLabel: timeCreated?.toLocaleString(undefined, {
+    dateLabel: timeCreated?.toLocaleString(t.locale, {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -50,7 +53,7 @@ export function useActivitySummary(activity: Activity): {
   const metrics: ActivityMetrics = {
     durationLabel: formatDuration(durationSeconds),
     movingLabel: formatDuration(movingSeconds),
-    distanceLabel: formatDistance(distanceMeters),
+    distanceLabel: formatDistance(distanceMeters, t.common.units.km),
     avgPower: activity.powerStats?.avgPower,
     normalizedPower: activity.powerStats?.normalizedPower,
   };

@@ -18,6 +18,7 @@ import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatDuration } from "../../fit/format-metrics";
 import { useRecordSeries } from "../../hooks/use-record-series";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./CadenceChartCard.css";
 
@@ -28,17 +29,18 @@ interface CadenceChartCardProps {
 export function CadenceChartCard({
   activity,
 }: CadenceChartCardProps): ReactElement {
+  const { t } = useT();
   const { cadence } = useRecordSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
 
   return (
     <ChartCard
-      title="Cadence"
+      title={t.charts.titles.cadence}
       expanded={<CombinedChart activity={activity} initial="cadence" />}
     >
       {cadence.length === 0 ? (
-        <p className="cadence-chart-empty">No cadence data</p>
+        <p className="cadence-chart-empty">{t.charts.noData.cadence}</p>
       ) : (
         <div className="cadence-chart-plot">
           <ResponsiveContainer width="100%" height="100%">
@@ -63,19 +65,21 @@ export function CadenceChartCard({
                 minTickGap={32}
               />
               <YAxis
-                unit=" rpm"
+                unit={` ${t.common.units.rpm}`}
                 width={64}
                 tick={{ fill: palette.axis, fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
-                content={(props) => <ChartTooltip {...props} unit="rpm" />}
+                content={(props) => (
+                  <ChartTooltip {...props} unit={t.common.units.rpm} />
+                )}
                 cursor={{ stroke: palette.grid }}
               />
               <Area
                 dataKey="value"
-                name="Cadence"
+                name={t.charts.titles.cadence}
                 stroke={palette.cadence}
                 strokeWidth={1.5}
                 fill="url(#cadence-fill)"

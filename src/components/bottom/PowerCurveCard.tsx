@@ -13,6 +13,7 @@ import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatCurveTick } from "../../charts/format-curve-tick";
 import { usePowerCurve } from "../../hooks/use-power-curve";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import { ChartCard } from "../charts/ui/ChartCard";
 import { ChartFillGradient } from "../charts/ui/ChartFillGradient";
@@ -27,6 +28,7 @@ interface PowerCurveCardProps {
 export function PowerCurveCard({
   activity,
 }: PowerCurveCardProps): ReactElement {
+  const { t } = useT();
   const curve = usePowerCurve(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
@@ -37,13 +39,11 @@ export function PowerCurveCard({
 
   return (
     <ChartCard
-      title="Power Curve"
-      aside={
-        <HelpTip text="Your best average power for every effort duration in this ride. The 5s point is your hardest 5-second burst, the 20m point your best sustained effort. Short efforts are always much higher: sprint power fades within seconds, while aerobic power can be held for hours — that is why the curve drops steeply on the left and flattens to the right." />
-      }
+      title={t.charts.titles.powerCurve}
+      aside={<HelpTip text={t.metricHelp.powerCurve} />}
     >
       {curve.length === 0 || curve[0].watts === 0 ? (
-        <p className="power-curve-empty">No power data</p>
+        <p className="power-curve-empty">{t.charts.noData.power}</p>
       ) : (
         <div className="power-curve-plot">
           <ResponsiveContainer width="100%" height="100%">
@@ -74,19 +74,21 @@ export function PowerCurveCard({
                 axisLine={false}
               />
               <YAxis
-                unit=" W"
+                unit={` ${t.common.units.w}`}
                 width={64}
                 tick={{ fill: palette.axis, fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
-                content={(props) => <ChartTooltip {...props} unit="W" />}
+                content={(props) => (
+                  <ChartTooltip {...props} unit={t.common.units.w} />
+                )}
                 cursor={{ stroke: palette.grid }}
               />
               <Area
                 dataKey="watts"
-                name="This Ride"
+                name={t.charts.thisRide}
                 stroke={palette.power}
                 strokeWidth={2}
                 fill="url(#power-curve-fill)"

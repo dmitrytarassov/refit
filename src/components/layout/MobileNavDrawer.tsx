@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import { ThemeToggle } from "./ThemeToggle";
 
+import { useT } from "../../hooks/use-translation";
+
 interface MobileNavDrawerProps {
   open: boolean;
   activeView: "dashboard" | "history" | "help" | "settings";
@@ -15,6 +17,7 @@ export function MobileNavDrawer({
   activeView,
   onClose,
 }: MobileNavDrawerProps): ReactElement | null {
+  const { t } = useT();
   if (!open) {
     return null;
   }
@@ -25,9 +28,9 @@ export function MobileNavDrawer({
         type="button"
         className="mobile-nav-drawer-backdrop"
         onClick={onClose}
-        aria-label="Close menu"
+        aria-label={t.nav.closeMenu}
       />
-      <nav className="mobile-nav-drawer-panel" aria-label="Main">
+      <nav className="mobile-nav-drawer-panel" aria-label={t.nav.main}>
         <Link
           to="/"
           onClick={onClose}
@@ -38,7 +41,7 @@ export function MobileNavDrawer({
           }
           aria-current={activeView === "dashboard" ? "page" : undefined}
         >
-          Dashboard
+          {t.nav.dashboard}
         </Link>
         <Link
           to="/?view=history"
@@ -50,7 +53,7 @@ export function MobileNavDrawer({
           }
           aria-current={activeView === "history" ? "page" : undefined}
         >
-          History
+          {t.nav.history}
         </Link>
         <Link
           to="/?view=settings"
@@ -62,7 +65,7 @@ export function MobileNavDrawer({
           }
           aria-current={activeView === "settings" ? "page" : undefined}
         >
-          Settings
+          {t.nav.settings}
         </Link>
         <Link
           to="/?view=help"
@@ -74,7 +77,7 @@ export function MobileNavDrawer({
           }
           aria-current={activeView === "help" ? "page" : undefined}
         >
-          Help
+          {t.nav.help}
         </Link>
         <a
           className="mobile-nav-drawer-link"

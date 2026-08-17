@@ -52,6 +52,7 @@ The abbreviation `mesg` (not `message`) is intentional: it's what Garmin itself 
 | [power-estimation.md](power-estimation.md) | the physical power model and its parameters |
 | [ftp-estimation.md](ftp-estimation.md) | FTP estimation as a lower bound from the power curve |
 | [web-app.md](web-app.md) | the web app: `src/` structure, processing flow, navigation, hooks |
+| [i18n.md](i18n.md) | UI localization (en/ru): dictionaries, language storage, picker modal |
 | [history-storage.md](history-storage.md) | local ride history in IndexedDB, the History page, `?record=id` |
 | [cli.md](cli.md) | CLI commands and flags |
 | [theme.md](theme.md) | the "Ink and brass" palette for the web UI |

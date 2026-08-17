@@ -26,6 +26,7 @@ Key facts:
 
 - [Architecture](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/architecture.md): directory layout, code organization rules, naming
 - [Web app](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/web-app.md): SPA structure, navigation, data flow, hooks
+- [i18n](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/i18n.md): UI localization (en/ru), dictionaries, language storage
 - [CLI](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/cli.md): commands, flags, example output
 - [FIT format](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/fit-format.md): how .fit files are read and written back
 - [Track cleaning](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/track-cleaning.md): the three filters, parameters, results

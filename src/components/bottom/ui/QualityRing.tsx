@@ -1,12 +1,14 @@
 import type { ReactElement } from "react";
 
 import "./QualityRing.css";
+import { useT } from "../../../hooks/use-translation";
 
 interface QualityRingProps {
   percent: number;
 }
 
 export function QualityRing({ percent }: QualityRingProps): ReactElement {
+  const { t } = useT();
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - percent / 100);
@@ -17,7 +19,7 @@ export function QualityRing({ percent }: QualityRingProps): ReactElement {
       width="96"
       height="96"
       role="img"
-      aria-label={`Quality score ${percent} percent`}
+      aria-label={t.charts.quality.scoreAria(percent)}
     >
       <circle
         cx="48"

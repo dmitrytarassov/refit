@@ -25,6 +25,7 @@ import { useCombinedSeries } from "../../hooks/use-combined-series";
 import { useDragZoom } from "../../hooks/use-drag-zoom";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import type { CombinedMetricKey } from "../../types/combined-point";
 
@@ -41,6 +42,7 @@ export function CombinedChart({
   activity: Activity;
   initial: CombinedMetricKey;
 }): ReactElement {
+  const { t } = useT();
   const points = useCombinedSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
@@ -51,7 +53,7 @@ export function CombinedChart({
   }));
 
   const units = Object.fromEntries(
-    COMBINED_METRICS.map((m) => [m.key, m.unit]),
+    COMBINED_METRICS.map((m) => [m.key, t.common.units[m.unitKey]]),
   );
   const axisWidth = isMobile ? 52 : 64;
 
@@ -63,7 +65,7 @@ export function CombinedChart({
           className="combined-chart-reset"
           onClick={zoom.reset}
         >
-          Reset zoom
+          {t.charts.resetZoom}
         </button>
       )}
       <ResponsiveContainer width="100%" height="100%">
@@ -115,7 +117,7 @@ export function CombinedChart({
               key={m.key}
               yAxisId={m.key}
               hide={m.key !== initial}
-              unit={` ${m.unit}`}
+              unit={` ${t.common.units[m.unitKey]}`}
               width={m.key !== initial ? 0 : axisWidth}
               tick={{ fill: palette.axis, fontSize: isMobile ? 10 : 12 }}
               tickLine={false}
@@ -158,7 +160,7 @@ export function CombinedChart({
                 key={m.key}
                 dataKey={m.key}
                 yAxisId={m.key}
-                name={m.name}
+                name={t.charts.titles[m.key]}
                 hide={!visible[m.key]}
                 stroke={palette[m.paletteKey]}
                 strokeWidth={m.key === initial ? 2 : 1.5}
@@ -172,7 +174,7 @@ export function CombinedChart({
                 key={m.key}
                 dataKey={m.key}
                 yAxisId={m.key}
-                name={m.name}
+                name={t.charts.titles[m.key]}
                 hide={!visible[m.key]}
                 stroke={palette[m.paletteKey]}
                 strokeWidth={m.key === initial ? 2 : 1.5}

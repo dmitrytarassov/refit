@@ -5,6 +5,7 @@ const SOURCES = [
   "README.md",
   "docs/architecture.md",
   "docs/web-app.md",
+  "docs/i18n.md",
   "docs/cli.md",
   "docs/fit-format.md",
   "docs/track-cleaning.md",

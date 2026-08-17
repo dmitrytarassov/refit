@@ -1,27 +1,26 @@
 import "./PowerSettingsPanel.css";
 import type { ReactElement } from "react";
 
-import { formatSettingValue } from "./format-setting-value";
-
+import { useT } from "../../hooks/use-translation";
 import type { RideSettings } from "../../types/ride-settings";
 
 const FIELDS = [
   {
     key: "cda",
-    label: "Riding position",
+    labelKey: "position",
     options: ["auto", "tops", "hoods", "drops", "aero"],
   },
   {
     key: "surface",
-    label: "Surface",
+    labelKey: "surface",
     options: ["good-asphalt", "rough-asphalt", "gravel"],
   },
   {
     key: "tires",
-    label: "Tires",
+    labelKey: "tires",
     options: ["road", "endurance", "gravel", "mtb"],
   },
-  { key: "pressure", label: "Pressure", options: ["high", "medium", "low"] },
+  { key: "pressure", labelKey: "pressure", options: ["high", "medium", "low"] },
 ] as const;
 
 export function PowerSettingsPanel({
@@ -31,6 +30,7 @@ export function PowerSettingsPanel({
   settings: RideSettings;
   onChange: (settings: RideSettings) => void;
 }): ReactElement {
+  const { t } = useT();
   const valueOf = (key: (typeof FIELDS)[number]["key"]): string =>
     key === "cda" ? settings.cda : settings.crr[key];
 
@@ -46,14 +46,14 @@ export function PowerSettingsPanel({
     <div className="power-settings-panel">
       {FIELDS.map((field) => (
         <label key={field.key}>
-          <span>{field.label}</span>
+          <span>{t.powerSettings.fields[field.labelKey]}</span>
           <select
             value={valueOf(field.key)}
             onChange={(event) => update(field.key, event.target.value)}
           >
             {field.options.map((option) => (
               <option key={option} value={option}>
-                {formatSettingValue(option)}
+                {t.powerSettings.values[option]}
               </option>
             ))}
           </select>

@@ -1,0 +1,15 @@
+export const NAV_RU = {
+  dashboard: "Дашборд",
+  history: "История",
+  settings: "Настройки",
+  help: "Справка",
+  github: "Репозиторий на GitHub",
+  telegram: "Телеграм-канал",
+  main: "Главное меню",
+  mobile: "Мобильное меню",
+  menu: "Меню",
+  closeMenu: "Закрыть меню",
+  close: "Закрыть",
+  switchToLight: "Светлая тема",
+  switchToDark: "Тёмная тема",
+};

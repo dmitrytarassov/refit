@@ -32,7 +32,7 @@ Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends 
 
 ## Language
 
-- **Everything in the repo is English**: code comments, docs (`docs/*.md`, README, TODO), commit messages, UI texts.
+- **Everything in the repo is English**: code comments, docs (`docs/*.md`, README, TODO), commit messages. UI texts live in i18n dictionaries (`src/i18n/`, see docs/i18n.md): `en/*` is the source of truth, `src/i18n/ru/*` is the only place with Russian text. Never hardcode a user-visible string in a component — add a key to both dictionaries.
 - **Chat replies follow the developer's language**: answer in whatever language they write to you (Russian message → Russian reply).
 
 ---

@@ -4,17 +4,20 @@ import { useSearchParams } from "react-router-dom";
 
 import "./DashboardTabs.css";
 
+import { useT } from "../../hooks/use-translation";
+
 const TABS = [
-  { key: "overview", label: "Overview", enabled: true },
-  { key: "power", label: "Power", enabled: true },
-  { key: "performance", label: "Performance", enabled: true },
-  { key: "intervals", label: "Intervals", enabled: false },
-  { key: "map", label: "Map", enabled: true },
-  { key: "data-quality", label: "Data Quality", enabled: true },
+  { key: "overview", tKey: "overview", enabled: true },
+  { key: "power", tKey: "power", enabled: true },
+  { key: "performance", tKey: "performance", enabled: true },
+  { key: "intervals", tKey: "intervals", enabled: false },
+  { key: "map", tKey: "map", enabled: true },
+  { key: "data-quality", tKey: "dataQuality", enabled: true },
 ] as const;
 
 export function DashboardTabs(): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useT();
   const active = searchParams.get("tab") ?? "overview";
 
   const select = (key: string): void => {
@@ -28,7 +31,7 @@ export function DashboardTabs(): ReactElement {
   };
 
   return (
-    <nav className="dashboard-tabs" aria-label="Dashboard sections">
+    <nav className="dashboard-tabs" aria-label={t.dashboard.tabs.aria}>
       {TABS.map((tab) =>
         tab.enabled ? (
           <button
@@ -42,7 +45,7 @@ export function DashboardTabs(): ReactElement {
             aria-current={active === tab.key ? "page" : undefined}
             onClick={deferCall(select, tab.key)}
           >
-            {tab.label}
+            {t.dashboard.tabs[tab.tKey]}
           </button>
         ) : (
           <button
@@ -52,7 +55,7 @@ export function DashboardTabs(): ReactElement {
             aria-disabled="true"
             tabIndex={-1}
           >
-            {tab.label}
+            {t.dashboard.tabs[tab.tKey]}
           </button>
         ),
       )}

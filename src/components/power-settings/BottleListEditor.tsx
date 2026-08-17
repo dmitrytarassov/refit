@@ -3,6 +3,8 @@ import { deferCall } from "just-defer-call";
 import { Plus, X } from "lucide-react";
 import type { ReactElement } from "react";
 
+import { useT } from "../../hooks/use-translation";
+
 interface BottleListEditorProps {
   bottles: number[];
   onChange: (bottles: number[]) => void;
@@ -12,6 +14,7 @@ export function BottleListEditor({
   bottles,
   onChange,
 }: BottleListEditorProps): ReactElement {
+  const { t } = useT();
   const removeAt = (index: number): void => {
     onChange(bottles.filter((_, i) => i !== index));
   };
@@ -38,7 +41,7 @@ export function BottleListEditor({
             max={3000}
             step={50}
             defaultValue={ml}
-            aria-label={`Bottle ${index + 1} volume, ml`}
+            aria-label={t.powerSettings.bottleVolume(index + 1)}
             onBlur={(event) => commit(index, event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
@@ -46,11 +49,11 @@ export function BottleListEditor({
               }
             }}
           />
-          <span className="bottle-list-unit">ml</span>
+          <span className="bottle-list-unit">{t.common.units.ml}</span>
           <button
             type="button"
             className="bottle-list-remove"
-            aria-label={`Remove bottle ${index + 1}`}
+            aria-label={t.powerSettings.removeBottle(index + 1)}
             onClick={deferCall(removeAt, index)}
           >
             <X size={13} aria-hidden="true" />
@@ -58,7 +61,7 @@ export function BottleListEditor({
         </span>
       ))}
       <button type="button" className="bottle-list-add" onClick={add}>
-        <Plus size={13} aria-hidden="true" /> Add bottle
+        <Plus size={13} aria-hidden="true" /> {t.powerSettings.addBottle}
       </button>
     </div>
   );

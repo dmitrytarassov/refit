@@ -6,6 +6,8 @@ import "./ChartCard.css";
 
 import { ChartCardExpanded } from "./ChartCardExpanded";
 
+import { useT } from "../../../hooks/use-translation";
+
 interface ChartCardProps {
   title: string;
   aside?: ReactNode;
@@ -20,6 +22,7 @@ export function ChartCard({
   expanded,
   children,
 }: ChartCardProps): ReactElement {
+  const { t } = useT();
   const [isExpanded, setExpanded] = useState(false);
 
   return (
@@ -31,7 +34,7 @@ export function ChartCard({
           type="button"
           className="chart-card-icon-button"
           onClick={deferCall(setExpanded, true)}
-          aria-label={`Expand ${title}`}
+          aria-label={t.charts.expand(title)}
         >
           <Maximize2 size={15} aria-hidden="true" />
         </button>

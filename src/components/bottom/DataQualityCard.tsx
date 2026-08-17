@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 
 import { QualityRing } from "./ui/QualityRing";
 
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./DataQualityCard.css";
 
@@ -12,6 +13,7 @@ interface DataQualityCardProps {
 export function DataQualityCard({
   activity,
 }: DataQualityCardProps): ReactElement {
+  const { t } = useT();
   const { report } = activity;
   const decodeErrors = activity.fit.errors.length;
   const speedGate = report.rejectedBy["speed-gate"];
@@ -29,11 +31,11 @@ export function DataQualityCard({
   return (
     <section className="data-quality-card">
       <header>
-        <h3>Data Quality</h3>
+        <h3>{t.charts.quality.title}</h3>
         <span
           className={`data-quality-chip ${isGood ? "is-good" : "is-cleaned"}`}
         >
-          {isGood ? "Good" : "Cleaned"}
+          {isGood ? t.charts.quality.good : t.charts.quality.cleaned}
         </span>
       </header>
       <div className="data-quality-body">
@@ -78,21 +80,21 @@ export function DataQualityCard({
             <div>
               <strong>
                 {decodeErrors > 0
-                  ? `${decodeErrors} decode issues`
-                  : "No decode errors"}
+                  ? t.charts.quality.decodeIssues(decodeErrors)
+                  : t.charts.quality.noDecodeErrors}
               </strong>
               <p>
                 {decodeErrors > 0
-                  ? "Some messages could not be decoded."
-                  : "Your file structure looks clean."}
+                  ? t.charts.quality.decodeBad
+                  : t.charts.quality.decodeGood}
               </p>
             </div>
           </li>
           <li>
             <span className="data-quality-icon is-brass" />
             <div>
-              <strong>Power data added</strong>
-              <p>Estimated from speed, elevation and rider profile.</p>
+              <strong>{t.charts.quality.powerAdded}</strong>
+              <p>{t.charts.quality.powerAddedText}</p>
             </div>
           </li>
           <li>
@@ -120,20 +122,20 @@ export function DataQualityCard({
             <div>
               <strong>
                 {rejected > 0
-                  ? `${rejected} GPS outliers removed`
-                  : "GPS track clean"}
+                  ? t.charts.quality.outliersRemoved(rejected)
+                  : t.charts.quality.trackClean}
               </strong>
               <p>
                 {rejected > 0
-                  ? `Speed gate ${speedGate} · Hampel ${hampel} · Kalman ${kalman}.`
-                  : "No outliers detected."}
+                  ? t.charts.quality.outliersDetail(speedGate, hampel, kalman)
+                  : t.charts.quality.noOutliers}
               </p>
             </div>
           </li>
         </ul>
         <div className="data-quality-score">
           <QualityRing percent={percent} />
-          <span>Quality Score</span>
+          <span>{t.charts.quality.score}</span>
         </div>
       </div>
     </section>

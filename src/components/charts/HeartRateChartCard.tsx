@@ -18,6 +18,7 @@ import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatDuration } from "../../fit/format-metrics";
 import { useRecordSeries } from "../../hooks/use-record-series";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./HeartRateChartCard.css";
 
@@ -28,17 +29,18 @@ interface HeartRateChartCardProps {
 export function HeartRateChartCard({
   activity,
 }: HeartRateChartCardProps): ReactElement {
+  const { t } = useT();
   const { heartRate } = useRecordSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
 
   return (
     <ChartCard
-      title="Heart Rate"
+      title={t.charts.titles.heartRate}
       expanded={<CombinedChart activity={activity} initial="heartRate" />}
     >
       {heartRate.length === 0 ? (
-        <p className="heart-rate-chart-empty">No heart rate data</p>
+        <p className="heart-rate-chart-empty">{t.charts.noData.heartRate}</p>
       ) : (
         <div className="heart-rate-chart-plot">
           <ResponsiveContainer width="100%" height="100%">
@@ -66,19 +68,21 @@ export function HeartRateChartCard({
                 minTickGap={32}
               />
               <YAxis
-                unit=" bpm"
+                unit={` ${t.common.units.bpm}`}
                 width={64}
                 tick={{ fill: palette.axis, fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
-                content={(props) => <ChartTooltip {...props} unit="bpm" />}
+                content={(props) => (
+                  <ChartTooltip {...props} unit={t.common.units.bpm} />
+                )}
                 cursor={{ stroke: palette.grid }}
               />
               <Area
                 dataKey="value"
-                name="Heart Rate"
+                name={t.charts.titles.heartRate}
                 stroke={palette.heartRate}
                 strokeWidth={1.5}
                 fill="url(#heart-rate-fill)"

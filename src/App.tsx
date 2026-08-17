@@ -1,78 +1,39 @@
 import "./App.css";
 import type { ReactElement } from "react";
-import { useSearchParams } from "react-router-dom";
 
-import { DashboardPanel } from "./components/dashboard/DashboardPanel";
-import { HelpPage } from "./components/help/HelpPage";
-import { HistoryPage } from "./components/history/HistoryPage";
-import { AppHeader } from "./components/layout/AppHeader";
-import { MobileNav } from "./components/layout/MobileNav";
-import { SettingsPage } from "./components/settings/SettingsPage";
-import { SidebarInfoCards } from "./components/sidebar/SidebarInfoCards";
-import { SidebarPanel } from "./components/sidebar/SidebarPanel";
-import { useFitProcessing } from "./hooks/use-fit-processing";
+import { AppContent } from "./AppContent";
+import { LanguagePickerModal } from "./components/layout/LanguagePickerModal";
+import { useLanguageState } from "./hooks/use-language-state";
 import { useThemeState } from "./hooks/use-theme-state";
+import { DICTIONARIES } from "./i18n/dictionaries";
+import { LanguageContext } from "./i18n/language-context";
 import { ThemeContext } from "./theme/theme-context";
 
-function App(): ReactElement {
+function App(): ReactElement | null {
   const theme = useThemeState();
-  const { state, processFile, processUrl, updateSettings, reset, discard } =
-    useFitProcessing();
-  const [searchParams] = useSearchParams();
-  const view = searchParams.get("view");
-  const activeView =
-    view === "history" || view === "help" || view === "settings"
-      ? view
-      : "dashboard";
+  const { lang, loaded, setLanguage } = useLanguageState();
 
-  let content: ReactElement;
-  if (view === "history") {
-    content = (
-      <main className="app-main">
-        <HistoryPage />
-      </main>
-    );
-  } else if (view === "help") {
-    content = (
-      <main className="app-main">
-        <HelpPage />
-      </main>
-    );
-  } else if (view === "settings") {
-    content = (
-      <main className="app-main">
-        <SettingsPage />
-      </main>
-    );
-  } else {
-    content = (
-      <div className="app-body">
-        <SidebarPanel
-          onFile={processFile}
-          busy={state.status === "processing"}
-        />
-        <main className="app-main">
-          <DashboardPanel
-            state={state}
-            onSettingsChange={updateSettings}
-            onLoadExample={processUrl}
-            onReset={reset}
-            onDiscard={discard}
-          />
-        </main>
-        <SidebarInfoCards />
-      </div>
-    );
+  if (!loaded) {
+    return null;
   }
 
+  const effectiveLang = lang ?? "en";
+
   return (
-    <ThemeContext.Provider value={theme}>
-      <div className="app-shell">
-        <AppHeader activeView={activeView} />
-        {content}
-        <MobileNav activeView={activeView} />
-      </div>
-    </ThemeContext.Provider>
+    <LanguageContext.Provider
+      value={{
+        lang: effectiveLang,
+        t: DICTIONARIES[effectiveLang],
+        setLanguage,
+      }}
+    >
+      <ThemeContext.Provider value={theme}>
+        <div className="app-shell">
+          <AppContent />
+          {lang == null && <LanguagePickerModal onPick={setLanguage} />}
+        </div>
+      </ThemeContext.Provider>
+    </LanguageContext.Provider>
   );
 }
 

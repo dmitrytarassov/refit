@@ -2,16 +2,18 @@ import "./ThemeToggle.css";
 import type { ReactElement } from "react";
 
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 
 export function ThemeToggle(): ReactElement {
   const { mode, toggle } = useTheme();
   const dark = mode === "dark";
+  const { t } = useT();
 
   return (
     <button
       type="button"
       className="theme-toggle"
-      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-label={dark ? t.nav.switchToLight : t.nav.switchToDark}
       onClick={toggle}
     >
       {dark ? (

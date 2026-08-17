@@ -4,11 +4,14 @@ import type { ReactElement } from "react";
 import "./EmptyState.css";
 import { EXAMPLE_FILES } from "./example-files";
 
+import { useT } from "../../hooks/use-translation";
+
 interface EmptyStateProps {
   onLoadExample: (url: string, fileName: string) => void;
 }
 
 export function EmptyState({ onLoadExample }: EmptyStateProps): ReactElement {
+  const { t } = useT();
   return (
     <section className="empty-state">
       <svg
@@ -27,12 +30,12 @@ export function EmptyState({ onLoadExample }: EmptyStateProps): ReactElement {
         <path d="M14 2v6h6" />
         <path d="M8 15h2l1.5-4 2 6 1.5-3h1" />
       </svg>
-      <h2 className="empty-state-title">No file loaded</h2>
-      <p className="empty-state-subtitle">
-        Upload a .fit file to see your ride analysis.
-      </p>
+      <h2 className="empty-state-title">{t.dashboard.empty.title}</h2>
+      <p className="empty-state-subtitle">{t.dashboard.empty.subtitle}</p>
       <div className="empty-state-examples">
-        <span className="empty-state-examples-label">Or try an example:</span>
+        <span className="empty-state-examples-label">
+          {t.dashboard.empty.tryExample}
+        </span>
         <div className="empty-state-examples-buttons">
           {EXAMPLE_FILES.map((file) => (
             <button
@@ -41,12 +44,12 @@ export function EmptyState({ onLoadExample }: EmptyStateProps): ReactElement {
               className="empty-state-example-button"
               onClick={deferCall(onLoadExample, file.url, file.fileName)}
             >
-              {file.label}
+              {t.dashboard.empty[file.labelKey]}
             </button>
           ))}
         </div>
         <span className="empty-state-examples-note">
-          Examples are not saved to History.
+          {t.dashboard.empty.notSaved}
         </span>
       </div>
     </section>

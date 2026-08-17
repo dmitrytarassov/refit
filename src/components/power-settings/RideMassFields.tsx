@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 
 import { DEFAULT_GEAR_KG } from "../../../lib/power/gear-defaults";
 import { POWER_DEFAULTS } from "../../fit/power-defaults";
+import { useT } from "../../hooks/use-translation";
 import type { RideSettings } from "../../types/ride-settings";
 import { HelpTip } from "../common/ui/HelpTip";
 
@@ -15,6 +16,7 @@ export function RideMassFields({
   settings,
   onChange,
 }: RideMassFieldsProps): ReactElement {
+  const { t } = useT();
   const mass = settings.mass ?? POWER_DEFAULTS.mass;
   const gearKg = mass.gearKg ?? DEFAULT_GEAR_KG;
 
@@ -35,7 +37,7 @@ export function RideMassFields({
   return (
     <div className="ride-mass-fields">
       <label>
-        <span>Rider, kg</span>
+        <span>{t.settings.weight.riderKg}</span>
         <input
           type="number"
           min={30}
@@ -52,7 +54,7 @@ export function RideMassFields({
         />
       </label>
       <label>
-        <span>Bike, kg</span>
+        <span>{t.settings.weight.bikeKg}</span>
         <input
           type="number"
           min={3}
@@ -70,8 +72,7 @@ export function RideMassFields({
       </label>
       <label>
         <span>
-          Gear, kg{" "}
-          <HelpTip text="Everything the rider carries: helmet, shoes, phone, bike computer, bottles and so on." />
+          {t.settings.weight.gearKg} <HelpTip text={t.metricHelp.gear} />
         </span>
         <input
           type="number"

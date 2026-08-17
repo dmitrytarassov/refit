@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 import type { RideRow } from "../../db/ride-row";
 import { formatDistance, formatDuration } from "../../fit/format-metrics";
+import { useT } from "../../hooks/use-translation";
 
 interface HistoryTableProps {
   rides: Array<Omit<RideRow, "file">>;
@@ -18,18 +19,19 @@ export function HistoryTable({
   armedId,
   onDelete,
 }: HistoryTableProps): ReactElement {
+  const { t } = useT();
   return (
     <table className="history-table">
       <thead>
         <tr>
-          <th>Date</th>
-          <th>File</th>
-          <th>Duration</th>
-          <th>Distance</th>
-          <th>Avg Power</th>
-          <th>Normalized Power</th>
-          <th>Est. FTP</th>
-          <th>TSS</th>
+          <th>{t.history.headers.date}</th>
+          <th>{t.history.headers.file}</th>
+          <th>{t.history.headers.duration}</th>
+          <th>{t.history.headers.distance}</th>
+          <th>{t.history.headers.avgPower}</th>
+          <th>{t.history.headers.normalizedPower}</th>
+          <th>{t.history.headers.estFtp}</th>
+          <th>{t.history.headers.tss}</th>
           <th />
         </tr>
       </thead>
@@ -37,7 +39,7 @@ export function HistoryTable({
         {rides.map((ride) => (
           <tr key={ride.id}>
             <td>
-              {new Date(ride.createdAt).toLocaleDateString(undefined, {
+              {new Date(ride.createdAt).toLocaleDateString(t.locale, {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
@@ -49,12 +51,22 @@ export function HistoryTable({
               </Link>
             </td>
             <td>{formatDuration(ride.durationSec)}</td>
-            <td>{formatDistance(ride.distanceM)}</td>
-            <td>{ride.avgPower != null ? `${ride.avgPower} W` : "—"}</td>
+            <td>{formatDistance(ride.distanceM, t.common.units.km)}</td>
             <td>
-              {ride.normalizedPower != null ? `${ride.normalizedPower} W` : "—"}
+              {ride.avgPower != null
+                ? `${ride.avgPower} ${t.common.units.w}`
+                : "—"}
             </td>
-            <td>{ride.ftpWatts != null ? `${ride.ftpWatts} W` : "—"}</td>
+            <td>
+              {ride.normalizedPower != null
+                ? `${ride.normalizedPower} ${t.common.units.w}`
+                : "—"}
+            </td>
+            <td>
+              {ride.ftpWatts != null
+                ? `${ride.ftpWatts} ${t.common.units.w}`
+                : "—"}
+            </td>
             <td>{ride.tss ?? "—"}</td>
             <td>
               {ride.id != null && (
@@ -67,13 +79,13 @@ export function HistoryTable({
                   }
                   aria-label={
                     armedId === ride.id
-                      ? `Confirm deleting ${ride.fileName}`
-                      : `Delete ${ride.fileName}`
+                      ? t.history.confirmDeleteAria(ride.fileName)
+                      : t.history.deleteAria(ride.fileName)
                   }
                   onClick={deferCall(onDelete, ride.id)}
                 >
                   {armedId === ride.id ? (
-                    "Delete?"
+                    t.history.deleteConfirm
                   ) : (
                     <Trash2 size={15} aria-hidden="true" />
                   )}

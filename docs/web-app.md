@@ -41,7 +41,7 @@ The **Download enhanced** button (`FileHeaderCard` → `DownloadMenu` → `use-e
 
 | Directory | Contents |
 | --- | --- |
-| `components/layout/` | `AppHeader`, `ThemeToggle`, mobile navigation (≤640px): `MobileNav` (open/close state) renders `MobileNavBar` — a fixed bottom bar with Home/History/Settings icons + a burger button — and `MobileNavDrawer` — a bottom sheet with all links as text (Dashboard, History, Settings, Help, GitHub, Telegram) plus `ThemeToggle` in its footer. On mobile the header is hidden entirely — the bottom bar + drawer replace it |
+| `components/layout/` | `AppHeader`, `ThemeToggle`, `LanguagePickerModal` (first-run language choice — [i18n.md](i18n.md)), mobile navigation (≤640px): `MobileNav` (open/close state) renders `MobileNavBar` — a fixed bottom bar with Home/History/Settings icons + a burger button — and `MobileNavDrawer` — a bottom sheet with all links as text (Dashboard, History, Settings, Help, GitHub, Telegram) plus `ThemeToggle` in its footer. On mobile the header is hidden entirely — the bottom bar + drawer replace it |
 | `components/sidebar/` | `SidebarPanel` (brand block + `UploadZone`; on mobile the brand title and tagline sit in one row) and `SidebarInfoCards` (How it works / What you get promo cards) — separate grid children of `.app-body` (areas `sidebar` / `extras`), so on mobile the cards move below the main content |
 | `components/dashboard/` | `DashboardPanel` (routing by `ProcessingState`, lazy boundary), `ActivityDashboard` (header cards + tabs, switches content by `?tab`), `OverviewTab` (tiles, power chart, a single `dashboard-card-grid` with the six metric/quality cards, map), `PowerTab` (power tiles incl. Intensity Factor + power chart with zones + power curve), `PerformanceTab` (HR/cadence/elevation/speed charts), `MapTab` (full-width route map), `DataQualityTab` (`DataQualityCard` + `FileDataCard` — raw mesg counts, fileId/session key-values, decode errors; the "View Raw Data" button in `FileHeaderCard` navigates here), `DashboardTabs` (state in `?tab` via `useSearchParams`; only Intervals is a stub), `FileHeaderCard`, `MetricTilesRow`, `EmptyState`. Computed metric tiles (Avg/NP/Max Power, Est. FTP, IF, TSS) carry a `?` HelpTip in the corner with a one-line "how it's computed" — texts live in `metric-help.ts`, shared by Overview and Power; self-evident tiles (Moving Time, Distance) have none — the Moving Time tile shows `totalTimerTime` (falls back to elapsed) with the full elapsed time (`totalElapsedTime`) small in its top-right corner (`corner` prop of `MetricTile`). Keep the texts in sync with docs/Help/README when formulas change (+ example buttons from `example-files.ts`: the demo ride is served from `public/examples/`, the Garmin sample is fetched from their GitHub at click time; both open via `processUrl` and are **not** saved to History) |
 | `components/charts/` | Recharts cards: Power, HeartRate, Cadence, Elevation, Speed + `PowerZonesPanel`, and `CombinedChart` — the shared expanded view: those five cards expand into one chart with all series (only the opener's series visible at first; legend items toggle the rest, each series on its own hidden Y axis, only the opener's axis shown) plus drag-to-select zoom (`useDragZoom` + ReferenceArea, "Reset zoom" button; on mobile a recharts Brush bar below the chart drives the zoom instead, hidden Y axes get width 0 and the modal paddings shrink). The Power card's zones panel stays card-only — the expanded view is the combined chart |
@@ -58,6 +58,7 @@ The **Download enhanced** button (`FileHeaderCard` → `DownloadMenu` → `use-e
 | `fit/` | UI helpers: `power-defaults.ts` (power model parameters for the web), `format-metrics.ts`, `downsample-points.ts` (cap of 2000 points per chart) |
 | `charts/` | chart palette and tick formatter |
 | `styles/`, `theme/` | `theme.css` and `ThemeContext` |
+| `i18n/` | en/ru dictionaries, `LanguageContext`, `Translation` type — [i18n.md](i18n.md); all UI strings come from `useT()` |
 
 CSS — plain files next to the component (`Component.tsx` + `Component.css`), no CSS-in-JS.
 
@@ -75,6 +76,8 @@ Components are pure render; computation lives in hooks:
 
 | Hook | What it does |
 | --- | --- |
+| `use-language-state` | loads/saves the UI language (IndexedDB `language` key), gates the first render, syncs `<html lang>` |
+| `use-translation` | `useT()` → `{ t, lang, setLanguage }` from `LanguageContext` |
 | `use-is-mobile` | `true` below the mobile breakpoint (`MOBILE_MEDIA_QUERY` from `styles/mobile-breakpoint.ts`, matchMedia + `useSyncExternalStore`); used by `HistoryPage` (mount one of table/cards; CSS media toggles stay) and `CombinedChart` (Brush vs drag-zoom, axis sizing) |
 | `use-fit-processing` | file or `?record=id` → `Activity`, saving to history; `processUrl` — fetch + decode a file by URL without saving (example rides); `updateSettings` — recompute power/metrics on settings change and autosave ([history-storage.md](history-storage.md)) |
 | `use-activity-summary` | meta (sport, date, device) and metrics for the tiles |

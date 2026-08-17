@@ -1,0 +1,58 @@
+export const DASHBOARD_RU = {
+  tabs: {
+    overview: "Обзор",
+    power: "Мощность",
+    performance: "Показатели",
+    intervals: "Интервалы",
+    map: "Карта",
+    dataQuality: "Качество данных",
+    aria: "Разделы дашборда",
+  },
+  tiles: {
+    aria: "Метрики заезда",
+    movingTime: "Время в движении",
+    distance: "Дистанция",
+    avgPower: "Средняя мощность",
+    normalizedPower: "Normalized Power",
+    maxPower: "Макс. мощность",
+    estFtp: "Оценка FTP",
+    ftpManual: "FTP (вручную)",
+    intensityFactor: "Intensity Factor",
+    tss: "TSS",
+  },
+  download: {
+    button: "Скачать улучшенный",
+    coordinates: "Очищенные координаты",
+    power: "Расчётная мощность",
+    sensorNote:
+      "В файле есть мощность с датчика — расчётная мощность по умолчанию выключена, чтобы сохранить оригинальные значения.",
+    save: "Сохранить .fit",
+  },
+  clear: {
+    aria: "Очистить дашборд",
+    confirm: "Удалить и этот заезд из Истории?",
+    delete: "Удалить",
+    keep: "Оставить",
+  },
+  empty: {
+    title: "Файл не загружен",
+    subtitle: "Загрузите .fit-файл, чтобы увидеть анализ заезда.",
+    tryExample: "Или попробуйте пример:",
+    notSaved: "Примеры не сохраняются в Историю.",
+    demoRide: "Демо-заезд — Magene C406",
+    garminExample: "Пример Garmin",
+  },
+  processing: (fileName: string): string => `Обрабатываем ${fileName}…`,
+  loadingDashboard: "Загружаем дашборд…",
+  viewRawData: "Сырые данные",
+  rawFileData: "Сырые данные файла",
+  messages: "Сообщения",
+  fileId: "File ID",
+  session: "Сессия",
+  massAlert: {
+    before: (rider: number, bike: number, gear: number): string =>
+      `Мощность рассчитана с весами по умолчанию: райдер ${rider} кг, велосипед ${bike} кг, экипировка ${gear} кг. Задайте свои значения в разделе `,
+    link: "Настройки",
+    after: " или поменяйте их для этого заезда через шестерёнку выше.",
+  },
+};

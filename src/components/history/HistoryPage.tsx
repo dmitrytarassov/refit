@@ -7,10 +7,12 @@ import { HistoryTable } from "./HistoryTable";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useRideHistory } from "../../hooks/use-ride-history";
 import "./HistoryPage.css";
+import { useT } from "../../hooks/use-translation";
 
 export function HistoryPage(): ReactElement {
   const { rides, loading, remove } = useRideHistory();
   const isMobile = useIsMobile();
+  const { t } = useT();
   const [armedId, setArmedId] = useState<number | null>(null);
 
   const handleDelete = (id: number): void => {
@@ -24,13 +26,9 @@ export function HistoryPage(): ReactElement {
 
   let body: ReactElement;
   if (loading) {
-    body = <p className="history-empty">Loading…</p>;
+    body = <p className="history-empty">{t.common.loading}</p>;
   } else if (rides.length === 0) {
-    body = (
-      <p className="history-empty">
-        No saved rides yet — process a .fit file on the Dashboard.
-      </p>
-    );
+    body = <p className="history-empty">{t.history.empty}</p>;
   } else if (isMobile) {
     body = <HistoryCardList rides={rides} />;
   } else {
@@ -41,7 +39,7 @@ export function HistoryPage(): ReactElement {
 
   return (
     <section className="history-page">
-      <h2>History</h2>
+      <h2>{t.history.title}</h2>
       {body}
     </section>
   );

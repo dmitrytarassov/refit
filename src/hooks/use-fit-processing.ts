@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { useT } from "./use-translation";
+
 import { cleanTrack } from "../../lib/pipeline/clean-track";
 import { estimatePower } from "../../lib/power/estimate-power";
 import { sessionPowerStats } from "../../lib/power/session-stats";
@@ -54,6 +56,7 @@ export function useFitProcessing(): {
   reset: () => void;
   discard: () => void;
 } {
+  const { t } = useT();
   const [searchParams, setSearchParams] = useSearchParams();
   const recordParam = searchParams.get("record");
   const loadedRecordRef = useRef<string | null>(null);
@@ -90,9 +93,7 @@ export function useFitProcessing(): {
     fetch(url)
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error(
-            `Failed to load ${fileName}: HTTP ${response.status}`,
-          );
+          throw new Error(t.errors.httpLoad(fileName, response.status));
         }
         const buffer = await response.arrayBuffer();
         const settings = await resolveRideSettings();
@@ -170,7 +171,7 @@ export function useFitProcessing(): {
         if (row == null) {
           setState({
             status: "error",
-            message: `Ride #${recordParam} not found in history`,
+            message: t.errors.rideNotFound(recordParam),
           });
           return;
         }

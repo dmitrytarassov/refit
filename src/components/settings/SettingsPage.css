@@ -8,6 +8,31 @@
     max-width: none;
   }
 
+  .settings-language-buttons {
+    display: flex;
+    gap: 10px;
+
+    .settings-language-button {
+      padding: 8px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--text-primary);
+      }
+
+      &.is-active {
+        color: var(--ink-fg);
+        background: var(--ink-tint);
+        border-color: var(--ink);
+      }
+    }
+  }
+
   .settings-main {
     min-width: 0;
 
@@ -23,7 +48,7 @@
       display: block;
       flex: 1;
       min-width: 0;
-      max-width: 720px;
+      /*max-width: 720px;*/
       position: sticky;
       top: 24px;
       --cyclist-line: var(--text-muted);
@@ -54,7 +79,7 @@
     }
 
     p {
-      margin: 0;
+      margin: 0 0 8px;
       font-size: 14px;
       color: var(--text-secondary);
     }

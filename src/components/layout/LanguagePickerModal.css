@@ -1,0 +1,53 @@
+.language-picker {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 50%);
+
+  .language-picker-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 32px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--text-primary);
+      text-align: center;
+    }
+  }
+
+  .language-picker-buttons {
+    display: flex;
+    gap: 12px;
+
+    button {
+      flex: 1;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        border-color: var(--ink);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: -2px;
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+export const DASHBOARD_EN = {
+  tabs: {
+    overview: "Overview",
+    power: "Power",
+    performance: "Performance",
+    intervals: "Intervals",
+    map: "Map",
+    dataQuality: "Data Quality",
+    aria: "Dashboard sections",
+  },
+  tiles: {
+    aria: "Ride metrics",
+    movingTime: "Moving Time",
+    distance: "Distance",
+    avgPower: "Avg Power",
+    normalizedPower: "Normalized Power",
+    maxPower: "Max Power",
+    estFtp: "Est. FTP",
+    ftpManual: "FTP (manual)",
+    intensityFactor: "Intensity Factor",
+    tss: "TSS",
+  },
+  download: {
+    button: "Download enhanced",
+    coordinates: "Cleaned coordinates",
+    power: "Estimated power",
+    sensorNote:
+      "This file has power from a sensor — estimated power is off by default to keep the original values.",
+    save: "Save .fit",
+  },
+  clear: {
+    aria: "Clear dashboard",
+    confirm: "Also delete this ride from History?",
+    delete: "Delete",
+    keep: "Keep",
+  },
+  empty: {
+    title: "No file loaded",
+    subtitle: "Upload a .fit file to see your ride analysis.",
+    tryExample: "Or try an example:",
+    notSaved: "Examples are not saved to History.",
+    demoRide: "Demo ride — Magene C406",
+    garminExample: "Garmin example",
+  },
+  processing: (fileName: string): string => `Processing ${fileName}…`,
+  loadingDashboard: "Loading dashboard…",
+  viewRawData: "View Raw Data",
+  rawFileData: "Raw File Data",
+  messages: "Messages",
+  fileId: "File ID",
+  session: "Session",
+  massAlert: {
+    before: (rider: number, bike: number, gear: number): string =>
+      `Power was estimated with default weights: rider ${rider} kg, bike ${bike} kg, gear ${gear} kg. Set your defaults in `,
+    link: "Settings",
+    after: ", or change them for this ride via the gear icon above.",
+  },
+};

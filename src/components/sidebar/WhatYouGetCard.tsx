@@ -2,11 +2,14 @@ import type { ReactElement } from "react";
 
 import "./WhatYouGetCard.css";
 
+import { useT } from "../../hooks/use-translation";
+
 export function WhatYouGetCard(): ReactElement {
+  const { t } = useT();
   const items = [
     {
-      title: "Clean Data",
-      text: "Fix errors and inconsistencies",
+      title: t.sidebar.whatYouGet.items[0].title,
+      text: t.sidebar.whatYouGet.items[0].text,
       icon: (
         <path
           d="M20 6 9 17l-5-5"
@@ -18,8 +21,8 @@ export function WhatYouGetCard(): ReactElement {
       ),
     },
     {
-      title: "Power Data",
-      text: "Estimated or measured power",
+      title: t.sidebar.whatYouGet.items[1].title,
+      text: t.sidebar.whatYouGet.items[1].text,
       icon: (
         <path
           d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"
@@ -31,8 +34,8 @@ export function WhatYouGetCard(): ReactElement {
       ),
     },
     {
-      title: "More Metrics",
-      text: "NP, IF, TSS, VI and more",
+      title: t.sidebar.whatYouGet.items[2].title,
+      text: t.sidebar.whatYouGet.items[2].text,
       icon: (
         <path
           d="M5 20V12M12 20V4M19 20v-6"
@@ -43,8 +46,8 @@ export function WhatYouGetCard(): ReactElement {
       ),
     },
     {
-      title: "Better Insights",
-      text: "Train with confidence",
+      title: t.sidebar.whatYouGet.items[3].title,
+      text: t.sidebar.whatYouGet.items[3].text,
       icon: (
         <path
           d="m3 17 6-6 4 4 8-8M15 7h6v6"
@@ -59,7 +62,7 @@ export function WhatYouGetCard(): ReactElement {
 
   return (
     <section className="what-you-get-card">
-      <h2 className="what-you-get-title">What you get</h2>
+      <h2 className="what-you-get-title">{t.sidebar.whatYouGet.title}</h2>
       <ul className="what-you-get-items">
         {items.map((item) => (
           <li key={item.title} className="what-you-get-item">

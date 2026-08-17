@@ -9,6 +9,7 @@ import { MapPinchZoom } from "./MapPinchZoom";
 import { CHART_PALETTE } from "../../charts/chart-palette";
 import { useRoutePoints } from "../../hooks/use-route-points";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import { ChartCard } from "../charts/ui/ChartCard";
 import { ToggleSwitch } from "../common/ui/ToggleSwitch";
@@ -20,6 +21,7 @@ interface RouteMapCardProps {
 export function RouteMapCard({
   activity,
 }: RouteMapCardProps): ReactElement | null {
+  const { t } = useT();
   const [showOriginal, setShowOriginal] = useState(false);
   const hasEdits = activity.report.accepted < activity.report.withGps;
   const points = useRoutePoints(activity);
@@ -31,11 +33,11 @@ export function RouteMapCard({
 
   return (
     <ChartCard
-      title="Route"
+      title={t.charts.titles.route}
       aside={
         hasEdits ? (
           <ToggleSwitch
-            label="Show Original"
+            label={t.charts.showOriginal}
             checked={showOriginal}
             onChange={setShowOriginal}
           />

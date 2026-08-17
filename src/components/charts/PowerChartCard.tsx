@@ -18,6 +18,7 @@ import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatDuration } from "../../fit/format-metrics";
 import { usePowerSeries } from "../../hooks/use-power-series";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./PowerChartCard.css";
 
@@ -28,6 +29,7 @@ interface PowerChartCardProps {
 export function PowerChartCard({
   activity,
 }: PowerChartCardProps): ReactElement {
+  const { t } = useT();
   const points = usePowerSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
@@ -46,7 +48,7 @@ export function PowerChartCard({
             strokeWidth="2"
           />
         </svg>
-        Power (Enhanced)
+        {t.charts.legendEnhanced}
       </span>
       <span className="power-chart-legend-item">
         <svg width="20" height="6" aria-hidden="true">
@@ -60,21 +62,21 @@ export function PowerChartCard({
             strokeDasharray="4 3"
           />
         </svg>
-        Power (Original)
+        {t.charts.legendOriginal}
       </span>
     </div>
   );
 
   return (
     <ChartCard
-      title="Power"
+      title={t.charts.titles.power}
       aside={legend}
       expanded={<CombinedChart activity={activity} initial="power" />}
     >
       <div className="power-chart-body">
         <div className="power-chart-plot">
           {points.length === 0 ? (
-            <p className="power-chart-empty">No power data</p>
+            <p className="power-chart-empty">{t.charts.noData.power}</p>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
@@ -95,20 +97,22 @@ export function PowerChartCard({
                   minTickGap={32}
                 />
                 <YAxis
-                  unit=" W"
+                  unit={` ${t.common.units.w}`}
                   width={56}
                   tick={{ fill: palette.axis, fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
                 />
                 <Tooltip
-                  content={(props) => <ChartTooltip {...props} unit="W" />}
+                  content={(props) => (
+                    <ChartTooltip {...props} unit={t.common.units.w} />
+                  )}
                   cursor={{ stroke: palette.grid }}
                 />
                 {hasOriginal && (
                   <Line
                     dataKey="original"
-                    name="Original"
+                    name={t.charts.seriesOriginal}
                     stroke={palette.original}
                     strokeWidth={1.5}
                     strokeDasharray="4 3"
@@ -118,7 +122,7 @@ export function PowerChartCard({
                 )}
                 <Line
                   dataKey="enhanced"
-                  name="Enhanced"
+                  name={t.charts.seriesEnhanced}
                   stroke={palette.enhanced}
                   strokeWidth={2}
                   dot={false}

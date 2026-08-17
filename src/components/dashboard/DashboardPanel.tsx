@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 
 import { EmptyState } from "./EmptyState";
 
+import { useT } from "../../hooks/use-translation";
 import type { ProcessingState } from "../../types/processing-state";
 import type { RideSettings } from "../../types/ride-settings";
 
@@ -24,11 +25,16 @@ export function DashboardPanel({
   onReset: () => void;
   onDiscard: () => void;
 }): ReactElement {
+  const { t } = useT();
   if (state.status === "idle") {
     return <EmptyState onLoadExample={onLoadExample} />;
   }
   if (state.status === "processing") {
-    return <p className="dashboard-processing">Processing {state.fileName}…</p>;
+    return (
+      <p className="dashboard-processing">
+        {t.dashboard.processing(state.fileName)}
+      </p>
+    );
   }
   if (state.status === "error") {
     return (
@@ -40,7 +46,9 @@ export function DashboardPanel({
 
   return (
     <Suspense
-      fallback={<p className="dashboard-processing">Loading dashboard…</p>}
+      fallback={
+        <p className="dashboard-processing">{t.dashboard.loadingDashboard}</p>
+      }
     >
       <ActivityDashboard
         activity={state.activity}

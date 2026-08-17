@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import type { DragEvent, KeyboardEvent, ReactElement } from "react";
+
 import "./UploadZone.css";
+import { useT } from "../../hooks/use-translation";
 
 interface UploadZoneProps {
   onFile: (file: File) => void;
@@ -8,6 +10,7 @@ interface UploadZoneProps {
 }
 
 export function UploadZone({ onFile, busy }: UploadZoneProps): ReactElement {
+  const { t } = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragDepth, setDragDepth] = useState(0);
 
@@ -61,7 +64,7 @@ export function UploadZone({ onFile, busy }: UploadZoneProps): ReactElement {
       className={className}
       role="button"
       tabIndex={busy ? -1 : 0}
-      aria-label="Upload .fit file"
+      aria-label={t.sidebar.upload.aria}
       aria-disabled={busy}
       onClick={openBrowser}
       onKeyDown={handleKeyDown}
@@ -87,9 +90,9 @@ export function UploadZone({ onFile, busy }: UploadZoneProps): ReactElement {
           />
         </svg>
       </span>
-      <p className="upload-zone-text">Drag &amp; drop your .fit file here</p>
-      <p className="upload-zone-browse">or click to browse</p>
-      <p className="upload-zone-hint">Max file size: 100MB</p>
+      <p className="upload-zone-text">{t.sidebar.upload.drag}</p>
+      <p className="upload-zone-browse">{t.sidebar.upload.browse}</p>
+      <p className="upload-zone-hint">{t.sidebar.upload.hint}</p>
       <input
         ref={inputRef}
         type="file"

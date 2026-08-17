@@ -8,12 +8,14 @@ import { RouteThumb } from "./RouteThumb";
 import type { RideRow } from "../../db/ride-row";
 import { formatDistance } from "../../fit/format-metrics";
 import { formatSpeed } from "../../fit/format-speed";
+import { useT } from "../../hooks/use-translation";
 
 interface HistoryRideCardProps {
   ride: Omit<RideRow, "file">;
 }
 
 export function HistoryRideCard({ ride }: HistoryRideCardProps): ReactElement {
+  const { t } = useT();
   const created = new Date(ride.createdAt);
 
   return (
@@ -24,21 +26,27 @@ export function HistoryRideCard({ ride }: HistoryRideCardProps): ReactElement {
           {shortenString(ride.fileName, 6)}
         </h3>
         <p className="history-ride-card-date">
-          {created.toLocaleDateString(undefined, {
+          {created.toLocaleDateString(t.locale, {
             month: "short",
             day: "numeric",
             year: "numeric",
           })}
           {" · "}
-          {created.toLocaleTimeString(undefined, {
+          {created.toLocaleTimeString(t.locale, {
             hour: "2-digit",
             minute: "2-digit",
           })}
         </p>
         <p className="history-ride-card-stats">
-          <span>{formatDistance(ride.distanceM)}</span>
-          <span>{formatSpeed(ride.distanceM, ride.durationSec)}</span>
-          <span>{ride.avgPower != null ? `${ride.avgPower} W` : "— W"}</span>
+          <span>{formatDistance(ride.distanceM, t.common.units.km)}</span>
+          <span>
+            {formatSpeed(ride.distanceM, ride.durationSec, t.common.units.kmh)}
+          </span>
+          <span>
+            {ride.avgPower != null
+              ? `${ride.avgPower} ${t.common.units.w}`
+              : `— ${t.common.units.w}`}
+          </span>
         </p>
       </div>
     </Link>

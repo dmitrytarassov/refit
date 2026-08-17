@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 
 import { useFTP } from "../../hooks/use-ftp";
 import { usePowerZones } from "../../hooks/use-power-zones";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./PowerZonesPanel.css";
 
@@ -12,6 +13,7 @@ interface PowerZonesPanelProps {
 export function PowerZonesPanel({
   activity,
 }: PowerZonesPanelProps): ReactElement {
+  const { t } = useT();
   const ftp = useFTP(activity);
   const zones = usePowerZones(activity);
   const maxSeconds = Math.max(...zones.map((z) => z.seconds), 1);
@@ -19,11 +21,16 @@ export function PowerZonesPanel({
   return (
     <aside className="power-zones-panel">
       <header className="power-zones-header">
-        <h3>Power Zones</h3>
+        <h3>{t.charts.titles.powerZones}</h3>
         <span className="power-zones-caption">
           {ftp != null
-            ? `@ FTP ${ftp.watts} W (${ftp.source})`
-            : "No power data"}
+            ? t.charts.ftpAt(
+                ftp.watts,
+                ftp.source === "manual"
+                  ? t.charts.ftpSourceManual
+                  : t.charts.ftpSourceEstimated,
+              )
+            : t.charts.noData.power}
         </span>
       </header>
       <ul>

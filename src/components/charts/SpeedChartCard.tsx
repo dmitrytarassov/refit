@@ -18,6 +18,7 @@ import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatDuration } from "../../fit/format-metrics";
 import { useRecordSeries } from "../../hooks/use-record-series";
 import { useTheme } from "../../hooks/use-theme";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 import "./SpeedChartCard.css";
 
@@ -28,17 +29,18 @@ interface SpeedChartCardProps {
 export function SpeedChartCard({
   activity,
 }: SpeedChartCardProps): ReactElement {
+  const { t } = useT();
   const { speed } = useRecordSeries(activity);
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
 
   return (
     <ChartCard
-      title="Speed"
+      title={t.charts.titles.speed}
       expanded={<CombinedChart activity={activity} initial="speed" />}
     >
       {speed.length === 0 ? (
-        <p className="speed-chart-empty">No speed data</p>
+        <p className="speed-chart-empty">{t.charts.noData.speed}</p>
       ) : (
         <div className="speed-chart-plot">
           <ResponsiveContainer width="100%" height="100%">
@@ -63,19 +65,21 @@ export function SpeedChartCard({
                 minTickGap={32}
               />
               <YAxis
-                unit=" km/h"
+                unit={` ${t.common.units.kmh}`}
                 width={72}
                 tick={{ fill: palette.axis, fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
-                content={(props) => <ChartTooltip {...props} unit="km/h" />}
+                content={(props) => (
+                  <ChartTooltip {...props} unit={t.common.units.kmh} />
+                )}
                 cursor={{ stroke: palette.grid }}
               />
               <Area
                 dataKey="value"
-                name="Speed"
+                name={t.charts.titles.speed}
                 stroke={palette.speed}
                 strokeWidth={1.5}
                 fill="url(#speed-fill)"

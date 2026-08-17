@@ -11,6 +11,8 @@ import { POWER_DEFAULTS } from "../../fit/power-defaults";
 import { useManualFtp } from "../../hooks/use-manual-ftp";
 import { useMassSettings } from "../../hooks/use-mass-settings";
 import { usePowerSettings } from "../../hooks/use-power-settings";
+import { useT } from "../../hooks/use-translation";
+import type { Language } from "../../types/language";
 import { BottleListEditor } from "../power-settings/BottleListEditor";
 import { PowerSettingsPanel } from "../power-settings/PowerSettingsPanel";
 
@@ -18,6 +20,7 @@ export function SettingsPage(): ReactElement {
   const { settings, update } = usePowerSettings();
   const { ftp, save } = useManualFtp();
   const { mass, save: saveMass } = useMassSettings();
+  const { t, lang, setLanguage } = useT();
 
   const updateMass = (
     key: "riderKg" | "bikeKg" | "gearKg",
@@ -45,32 +48,46 @@ export function SettingsPage(): ReactElement {
   return (
     <section className="settings-page">
       <div className="settings-main">
-        <h2>Settings</h2>
+        <h2>{t.settings.title}</h2>
         <article className="settings-card">
-          <h3>Power estimation defaults</h3>
-          <p>
-            Applied to every newly loaded ride. Changing these on a ride&rsquo;s
-            dashboard also updates the defaults.
-          </p>
+          <h3>{t.language.settingsTitle}</h3>
+          <p>{t.language.settingsText}</p>
+          <div className="settings-language-buttons">
+            {(["en", "ru"] as Language[]).map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={
+                  lang === option
+                    ? "settings-language-button is-active"
+                    : "settings-language-button"
+                }
+                onClick={deferCall(setLanguage, option)}
+              >
+                {option === "en" ? t.language.english : t.language.russian}
+              </button>
+            ))}
+          </div>
+        </article>
+        <article className="settings-card">
+          <h3>{t.settings.powerDefaults.title}</h3>
+          <p>{t.settings.powerDefaults.text}</p>
           {settings != null && (
             <PowerSettingsPanel settings={settings} onChange={update} />
           )}
         </article>
         <article className="settings-card">
-          <h3>Weight</h3>
+          <h3>{t.settings.weight.title}</h3>
           <p>
-            Default rider, bike and gear mass for the power model — copied into
-            every newly loaded ride (each ride can then override them in its
-            power settings). Gear is everything the rider carries: helmet,
-            shoes, phone, bike computer, bottles and so on. When not set,
-            defaults of {POWER_DEFAULTS.mass.riderKg} kg (rider),{" "}
-            {POWER_DEFAULTS.mass.bikeKg} kg (bike) and{" "}
-            {POWER_DEFAULTS.mass.gearKg} kg (gear) are used and the dashboard
-            shows a reminder.
+            {t.settings.weight.text(
+              POWER_DEFAULTS.mass.riderKg,
+              POWER_DEFAULTS.mass.bikeKg,
+              POWER_DEFAULTS.mass.gearKg ?? 2,
+            )}
           </p>
           <div className="settings-ftp-row">
             <label>
-              <span>Rider, kg</span>
+              <span>{t.settings.weight.riderKg}</span>
               <span className="settings-ftp-field">
                 <input
                   type="number"
@@ -85,7 +102,7 @@ export function SettingsPage(): ReactElement {
               </span>
             </label>
             <label>
-              <span>Bike, kg</span>
+              <span>{t.settings.weight.bikeKg}</span>
               <span className="settings-ftp-field">
                 <input
                   type="number"
@@ -100,7 +117,7 @@ export function SettingsPage(): ReactElement {
               </span>
             </label>
             <label>
-              <span>Gear, kg</span>
+              <span>{t.settings.weight.gearKg}</span>
               <span className="settings-ftp-field">
                 <input
                   type="number"
@@ -118,7 +135,7 @@ export function SettingsPage(): ReactElement {
               <button
                 type="button"
                 className="settings-ftp-clear settings-mass-clear"
-                aria-label="Clear weights"
+                aria-label={t.settings.weight.clear}
                 onClick={deferCall(saveMass, null)}
               >
                 <X size={14} aria-hidden="true" />
@@ -127,34 +144,25 @@ export function SettingsPage(): ReactElement {
           </div>
         </article>
         <article className="settings-card">
-          <h3>Bottles</h3>
-          <p>
-            Water you start the ride with — each bottle&rsquo;s volume is added
-            to the total mass (1 L ≈ 1 kg), counted full for the whole ride.
-            Copied into every newly loaded ride; each ride can edit its own set
-            in its power settings.
-          </p>
+          <h3>{t.settings.bottles.title}</h3>
+          <p>{t.settings.bottles.text}</p>
           <BottleListEditor
             bottles={mass?.bottlesMl ?? []}
             onChange={updateBottles}
           />
         </article>
         <article className="settings-card">
-          <h3>FTP</h3>
-          <p>
-            Your Functional Threshold Power. When set, it replaces the per-ride
-            estimate everywhere — power zones, TSS and Intensity Factor. Clear
-            it to go back to the estimated lower bound.
-          </p>
+          <h3>{t.settings.ftp.title}</h3>
+          <p>{t.settings.ftp.text}</p>
           <div className="settings-ftp-row">
             <label>
-              <span>Manual FTP</span>
+              <span>{t.settings.ftp.label}</span>
               <span className="settings-ftp-field">
                 <input
                   type="number"
                   min={50}
                   max={600}
-                  placeholder="e.g. 250"
+                  placeholder={t.settings.ftp.placeholder}
                   value={ftp ?? ""}
                   onChange={(event) => {
                     const raw = event.target.value;
@@ -172,7 +180,7 @@ export function SettingsPage(): ReactElement {
                   <button
                     type="button"
                     className="settings-ftp-clear"
-                    aria-label="Clear FTP"
+                    aria-label={t.settings.ftp.clear}
                     onClick={deferCall(save, null)}
                   >
                     <X size={14} aria-hidden="true" />
@@ -180,7 +188,7 @@ export function SettingsPage(): ReactElement {
                 )}
               </span>
             </label>
-            <span className="settings-ftp-unit">W</span>
+            <span className="settings-ftp-unit">{t.common.units.w}</span>
           </div>
         </article>
       </div>

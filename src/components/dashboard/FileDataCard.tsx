@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 
 import "./FileDataCard.css";
+import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
 
 function formatRawValue(value: unknown): string {
@@ -21,6 +22,7 @@ export function FileDataCard({
 }: {
   activity: Activity;
 }): ReactElement {
+  const { t } = useT();
   const messages = activity.fit.messages as Record<string, unknown>;
   const counts = Object.entries(messages)
     .filter((entry): entry is [string, unknown[]] => Array.isArray(entry[1]))
@@ -38,7 +40,7 @@ export function FileDataCard({
 
   return (
     <section className="file-data-card">
-      <h3>Raw File Data</h3>
+      <h3>{t.dashboard.rawFileData}</h3>
       {errors.length > 0 && (
         <ul className="file-data-errors">
           {errors.map((error) => (
@@ -49,7 +51,7 @@ export function FileDataCard({
       <div className="file-data-tables">
         <div className="file-data-column">
           <div>
-            <h4>Messages</h4>
+            <h4>{t.dashboard.messages}</h4>
             <table>
               <tbody>
                 {counts.map((row) => (
@@ -62,7 +64,7 @@ export function FileDataCard({
             </table>
           </div>
           <div>
-            <h4>File ID</h4>
+            <h4>{t.dashboard.fileId}</h4>
             <table>
               <tbody>
                 {Object.entries(fileId).map(([key, value]) => (
@@ -77,7 +79,7 @@ export function FileDataCard({
         </div>
         <div className="file-data-column">
           <div>
-            <h4>Session</h4>
+            <h4>{t.dashboard.session}</h4>
             <table>
               <tbody>
                 {Object.entries(session).map(([key, value]) => (
