@@ -4,4 +4,7 @@ export interface ActivityMetrics {
   distanceLabel: string;
   avgPower?: number;
   normalizedPower?: number;
+  avgSpeedKmh?: number;
+  maxSpeedKmh?: number;
+  avgHeartRate?: number;
 }

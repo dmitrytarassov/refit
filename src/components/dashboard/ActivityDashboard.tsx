@@ -17,11 +17,13 @@ import { PowerSettingsBar } from "../power-settings/PowerSettingsBar";
 export function ActivityDashboard({
   activity,
   onSettingsChange,
+  onTitleChange,
   onReset,
   onDiscard,
 }: {
   activity: Activity;
   onSettingsChange: (settings: RideSettings) => void;
+  onTitleChange: (title: string) => void;
   onReset: () => void;
   onDiscard: () => void;
 }): ReactElement {
@@ -45,6 +47,7 @@ export function ActivityDashboard({
     <div className="dashboard-panel">
       <FileHeaderCard
         activity={activity}
+        onTitleChange={onTitleChange}
         onReset={onReset}
         onDiscard={onDiscard}
       />

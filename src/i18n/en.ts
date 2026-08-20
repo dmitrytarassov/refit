@@ -9,6 +9,7 @@ import { METRIC_HELP_EN } from "./en/metric-help";
 import { NAV_EN } from "./en/nav";
 import { POWER_SETTINGS_EN } from "./en/power-settings";
 import { SETTINGS_EN } from "./en/settings";
+import { SHARE_EN } from "./en/share";
 import { SIDEBAR_EN } from "./en/sidebar";
 
 export const EN = {
@@ -22,6 +23,7 @@ export const EN = {
   charts: CHARTS_EN,
   history: HISTORY_EN,
   settings: SETTINGS_EN,
+  share: SHARE_EN,
   powerSettings: POWER_SETTINGS_EN,
   errors: ERRORS_EN,
   help: HELP_EN,

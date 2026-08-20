@@ -14,6 +14,7 @@ import { getRide } from "../db/get-ride";
 import { resolveRideSettings } from "../db/resolve-ride-settings";
 import { saveLastSettings } from "../db/save-last-settings";
 import { saveRide } from "../db/save-ride";
+import { saveRideTitle } from "../db/save-ride-title";
 import { updateRide } from "../db/update-ride";
 import { POWER_DEFAULTS } from "../fit/power-defaults";
 import type { Activity } from "../types/activity";
@@ -53,6 +54,7 @@ export function useFitProcessing(): {
   processFile: (file: File) => void;
   processUrl: (url: string, fileName: string) => void;
   updateSettings: (settings: RideSettings) => void;
+  updateTitle: (title: string) => void;
   reset: () => void;
   discard: () => void;
 } {
@@ -72,8 +74,9 @@ export function useFitProcessing(): {
       .arrayBuffer()
       .then(async (buffer) => {
         const settings = await resolveRideSettings();
-        const activity = await decodeActivity(buffer, file.name, settings);
+        const decoded = await decodeActivity(buffer, file.name, settings);
         const existing = await findRideByFileName(file.name);
+        const activity: Activity = { ...decoded, title: existing?.title };
         const id =
           existing?.id ?? (await saveRide(buildRideRow(activity, buffer)));
         loadedRecordRef.current = String(id);
@@ -153,6 +156,24 @@ export function useFitProcessing(): {
     });
   };
 
+  const updateTitle = (title: string): void => {
+    if (state.status !== "ready") {
+      return;
+    }
+    const trimmed = title.trim();
+    setState({
+      status: "ready",
+      activity: {
+        ...state.activity,
+        title: trimmed === "" ? undefined : trimmed,
+      },
+    });
+    const id = loadedRecordRef.current;
+    if (id != null) {
+      void saveRideTitle(Number(id), trimmed);
+    }
+  };
+
   useEffect(() => {
     if (recordParam == null) {
       if (loadedRecordRef.current != null) {
@@ -176,9 +197,10 @@ export function useFitProcessing(): {
           return;
         }
         const settings = await resolveRideSettings(row.settings);
+        const decoded = await decodeActivity(row.file, row.fileName, settings);
         setState({
           status: "ready",
-          activity: await decodeActivity(row.file, row.fileName, settings),
+          activity: { ...decoded, title: row.title },
         });
       })
       .catch((error: unknown) => {
@@ -189,5 +211,13 @@ export function useFitProcessing(): {
       });
   }, [recordParam]);
 
-  return { state, processFile, processUrl, updateSettings, reset, discard };
+  return {
+    state,
+    processFile,
+    processUrl,
+    updateSettings,
+    updateTitle,
+    reset,
+    discard,
+  };
 }

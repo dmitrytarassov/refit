@@ -77,6 +77,12 @@
     }
   }
 
+  .file-header-card-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .file-header-card-primary {
     display: inline-flex;
     align-items: center;

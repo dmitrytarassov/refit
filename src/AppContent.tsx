@@ -12,8 +12,15 @@ import { SidebarPanel } from "./components/sidebar/SidebarPanel";
 import { useFitProcessing } from "./hooks/use-fit-processing";
 
 export function AppContent(): ReactElement {
-  const { state, processFile, processUrl, updateSettings, reset, discard } =
-    useFitProcessing();
+  const {
+    state,
+    processFile,
+    processUrl,
+    updateSettings,
+    updateTitle,
+    reset,
+    discard,
+  } = useFitProcessing();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
   const activeView =
@@ -51,6 +58,7 @@ export function AppContent(): ReactElement {
           <DashboardPanel
             state={state}
             onSettingsChange={updateSettings}
+            onTitleChange={updateTitle}
             onLoadExample={processUrl}
             onReset={reset}
             onDiscard={discard}

@@ -3,6 +3,7 @@ import type { RideSettings } from "../types/ride-settings";
 export interface RideRow {
   id?: number;
   fileName: string;
+  title?: string;
   createdAt: number;
   durationSec: number;
   distanceM: number;

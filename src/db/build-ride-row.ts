@@ -26,6 +26,7 @@ export function buildRideRow(
   const np = activity.powerStats?.normalizedPower;
   return {
     fileName: activity.fileName,
+    title: activity.title,
     createdAt: (stamps[0] ?? new Date()).getTime(),
     durationSec,
     distanceM,

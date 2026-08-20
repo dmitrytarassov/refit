@@ -9,6 +9,7 @@ import { METRIC_HELP_RU } from "./ru/metric-help";
 import { NAV_RU } from "./ru/nav";
 import { POWER_SETTINGS_RU } from "./ru/power-settings";
 import { SETTINGS_RU } from "./ru/settings";
+import { SHARE_RU } from "./ru/share";
 import { SIDEBAR_RU } from "./ru/sidebar";
 import type { Translation } from "./translation";
 
@@ -23,6 +24,7 @@ export const RU: Translation = {
   charts: CHARTS_RU,
   history: HISTORY_RU,
   settings: SETTINGS_RU,
+  share: SHARE_RU,
   powerSettings: POWER_SETTINGS_RU,
   errors: ERRORS_RU,
   help: HELP_RU,

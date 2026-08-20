@@ -7,6 +7,7 @@ import type { FitRecord } from "../../lib/track/fit-record";
 
 export interface Activity {
   fileName: string;
+  title?: string;
   fit: FitFile;
   records: FitRecord[];
   verdicts: CleanResult["verdicts"];

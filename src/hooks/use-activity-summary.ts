@@ -50,12 +50,32 @@ export function useActivitySummary(activity: Activity): {
   const distanceMeters: number =
     session?.totalDistance ?? distances[distances.length - 1] ?? 0;
 
+  let maxSpeed = 0;
+  let hrSum = 0;
+  let hrCount = 0;
+  for (const r of activity.records) {
+    const spd = r.enhancedSpeed ?? r.speed;
+    if (typeof spd === "number" && spd > maxSpeed) {
+      maxSpeed = spd;
+    }
+    if (typeof r.heartRate === "number") {
+      hrSum += r.heartRate;
+      hrCount += 1;
+    }
+  }
+
   const metrics: ActivityMetrics = {
     durationLabel: formatDuration(durationSeconds),
     movingLabel: formatDuration(movingSeconds),
     distanceLabel: formatDistance(distanceMeters, t.common.units.km),
     avgPower: activity.powerStats?.avgPower,
     normalizedPower: activity.powerStats?.normalizedPower,
+    avgSpeedKmh:
+      movingSeconds > 0 && distanceMeters > 0
+        ? Math.round((distanceMeters / movingSeconds) * 36) / 10
+        : undefined,
+    maxSpeedKmh: maxSpeed > 0 ? Math.round(maxSpeed * 36) / 10 : undefined,
+    avgHeartRate: hrCount > 0 ? Math.round(hrSum / hrCount) : undefined,
   };
 
   return { meta, metrics };

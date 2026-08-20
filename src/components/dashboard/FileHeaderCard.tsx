@@ -7,16 +7,19 @@ import { DownloadMenu } from "./DownloadMenu";
 import { useActivitySummary } from "../../hooks/use-activity-summary";
 import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
+import { ShareButton } from "../share/ShareButton";
 import "./FileHeaderCard.css";
 
 interface FileHeaderCardProps {
   activity: Activity;
+  onTitleChange: (title: string) => void;
   onReset: () => void;
   onDiscard: () => void;
 }
 
 export function FileHeaderCard({
   activity,
+  onTitleChange,
   onReset,
   onDiscard,
 }: FileHeaderCardProps): ReactElement {
@@ -64,6 +67,7 @@ export function FileHeaderCard({
         >
           {t.dashboard.viewRawData}
         </button>
+        <ShareButton activity={activity} onTitleChange={onTitleChange} />
         <DownloadMenu key={activity.fileName} activity={activity} />
         <ClearButton onReset={onReset} onDiscard={onDiscard} />
       </div>

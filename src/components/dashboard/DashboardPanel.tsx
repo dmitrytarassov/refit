@@ -15,12 +15,14 @@ const ActivityDashboard = lazy(() =>
 export function DashboardPanel({
   state,
   onSettingsChange,
+  onTitleChange,
   onLoadExample,
   onReset,
   onDiscard,
 }: {
   state: ProcessingState;
   onSettingsChange: (settings: RideSettings) => void;
+  onTitleChange: (title: string) => void;
   onLoadExample: (url: string, fileName: string) => void;
   onReset: () => void;
   onDiscard: () => void;
@@ -53,6 +55,7 @@ export function DashboardPanel({
       <ActivityDashboard
         activity={state.activity}
         onSettingsChange={onSettingsChange}
+        onTitleChange={onTitleChange}
         onReset={onReset}
         onDiscard={onDiscard}
       />

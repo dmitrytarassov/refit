@@ -36,6 +36,27 @@ export function MetricTilesRow({
         unit={distanceUnit === "km" ? t.common.units.km : distanceUnit}
       />
       <MetricTile
+        label={t.dashboard.tiles.speed}
+        value={
+          metrics.avgSpeedKmh != null ? metrics.avgSpeedKmh.toFixed(1) : "—"
+        }
+        unit={metrics.avgSpeedKmh != null ? t.common.units.kmh : undefined}
+        muted={metrics.avgSpeedKmh == null}
+        corner={
+          metrics.maxSpeedKmh != null
+            ? `${t.dashboard.tiles.maxSpeedShort} ${metrics.maxSpeedKmh.toFixed(1)}`
+            : undefined
+        }
+      />
+      <MetricTile
+        label={t.dashboard.tiles.avgHeartRate}
+        value={
+          metrics.avgHeartRate != null ? String(metrics.avgHeartRate) : "—"
+        }
+        unit={metrics.avgHeartRate != null ? t.common.units.bpm : undefined}
+        muted={metrics.avgHeartRate == null}
+      />
+      <MetricTile
         label={t.dashboard.tiles.avgPower}
         value={metrics.avgPower != null ? String(metrics.avgPower) : "—"}
         unit={metrics.avgPower != null ? t.common.units.w : undefined}
