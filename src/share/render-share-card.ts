@@ -41,7 +41,7 @@ export async function renderShareCard(
     ctx.rect(0, 0, SHARE_CARD_WIDTH, mapHeight);
     ctx.clip();
     await drawMapTiles(ctx, view, SHARE_CARD_WIDTH, mapHeight);
-    drawRouteLine(ctx, data.points, view, palette);
+    drawRouteLine(ctx, data.points, view, data.routePalette);
     const fade = ctx.createLinearGradient(0, mapHeight - 220, 0, mapHeight);
     fade.addColorStop(0, "rgba(0, 0, 0, 0)");
     fade.addColorStop(1, palette.background);

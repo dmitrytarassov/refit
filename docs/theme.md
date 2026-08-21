@@ -103,6 +103,20 @@ For multi-series charts (power, heart rate, cadence, elevation at once):
 
 Brass `#C0891F` is **not used** in multi-series charts — it's reserved for the "fixed" state and must stay unambiguous.
 
+### Route line
+
+The cleaned route on the map and on the share image is a start → finish gradient: 100 pieces interpolated in RGB between the two colors of the selected palette, no outline. Five palettes live in `src/route/route-palettes.ts` (`ROUTE_PALETTES`, picked in the map card header, saved in settings):
+
+| Key | Start | End |
+| --- | --- | --- |
+| `classic` (default) | `#0048ff` | `#418bd4` |
+| `sunset` | `#ff3d00` | `#ffc400` |
+| `forest` | `#00897b` | `#aeea00` |
+| `violet` | `#6a00f4` | `#ff2e88` |
+| `graphite` | `#1c1c1e` | `#9a9aa3` |
+
+The raw-track overlay ("Show Original") stays a single `heartRate` red line.
+
 ---
 
 ## Dark theme

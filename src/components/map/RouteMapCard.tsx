@@ -5,11 +5,15 @@ import { useState } from "react";
 import { MapContainer, Polyline, TileLayer } from "react-leaflet";
 
 import { MapPinchZoom } from "./MapPinchZoom";
+import { RouteGradientLine } from "./RouteGradientLine";
+import { RoutePalettePicker } from "./RoutePalettePicker";
 
 import { CHART_PALETTE } from "../../charts/chart-palette";
+import { useRoutePalette } from "../../hooks/use-route-palette";
 import { useRoutePoints } from "../../hooks/use-route-points";
 import { useTheme } from "../../hooks/use-theme";
 import { useT } from "../../hooks/use-translation";
+import { ROUTE_PALETTES } from "../../route/route-palettes";
 import type { Activity } from "../../types/activity";
 import { ChartCard } from "../charts/ui/ChartCard";
 import { ToggleSwitch } from "../common/ui/ToggleSwitch";
@@ -27,6 +31,7 @@ export function RouteMapCard({
   const points = useRoutePoints(activity);
   const originalPoints = useRoutePoints(activity, true);
   const { mode } = useTheme();
+  const { paletteKey } = useRoutePalette();
   if (points.length === 0) {
     return null;
   }
@@ -35,13 +40,16 @@ export function RouteMapCard({
     <ChartCard
       title={t.charts.titles.route}
       aside={
-        hasEdits ? (
-          <ToggleSwitch
-            label={t.charts.showOriginal}
-            checked={showOriginal}
-            onChange={setShowOriginal}
-          />
-        ) : undefined
+        <div className="route-map-aside">
+          <RoutePalettePicker />
+          {hasEdits && (
+            <ToggleSwitch
+              label={t.charts.showOriginal}
+              checked={showOriginal}
+              onChange={setShowOriginal}
+            />
+          )}
+        </div>
       }
     >
       <div className="route-map">
@@ -64,9 +72,9 @@ export function RouteMapCard({
               pathOptions={{ color: CHART_PALETTE[mode].heartRate, weight: 3 }}
             />
           )}
-          <Polyline
-            positions={points}
-            pathOptions={{ color: CHART_PALETTE[mode].accent, weight: 3 }}
+          <RouteGradientLine
+            points={points}
+            palette={ROUTE_PALETTES[paletteKey]}
           />
           <MapPinchZoom />
         </MapContainer>

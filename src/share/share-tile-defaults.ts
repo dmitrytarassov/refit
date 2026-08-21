@@ -12,3 +12,11 @@ export const SHARE_TILE_KEYS: ShareTileKey[] = [
   "ftp",
   "tss",
 ];
+
+/** Tiles selected by default in the Photo layout — the few that fit a photo story. */
+export const SHARE_PHOTO_TILE_KEYS: ShareTileKey[] = [
+  "movingTime",
+  "distance",
+  "avgSpeed",
+  "avgPower",
+];

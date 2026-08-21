@@ -9,4 +9,22 @@ export const SHARE_EN = {
   cards: "Cards on the image",
   titleLabel: "Ride name",
   titlePlaceholder: "File name is used when empty",
+  layout: "Layout",
+  variants: {
+    map: "Map",
+    photo: "Photo",
+  },
+  choosePhoto: "Choose photo",
+  decodingPhoto: "Preparing photo…",
+  shade: {
+    label: "Darkening",
+    strength: "Strength",
+    modes: {
+      none: "None",
+      topBottom: "Top and bottom",
+      bottom: "Bottom",
+      full: "Whole photo",
+    },
+  },
+  changePhoto: "Change photo",
 };

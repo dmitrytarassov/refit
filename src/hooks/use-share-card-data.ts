@@ -2,10 +2,12 @@ import { useMemo } from "react";
 
 import { useActivitySummary } from "./use-activity-summary";
 import { useFTP } from "./use-ftp";
+import { useRoutePalette } from "./use-route-palette";
 import { useT } from "./use-translation";
 import { useTSS } from "./use-tss";
 
 import { routePoints } from "../fit/route-points";
+import { ROUTE_PALETTES } from "../route/route-palettes";
 import type { Activity } from "../types/activity";
 import type { ShareCardData } from "../types/share-card-data";
 import type { ShareTile } from "../types/share-tile";
@@ -16,6 +18,7 @@ export function useShareCardData(activity: Activity): ShareCardData {
   const { meta, metrics } = useActivitySummary(activity);
   const ftp = useFTP(activity);
   const tss = useTSS(activity);
+  const { paletteKey } = useRoutePalette();
   const ftpWatts = ftp?.watts;
   const ftpSource = ftp?.source;
 
@@ -96,7 +99,8 @@ export function useShareCardData(activity: Activity): ShareCardData {
         .join(" · "),
       dateLabel: meta.dateLabel,
       points: routePoints(activity),
+      routePalette: ROUTE_PALETTES[paletteKey],
       tiles: tiles.filter((tile): tile is ShareTile => tile != null),
     };
-  }, [activity, t, meta, metrics, ftpWatts, ftpSource, tss]);
+  }, [activity, t, meta, metrics, ftpWatts, ftpSource, tss, paletteKey]);
 }

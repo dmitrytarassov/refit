@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@garmin/fitsdk": "^21.208.0",
+    "heic-to": "^1.5.2",
     "just-defer-call": "^1.0.5",
     "just-shorten": "^1.0.2",
     "leaflet": "^1.9.4",

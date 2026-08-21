@@ -9,4 +9,22 @@ export const SHARE_RU = {
   cards: "Карточки на картинке",
   titleLabel: "Название заезда",
   titlePlaceholder: "Пусто — будет имя файла",
+  layout: "Макет",
+  variants: {
+    map: "Карта",
+    photo: "Фото",
+  },
+  choosePhoto: "Выбрать фото",
+  decodingPhoto: "Обрабатываем фото…",
+  shade: {
+    label: "Затемнение",
+    strength: "Сила",
+    modes: {
+      none: "Без",
+      topBottom: "Сверху и снизу",
+      bottom: "Снизу",
+      full: "Всё фото",
+    },
+  },
+  changePhoto: "Заменить фото",
 };

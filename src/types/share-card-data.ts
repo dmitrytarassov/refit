@@ -1,3 +1,4 @@
+import type { RoutePalette } from "./route-palette";
 import type { ShareTile } from "./share-tile";
 
 export interface ShareCardData {
@@ -5,6 +6,7 @@ export interface ShareCardData {
   subtitle: string;
   dateLabel?: string;
   points: Array<[number, number]>;
+  routePalette: RoutePalette;
   tiles: ShareTile[];
 }
 
@@ -17,6 +19,4 @@ export interface ShareCardPalette {
   textMuted: string;
   ink: string;
   inkOn: string;
-  route: string;
-  routeOutline: string;
 }

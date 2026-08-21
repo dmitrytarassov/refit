@@ -30,6 +30,11 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 16px 20px;
+
+    &[data-dragging="true"] {
+      border-color: var(--ink);
+      box-shadow: inset 0 0 0 2px var(--ink);
+    }
   }
 
   .share-modal-header {
@@ -53,6 +58,59 @@
     overflow: auto;
   }
 
+  .share-variant-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-subtle);
+
+    button {
+      padding: 6px 0;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+
+      &[aria-checked="true"] {
+        background: var(--surface-card);
+        color: var(--text-primary);
+        box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+      }
+    }
+  }
+
+  .share-photo-field {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+  }
+
   .share-modal-preview {
     display: block;
     width: 100%;
@@ -67,10 +125,16 @@
 
   .share-modal-placeholder {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     font-size: 13px;
     color: var(--text-secondary);
+  }
+
+  .share-modal-spinner {
+    animation: share-modal-spin 1s linear infinite;
   }
 
   .share-modal-settings {
@@ -84,6 +148,10 @@
       font-size: 12px;
       font-weight: 600;
       color: var(--text-secondary);
+    }
+
+    .route-palette-picker {
+      margin-bottom: 12px;
     }
   }
 
@@ -116,6 +184,41 @@
     }
   }
 
+  .share-shade-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    select {
+      padding: 6px 8px;
+      font: inherit;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin: 8px 0;
+      accent-color: var(--ink);
+    }
+  }
+
   .share-tile-picker {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -129,6 +232,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
+  }
+
+  .share-modal-footer-actions {
+    display: flex;
+    align-items: center;
     gap: 8px;
   }
 
@@ -180,5 +289,11 @@
       opacity: 0.6;
       cursor: default;
     }
+  }
+}
+
+@keyframes share-modal-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

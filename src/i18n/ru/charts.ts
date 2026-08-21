@@ -22,6 +22,16 @@ export const CHARTS_RU = {
   seriesOriginal: "Оригинал",
   thisRide: "Этот заезд",
   showOriginal: "Показать оригинал",
+  routePalette: {
+    label: "Цвет маршрута",
+    names: {
+      classic: "Классический синий",
+      sunset: "Закат",
+      forest: "Лес",
+      violet: "Фиолет",
+      graphite: "Графит",
+    },
+  },
   resetZoom: "Сбросить зум",
   expand: (title: string): string => `Развернуть «${title}»`,
   whatIsThis: "Что это?",

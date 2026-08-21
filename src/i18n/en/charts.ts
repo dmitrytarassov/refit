@@ -22,6 +22,16 @@ export const CHARTS_EN = {
   seriesOriginal: "Original",
   thisRide: "This Ride",
   showOriginal: "Show Original",
+  routePalette: {
+    label: "Route color",
+    names: {
+      classic: "Classic blue",
+      sunset: "Sunset",
+      forest: "Forest",
+      violet: "Violet",
+      graphite: "Graphite",
+    },
+  },
   resetZoom: "Reset zoom",
   expand: (title: string): string => `Expand ${title}`,
   whatIsThis: "What is this?",

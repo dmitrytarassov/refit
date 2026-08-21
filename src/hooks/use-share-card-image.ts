@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 
 import { renderShareCard } from "../share/render-share-card";
+import { renderSharePhotoCard } from "../share/render-share-photo-card";
 import { SHARE_CARD_PALETTE } from "../share/share-card-palette";
 import type { ShareCardData } from "../types/share-card-data";
+import type { ShareRenderOptions } from "../types/share-render-options";
 import type { ShareTileKey } from "../types/share-tile";
-import type { ThemeMode } from "../types/theme-mode";
 
-/** Renders the share image off-screen; null while tiles are loading. */
+/** Renders the share image off-screen for the chosen layout; null while rendering. */
 export function useShareCardImage(
   data: ShareCardData,
   selected: ShareTileKey[],
-  mode: ThemeMode,
+  { mode, variant, photo, shade }: ShareRenderOptions,
 ): string | null {
   const [url, setUrl] = useState<string | null>(null);
 
@@ -18,7 +19,12 @@ export function useShareCardImage(
     let cancelled = false;
     setUrl(null);
     const tiles = data.tiles.filter((tile) => selected.includes(tile.key));
-    renderShareCard({ ...data, tiles }, SHARE_CARD_PALETTE[mode])
+    const card = { ...data, tiles };
+    const render =
+      variant === "photo"
+        ? renderSharePhotoCard(card, photo, shade)
+        : renderShareCard(card, SHARE_CARD_PALETTE[mode]);
+    render
       .then((canvas) => {
         if (!cancelled) {
           setUrl(canvas.toDataURL("image/png"));
@@ -32,7 +38,7 @@ export function useShareCardImage(
     return () => {
       cancelled = true;
     };
-  }, [data, selected, mode]);
+  }, [data, selected, mode, variant, photo, shade]);
 
   return url;
 }

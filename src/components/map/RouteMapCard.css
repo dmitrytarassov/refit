@@ -2,6 +2,12 @@
   height: 420px;
 }
 
+.route-map-aside {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .route-map .leaflet-container {
   width: 100%;
   height: 100%;

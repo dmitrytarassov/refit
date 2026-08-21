@@ -1,13 +1,15 @@
 import { projectLatLng } from "./project-lat-lng";
 
+import { routeSegmentColor } from "../route/route-segment-color";
+import { ROUTE_SEGMENT_COUNT } from "../route/route-segment-count";
+import { splitRouteSegments } from "../route/split-route-segments";
 import type { MapView } from "../types/map-view";
-import type { ShareCardPalette } from "../types/share-card-data";
+import type { RoutePalette } from "../types/route-palette";
 
-export function drawRouteLine(
+function tracePath(
   ctx: CanvasRenderingContext2D,
   points: Array<[number, number]>,
   view: MapView,
-  palette: ShareCardPalette,
 ): void {
   ctx.beginPath();
   points.forEach(([lat, lng], index) => {
@@ -18,12 +20,22 @@ export function drawRouteLine(
       ctx.lineTo(x - view.originX, y - view.originY);
     }
   });
+}
+
+/** 100 pieces colored along the start → finish gradient. */
+export function drawRouteLine(
+  ctx: CanvasRenderingContext2D,
+  points: Array<[number, number]>,
+  view: MapView,
+  palette: RoutePalette,
+): void {
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
-  ctx.strokeStyle = palette.routeOutline;
-  ctx.lineWidth = 14;
-  ctx.stroke();
-  ctx.strokeStyle = palette.route;
-  ctx.lineWidth = 8;
-  ctx.stroke();
+  const segments = splitRouteSegments(points, ROUTE_SEGMENT_COUNT);
+  segments.forEach((segment, index) => {
+    tracePath(ctx, segment, view);
+    ctx.strokeStyle = routeSegmentColor(index, segments.length, palette);
+    ctx.lineWidth = 8;
+    ctx.stroke();
+  });
 }

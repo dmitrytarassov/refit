@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useT } from "../../hooks/use-translation";
 
@@ -8,15 +8,29 @@ interface ShareTitleFieldProps {
   onChange: (title: string) => void;
 }
 
-/** Custom ride name for the share image; committed on blur / Enter so typing doesn't re-render the canvas. */
+/** Custom ride name for the share image; committed after a typing pause (400 ms) and immediately on Enter / blur. */
 export function ShareTitleField({
   value,
   onChange,
 }: ShareTitleFieldProps): ReactElement {
   const { t } = useT();
   const [draft, setDraft] = useState(value);
+  const sent = useRef(value);
+
+  useEffect(() => {
+    if (draft === sent.current) {
+      return undefined;
+    }
+    const timer = window.setTimeout(() => {
+      sent.current = draft;
+      onChange(draft);
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [draft, onChange]);
+
   const commit = (): void => {
-    if (draft.trim() !== value) {
+    if (draft !== sent.current) {
+      sent.current = draft;
       onChange(draft);
     }
   };

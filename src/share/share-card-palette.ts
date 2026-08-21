@@ -11,8 +11,6 @@ export const SHARE_CARD_PALETTE: Record<ThemeMode, ShareCardPalette> = {
     textMuted: "#8C93A5",
     ink: "#2A3572",
     inkOn: "#FFFFFF",
-    route: "#7dff46",
-    routeOutline: "#161B33",
   },
   dark: {
     background: "#0F1220",
@@ -23,7 +21,5 @@ export const SHARE_CARD_PALETTE: Record<ThemeMode, ShareCardPalette> = {
     textMuted: "#6E7590",
     ink: "#3D4A9E",
     inkOn: "#FFFFFF",
-    route: "#7dff46",
-    routeOutline: "#161B33",
   },
 };
