@@ -1,9 +1,14 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const ROOT = resolve(import.meta.dirname, "..");
 
 /** Doc order mirrors the reading path: overview first, then subsystems. */
 const SOURCES = [
   "README.md",
   "docs/architecture.md",
+  "docs/library.md",
+  "docs/publishing.md",
   "docs/web-app.md",
   "docs/i18n.md",
   "docs/cli.md",
@@ -16,10 +21,11 @@ const SOURCES = [
 ];
 
 const parts = SOURCES.map(
-  (path) => `<!-- source: ${path} -->\n\n${readFileSync(path, "utf8").trim()}`,
+  (path) =>
+    `<!-- source: ${path} -->\n\n${readFileSync(resolve(ROOT, path), "utf8").trim()}`,
 );
 writeFileSync(
-  "dist/llms-full.txt",
+  resolve(ROOT, "packages/web/dist/llms-full.txt"),
   `# ReFit — full documentation for LLMs\n\n` +
     `> Generated at build time from README.md and docs/*.md of https://github.com/dmitrytarassov/refit\n\n` +
     `${parts.join("\n\n---\n\n")}\n`,

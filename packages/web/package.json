@@ -1,0 +1,36 @@
+{
+  "name": "refit-web",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && bun ../../scripts/build-llms-full.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "heic-to": "^1.5.2",
+    "just-defer-call": "^1.0.5",
+    "just-shorten": "^1.0.2",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.28.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.18.2",
+    "recharts": "^3.10.1",
+    "refit-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@types/babel__core": "^7.20.5",
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "vite": "^8.2.0"
+  }
+}

@@ -2,11 +2,13 @@
 
 ## Running
 
+From the repository root:
+
 ```bash
-bun lib/index.ts <file.fit> [flags]
+bun run cli <file.fit> [flags]
 ```
 
-The output is written next to the input file as `<name>.out.fit`. Argument parsing lives in `cli/parse-args.ts`, orchestration in `cli/run.ts`.
+The output is written next to the input file as `<name>.out.fit`. The CLI is the `packages/refit-cli` workspace (private, not on npm yet — see [publishing.md](publishing.md)): argument parsing lives in `src/parse-args.ts`, orchestration in `src/run.ts`, which calls `refit-core` through its package entries (`refit-core`, `refit-core/fit`, `refit-core/node`; see [library.md](library.md)). `bun run cli` passes `--conditions=source` so the core is read from source without a build.
 
 ## Flags
 
@@ -29,16 +31,16 @@ The mass/CdA/Crr flags only make sense together with `--power`.
 
 ```bash
 # track cleaning only
-bun lib/index.ts ride.fit
+bun run cli ride.fit
 
 # cleaning + coordinate smoothing
-bun lib/index.ts ride.fit --smooth
+bun run cli ride.fit --smooth
 
 # cleaning + power with default parameters (8 + 82 kg, auto, asphalt/road/high)
-bun lib/index.ts ride.fit --power
+bun run cli ride.fit --power
 
 # everything at once, custom parameters
-bun lib/index.ts ride.fit --smooth --power --bike-mass 9.5 --rider-mass 75 --cda hoods --surface rough-asphalt --pressure medium
+bun run cli ride.fit --smooth --power --bike-mass 9.5 --rider-mass 75 --cda hoods --surface rough-asphalt --pressure medium
 ```
 
 ## What it prints
@@ -48,7 +50,7 @@ ride.fit -> ride.out.fit
 Records: 5548, with GPS: 3670
 Rejected: 384 (speed-gate: 267, hampel: 117, kalman: 0)
 Accepted: 3286
-Power: avg 140 W, NP 178 W, max 720 W
+Power: avg 140 W, NP 180 W, max 735 W
 ```
 
 - `Records` — total records / of them, with GPS coordinates;

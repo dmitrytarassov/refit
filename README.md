@@ -1,6 +1,6 @@
 # ReFit
 
-ReFit takes a `.fit` cycling activity from a bike computer, cleans GPS outliers from the track, optionally smooths it, enriches it with physics-based estimated power, and writes a valid `.fit` back — one that Strava and Garmin Connect understand. It ships as a web app and a CLI on top of the same computation core (`lib/`).
+ReFit takes a `.fit` cycling activity from a bike computer, cleans GPS outliers from the track, optionally smooths it, enriches it with physics-based estimated power, and writes a valid `.fit` back — one that Strava and Garmin Connect understand. It ships as a web app and a CLI on top of the same computation core, which is also published to npm as [`refit-core`](https://www.npmjs.com/package/refit-core).
 
 Runtime and package manager: [bun](https://bun.sh). No backend anywhere: the web app runs the whole pipeline in the browser.
 
@@ -22,10 +22,10 @@ Details: [docs/web-app.md](docs/web-app.md), [docs/history-storage.md](docs/hist
 ## CLI
 
 ```bash
-bun lib/index.ts <file.fit> [flags]
+bun run cli <file.fit> [flags]
 ```
 
-Writes `<name>.out.fit` next to the input and prints a cleaning/power report.
+Runs from the repository (the CLI is not on npm yet). Writes `<name>.out.fit` next to the input and prints a cleaning/power report.
 
 | Flag | Values | Default | Effect |
 | --- | --- | --- | --- |
@@ -41,6 +41,36 @@ Writes `<name>.out.fit` next to the input and prints a cleaning/power report.
 | `--pressure` | `high` \| `medium` \| `low` | `high` | pressure (Crr multiplier) |
 
 Details: [docs/cli.md](docs/cli.md).
+
+## Use as a library
+
+```bash
+bun add refit-core   # or: npm install refit-core
+```
+
+```ts
+import { cleanTrack, estimatePower, sessionPowerStats } from "refit-core";
+import { applyEnhancements } from "refit-core/fit";
+import { readFit, writeFit } from "refit-core/node";
+
+const { ordered, messages } = readFit("ride.fit");
+const records = messages.recordMesgs ?? [];
+const { verdicts } = cleanTrack(records);
+const powers = estimatePower(records, {
+  mass: { bikeKg: 8, riderKg: 82 },
+  cda: "auto",
+  crr: { surface: "good-asphalt", tires: "road", pressure: "high" },
+});
+applyEnhancements(ordered, {
+  verdicts,
+  smooth: true,
+  powers,
+  powerStats: sessionPowerStats(records, powers),
+});
+writeFit("ride.out.fit", ordered);
+```
+
+ESM, typed, no UI: `refit-core` is the pure pipeline and metrics, `refit-core/fit` adds the Garmin SDK for decode/encode, `refit-core/node` adds `node:fs` helpers. In the browser use `decodeFit(new Uint8Array(await file.arrayBuffer()))` from `refit-core/fit`. Details: [docs/library.md](docs/library.md).
 
 ## The formulas
 
@@ -122,30 +152,37 @@ Details: [docs/ftp-estimation.md](docs/ftp-estimation.md).
 
 ## Project layout
 
+A bun workspaces monorepo:
+
 ```
-lib/   — all computation (FIT I/O, geo, filters, pipeline, power); CLI entry: lib/index.ts
-cli/   — argument parsing and orchestration on top of lib
-src/   — Vite + React web app on top of lib
-docs/  — documentation, start with docs/architecture.md
+packages/refit-core/  — all computation (FIT I/O, geo, filters, pipeline, power); npm package `refit-core`
+packages/refit-cli/   — argument parsing and orchestration on top of refit-core (private for now)
+packages/web/         — Vite + React web app on top of refit-core
+docs/                 — documentation, start with docs/architecture.md
 ```
 
 ### Example files
 
 The empty dashboard offers two sample rides (opened without saving to History):
 
-- **Demo ride — Magene C406** (`public/examples/`) — the author's own real outdoor recording, shipped with the app for demo purposes.
+- **Demo ride — Magene C406** (`packages/web/public/examples/`) — the author's own real outdoor recording, shipped with the app for demo purposes.
 - **Garmin example** — `WithGearChangeData.fit` from Garmin's [fit-javascript-sdk](https://github.com/garmin/fit-javascript-sdk/tree/main/test/data) (© Garmin International, Inc., [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt)). It is **not** redistributed in this repository — the app fetches it from Garmin's GitHub at click time.
 
-Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends on nothing above it.
+Dependency direction is one-way: `refit-cli` and `web` depend on `refit-core` through its package entries; `refit-core` depends on nothing in the repository.
 
 ## Development
 
 ```bash
 bun install
-bun run dev       # web app with HMR
-bun run build     # type-check + production build
-bun run lint      # eslint
+bun run dev        # web app with HMR (reads refit-core from source, no build needed)
+bun test           # refit-core test suite
+bun run typecheck  # tsc -b over all packages
+bun run lint       # eslint
+bun run build      # builds every package: refit-core dist/ + the web app
+bun run cli ride.fit --power
 ```
+
+Releasing `refit-core` to npm: [docs/publishing.md](docs/publishing.md).
 
 ## License
 

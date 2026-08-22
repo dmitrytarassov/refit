@@ -18,9 +18,9 @@ If the recording has no 20-minute interval (a short ride) — no estimate (`null
 
 ## Code
 
-- `lib/power/estimate-ftp.ts` — `estimateFtp(curve): FtpEstimate | null`, a pure function over the curve.
-- `lib/power/ftp-estimate.ts` — the `FtpEstimate { watts, method }` and `FtpMethod` types.
-- `src/hooks/use-ftp.ts` — the `useFTP(activity)` hook for the web app; the single point of FTP access in the UI.
+- `packages/refit-core/src/power/estimate-ftp.ts` — `estimateFtp(curve): FtpEstimate | null`, a pure function over the curve.
+- `packages/refit-core/src/power/ftp-estimate.ts` — the `FtpEstimate { watts, method }` and `FtpMethod` types.
+- `packages/web/src/hooks/use-ftp.ts` — the `useFTP(activity)` hook for the web app; the single point of FTP access in the UI.
 
 ## Limitations
 
@@ -33,5 +33,5 @@ If the recording has no 20-minute interval (a short ride) — no estimate (`null
 Everyone takes FTP only through `useFTP`, never from constants:
 
 - **The Est. FTP tile** (`MetricTilesRow`) — shows the estimate; took the spot of Intensity Factor (IF removed, see TODO).
-- **TSS** — `src/hooks/use-tss.ts` on top of `lib/power/compute-tss.ts`: TSS = sec · (NP/FTP)² / 36, duration is `session.totalTimerTime` (moving time). Since FTP is a lower bound, IF is overestimated, and TSS is an **upper-bound estimate**.
-- **Power Zones** — `src/hooks/use-power-zones.ts` on top of `lib/power/compute-power-zones.ts`: Coggan zones (bounds as fractions of FTP in `zone-bounds.ts`: 55 / 75 / 90 / 105 / 120 / 150% and above), time in zone is summed over Δt between records, pauses (Δt > 10 s) are not counted.
+- **TSS** — `packages/web/src/hooks/use-tss.ts` on top of `packages/refit-core/src/power/compute-tss.ts`: TSS = sec · (NP/FTP)² / 36, duration is `session.totalTimerTime` (moving time). Since FTP is a lower bound, IF is overestimated, and TSS is an **upper-bound estimate**.
+- **Power Zones** — `packages/web/src/hooks/use-power-zones.ts` on top of `packages/refit-core/src/power/compute-power-zones.ts`: Coggan zones (bounds as fractions of FTP in `zone-bounds.ts`: 55 / 75 / 90 / 105 / 120 / 150% and above), time in zone is summed over Δt between records, pauses (Δt > 10 s) are not counted.

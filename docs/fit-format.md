@@ -16,11 +16,11 @@ Message types found in our files: `fileId`, `deviceInfo`, `software`, `record` (
 
 We use the official `@garmin/fitsdk` (JavaScript SDK, includes both `Decoder` and `Encoder`).
 
-**Reading** — `lib/fit/read-fit.ts`. Checks the signature (`isFIT()`) and CRC (`checkIntegrity()`), then decodes. Key point: besides the grouped messages (`messages.recordMesgs` etc.), we use `mesgListener` to collect **all messages in their original order** (`OrderedMesg[]`) — this is the list that gets written back, so message order in the output file matches the input.
+**Reading** — `packages/refit-core/src/fit/read-fit.ts`. Checks the signature (`isFIT()`) and CRC (`checkIntegrity()`), then decodes. Key point: besides the grouped messages (`messages.recordMesgs` etc.), we use `mesgListener` to collect **all messages in their original order** (`OrderedMesg[]`) — this is the list that gets written back, so message order in the output file matches the input.
 
-**Writing** — `lib/fit/write-fit.ts`. `Encoder` accepts messages in exactly the format that `Decoder` produces (camelCase fields, `Date` for time, semicircles for coordinates), builds the definition messages itself, and computes the CRC.
+**Writing** — `packages/refit-core/src/fit/write-fit.ts`. `Encoder` accepts messages in exactly the format that `Decoder` produces (camelCase fields, `Date` for time, semicircles for coordinates), builds the definition messages itself, and computes the CRC.
 
-**Message numbers** — `lib/fit/mesg-nums.ts`: the `RECORD_MESG_NUM` and `SESSION_MESG_NUM` constants from `Profile.MesgNum`.
+**Message numbers** — `packages/refit-core/src/fit/mesg-nums.ts`: the `RECORD_MESG_NUM` and `SESSION_MESG_NUM` constants from `Profile.MesgNum`.
 
 ## File modification principles
 

@@ -1,0 +1,45 @@
+# ReFit
+
+> ReFit cleans GPS outliers from cycling .fit activities, estimates power from physics (no power meter needed), derives FTP, TSS and power zones, and writes a valid .fit back. A web app and a CLI on one TypeScript core; everything runs in the browser — no accounts, no server. MIT.
+
+ReFit is a static single-page app, so the crawlable HTML at this domain is only
+a shell. This file and /llms-full.txt describe what the app actually does.
+
+Key facts:
+
+- Web app: https://dmitrytarassov.github.io/refit/ — drop a .fit file or try the
+  built-in examples; rides are stored locally in IndexedDB, files never leave
+  the browser.
+- Library: the core is on npm as `refit-core` (ESM, TypeScript types, Node/Bun/browser) —
+  `bun add refit-core`; entries `refit-core`, `refit-core/fit`, `refit-core/node`.
+- CLI: `bun run cli <file.fit> [--smooth] [--power ...]` from the repo — writes
+  `<name>.out.fit` next to the input.
+- Track cleaning pipeline: speed gate → Hampel filter (robust statistics) →
+  Kalman filter + Rauch–Tung–Striebel smoothing.
+- Power model: P = (F_gravity + F_rolling + F_aero + F_inertia) · v / η with
+  η = 0.975; device speed is Hampel-filtered first; accuracy ±10–15% on a calm
+  solo ride (wind and drafting are invisible to the model).
+- Metrics: Normalized Power (Coggan), FTP estimated as a lower bound
+  (max of 0.95·P₂₀, Monod Critical Power, best hour) with a manual override in
+  Settings, TSS, Coggan power zones.
+- Source: https://github.com/dmitrytarassov/refit (MIT license).
+
+## Docs
+
+- [Architecture](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/architecture.md): directory layout, code organization rules, naming
+- [Library](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/library.md): `refit-core` on npm — entries, API, examples
+- [Publishing](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/publishing.md): releasing `refit-core` — versioning, tags, the publish workflow
+- [Web app](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/web-app.md): SPA structure, navigation, data flow, hooks
+- [i18n](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/i18n.md): UI localization (en/ru), dictionaries, language storage
+- [CLI](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/cli.md): commands, flags, example output
+- [FIT format](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/fit-format.md): how .fit files are read and written back
+- [Track cleaning](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/track-cleaning.md): the three filters, parameters, results
+- [Power estimation](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/power-estimation.md): the physics model, CdA/Crr tables, accuracy
+- [FTP estimation](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/ftp-estimation.md): lower-bound estimate and the manual override
+- [History storage](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/history-storage.md): IndexedDB schema and flows
+- [Theme](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/theme.md): the "Ink and brass" UI palette
+
+## Optional
+
+- [README](https://raw.githubusercontent.com/dmitrytarassov/refit/main/README.md): full project overview with all formulas
+- [Everything in one file](https://dmitrytarassov.github.io/refit/llms-full.txt): README + all docs, concatenated at build time

@@ -3,12 +3,12 @@ import reactRefresh from "eslint-plugin-react-refresh";
 
 export default defineConfig({
   preset: "very-strict",
-  ignores: ["dist"],
+  ignores: ["**/dist"],
   overrides: [
     reactRefresh.configs.vite,
     {
       // The CLI's console output is its product, not debug leftovers.
-      files: ["cli/**/*.ts", "lib/index.ts"],
+      files: ["packages/refit-cli/**/*.ts"],
       rules: { "no-console": "off" },
     },
   ],

@@ -1,0 +1,48 @@
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Trusted publishing (OIDC): npm trusts this repo + workflow file, no token stored anywhere.
+    # The `npm` environment can additionally require a reviewer before the job runs.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1; the npm bundled with Node may be older.
+      - run: npm install -g npm@latest
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run lint
+
+      - run: bun run typecheck
+
+      - run: bun test
+
+      - run: bun run --filter refit-core build
+
+      - name: Tag must match the package version
+        run: |
+          version=$(node -p "require('./packages/refit-core/package.json').version")
+          test "v$version" = "$GITHUB_REF_NAME"
+
+      - run: mkdir -p artifacts && cd packages/refit-core && bun pm pack --destination ../../artifacts
+
+      - run: npm publish artifacts/refit-core-*.tgz --provenance --access public

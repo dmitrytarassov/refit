@@ -1,0 +1,14 @@
+{
+  "name": "refit-cli",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --conditions=source src/refit.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "refit-core": "workspace:^"
+  }
+}

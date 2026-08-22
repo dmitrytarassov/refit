@@ -6,17 +6,17 @@ A bike computer's GPS receiver periodically "teleports" points: multipath in the
 
 ## Pipeline
 
-Orchestration — `lib/pipeline/clean-track.ts`. Three filters, from cheap to smart; each sees only the points that survived the previous ones, and each can be disabled independently (`PipelineConfig`, field = `false`):
+Orchestration — `packages/refit-core/src/pipeline/clean-track.ts`. Three filters, from cheap to smart; each sees only the points that survived the previous ones, and each can be disabled independently (`PipelineConfig`, field = `false`):
 
 ```
 GPS points → speed gate → Hampel → Kalman + RTS → verdicts
 ```
 
-All filters work in a local metric projection (`lib/geo/create-projection.ts` — an equidistant projection around the track's first point; at distances up to ~100 km the error is under a meter, the inverse transform is exact).
+All filters work in a local metric projection (`packages/refit-core/src/geo/create-projection.ts` — an equidistant projection around the track's first point; at distances up to ~100 km the error is under a meter, the inverse transform is exact).
 
 The result is a `Verdict` per GPS point: `accepted` (plus smoothed coordinates, if Kalman is enabled) or `rejected` with the filter's name, plus a report with rejection counts per stage.
 
-## Stage 1: speed gate (`lib/filters/speed-gate.ts`)
+## Stage 1: speed gate (`packages/refit-core/src/filters/speed-gate.ts`)
 
 The classic physical-reachability filter. A point is rejected if it is farther from the **last accepted** point than the device-reported speed allows:
 
@@ -37,7 +37,7 @@ Three deliberate decisions:
 | `fallbackSpeedMps` | 10 | speed to use if the device didn't record it |
 | `maxPlausibleSpeedMps` | 30 | ceiling of trust in the device speed, m/s |
 
-## Stage 2: Hampel filter (`lib/filters/hampel.ts`)
+## Stage 2: Hampel filter (`packages/refit-core/src/filters/hampel.ts`)
 
 Robust statistics with no trust in the device speed: the track judges itself. For each point, an "implied speed" is computed (distance to the last accepted point / Δt) and compared against the rolling median of implied speeds in a window. Deviation is measured in robust sigmas (σ = 1.4826 · MAD — median absolute deviation; tolerates up to 50% garbage in the window).
 
@@ -49,7 +49,7 @@ The filter is one-sided: only "too fast" is rejected — an outlier teleports a 
 | `nSigmas` | 6 | threshold in robust sigmas |
 | `minSigmaMps` | 1 | sigma floor — protection against MAD ≈ 0 on uniform stretches |
 
-## Stage 3: Kalman filter + RTS (`lib/filters/kalman-rts.ts`)
+## Stage 3: Kalman filter + RTS (`packages/refit-core/src/filters/kalman-rts.ts`)
 
 Model-based filtering. State `[x, y, vx, vy]`, constant-velocity model with white acceleration noise; measurements are GPS position only.
 
@@ -66,7 +66,7 @@ Model-based filtering. State `[x, y, vx, vy]`, constant-velocity model with whit
 | `gapResetS` | 60 | gap, s, after which a new segment starts |
 | `initVelocitySigmaMps` | 15 | initial velocity uncertainty |
 
-Matrix algebra is homegrown (`lib/mat/`): multiplication, transposition, Gauss–Jordan inversion with pivoting; the matrices are small (up to 4×4), no external dependency needed.
+Matrix algebra is homegrown (`packages/refit-core/src/mat/`): multiplication, transposition, Gauss–Jordan inversion with pivoting; the matrices are small (up to 4×4), no external dependency needed.
 
 ## Results on the reference file
 

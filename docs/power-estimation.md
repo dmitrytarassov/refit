@@ -2,7 +2,7 @@
 
 ## Model
 
-Power at the pedals is the sum of resistive forces times speed, corrected for drivetrain efficiency (`lib/power/point-power.ts`):
+Power at the pedals is the sum of resistive forces times speed, corrected for drivetrain efficiency (`packages/refit-core/src/power/point-power.ts`):
 
 ```
 P = (F_gravity + F_rolling + F_aero + F_inertia) · v / η
@@ -28,13 +28,13 @@ A negative total (descending, braking) is clamped to 0 — you can't push negati
 
 **Air density** ρ (`air-density.ts`) — barometric formula from the point's temperature and altitude; gives a noticeable ±3–5% on the aero component compared to a constant.
 
-**Speed cleaning** — device speed is not touched by the GPS cleaning pipeline, and a single glitched sample spikes both the aero term (~v³) and the acceleration derivative (a 2000 W artifact from one bad second). Before any use, the speed series goes through a two-sided Hampel filter (`lib/filters/hampel-speed.ts`): a sample deviating from the ±5-record window median by more than 5 robust sigmas (σ = max(1.4826 · MAD, 0.5 m/s)) is replaced with that median. A real 1-s sprint surge survives; recording glitches do not. On a clean series the filter is a no-op (verified on the reference file: avg/NP/max unchanged). The Hampel output then goes through a 3-point rolling median (`lib/filters/median3.ts`): one-sample V-dips small enough to stay under the sigma threshold (e.g. a 2 m/s single-second dip at 30 km/h ≈ a fake +700 W inertia spike on recovery) are flattened, while monotonic runs — real accelerations and sprints — pass through unchanged by construction (the median of an ordered triple is its middle element).
+**Speed cleaning** — device speed is not touched by the GPS cleaning pipeline, and a single glitched sample spikes both the aero term (~v³) and the acceleration derivative (a 2000 W artifact from one bad second). Before any use, the speed series goes through a two-sided Hampel filter (`packages/refit-core/src/filters/hampel-speed.ts`): a sample deviating from the ±5-record window median by more than 5 robust sigmas (σ = max(1.4826 · MAD, 0.5 m/s)) is replaced with that median. A real 1-s sprint surge survives; recording glitches do not. On a clean series the filter is a no-op (verified on the reference file: avg/NP/max unchanged). The Hampel output then goes through a 3-point rolling median (`packages/refit-core/src/filters/median3.ts`): one-sample V-dips small enough to stay under the sigma threshold (e.g. a 2 m/s single-second dip at 30 km/h ≈ a fake +700 W inertia spike on recovery) are flattened, while monotonic runs — real accelerations and sprints — pass through unchanged by construction (the median of an ordered triple is its middle element).
 
 **Acceleration** a — central difference of (filtered) speed over neighboring records, with safeguards: not computed across data gaps and pauses (Δt > 10 s), magnitude capped at 3 m/s².
 
 ## Parameters (function arguments)
 
-Config — `PowerConfig` (`lib/power/power-config.ts`): `estimatePower(records, config)`.
+Config — `PowerConfig` (`packages/refit-core/src/power/power-config.ts`): `estimatePower(records, config)`.
 
 ### Mass — two arguments
 
@@ -77,7 +77,7 @@ Example: good asphalt + road tires + high pressure = 0.0045 × 1.0 × 0.9 ≈ 0.
 - **Wind** is the main irreducible error source: we know speed relative to the ground, aero depends on speed relative to the air.
 - **Drafting** — riding in a group cuts the aero component by 30–40%; the model can't see it.
 - On a solo ride in calm weather, expected accuracy is ±10–15% — the level of Strava's "estimated power".
-- Reference: a ride of 43 km / 28 km/h average / 90 kg total mass → avg 140 W, NP 178 W, max 720 W — plausible values for flat terrain.
+- Reference: a ride of 43 km / 28 km/h average / 90 kg total mass → avg 140 W, NP 180 W, max 735 W — plausible values for flat terrain.
 
 ## Ideas for later
 

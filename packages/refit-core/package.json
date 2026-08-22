@@ -1,0 +1,43 @@
+{
+  "name": "refit-core",
+  "version": "0.1.0",
+  "description": "Clean GPS outliers in cycling .fit files and estimate power, NP, FTP, TSS and zones from physics. Runs in Node, Bun and the browser.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmitrytarassov/refit.git",
+    "directory": "packages/refit-core"
+  },
+  "homepage": "https://dmitrytarassov.github.io/refit/",
+  "keywords": ["fit", "garmin", "cycling", "gps", "kalman", "power", "ftp", "tss"],
+  "sideEffects": false,
+  "engines": { "node": ">=20" },
+  "files": ["dist", "src"],
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./fit": {
+      "source": "./src/fit.ts",
+      "types": "./dist/fit.d.ts",
+      "import": "./dist/fit.js"
+    },
+    "./node": {
+      "source": "./src/node.ts",
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@garmin/fitsdk": "^21.208.0"
+  }
+}

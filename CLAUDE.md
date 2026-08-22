@@ -6,18 +6,18 @@ You are a senior TypeScript + React engineer with deep expertise in frontend arc
 
 # Project
 
-**Stack:** React, TypeScript. Runtime & package manager: **bun** (never npm). Lint: `eslint-config-the-only-perfect` (preset `very-strict`, requires ESLint 9) + prettier via the same config; `no-console` is deliberately off in `cli/**` and `lib/index.ts` — the CLI's console output is its product.
+**Stack:** React, TypeScript. Runtime & package manager: **bun** (never npm). Lint: `eslint-config-the-only-perfect` (preset `very-strict`, requires ESLint 9) + prettier via the same config; `no-console` is deliberately off in `packages/refit-cli/**` — the CLI's console output is its product.
 
 ReFit (package name `refit`, formerly dot-fit) reads a .fit cycling activity file, cleans GPS outliers, optionally smooths the track, enriches it with estimated power, and writes a valid .fit back.
 
-**Layout:**
+**Layout** (bun workspaces monorepo, `packages/*`; the root `package.json` is private and holds only shared tooling):
 
-- `lib/` — all computation (FIT I/O, geo, matrix algebra, outlier filters, cleaning pipeline, power model). No UI concerns. `lib/index.ts` is the CLI entry: `bun lib/index.ts <file.fit> [--smooth] [--power ...]`.
-- `cli/` — argument parsing and orchestration on top of `lib`.
-- `src/` — Vite + React web app on top of `lib`. Fully client-side (no backend, no auth): the whole pipeline runs in the browser, ride history lives in IndexedDB. See `docs/web-app.md` before touching it.
-- `docs/` — project documentation (architecture, FIT format, cleaning algorithms, power model, CLI, web app, history storage, UI palette). Read it before touching a subsystem; update it when behavior changes.
+- `packages/refit-core/` — all computation (FIT I/O, geo, matrix algebra, outlier filters, cleaning pipeline, power model). No UI concerns. Published to npm as `refit-core` with three entries: `src/index.ts` (`refit-core`, pure), `src/fit.ts` (`refit-core/fit`, Garmin SDK), `src/node.ts` (`refit-core/node`, `node:fs`). Relative imports inside it carry a `.js` suffix (`./x.js` for `./x.ts`) because `dist/` is emitted file-by-file by `tsc`. Tests in `test/` (`bun test`). See `docs/library.md`.
+- `packages/refit-cli/` — argument parsing and orchestration on top of `refit-core`; private workspace, not published yet. Run: `bun run cli <file.fit> [--smooth] [--power ...]` from the root.
+- `packages/web/` — Vite + React web app on top of `refit-core`. Fully client-side (no backend, no auth): the whole pipeline runs in the browser, ride history lives in IndexedDB. See `docs/web-app.md` before touching it.
+- `docs/` — project documentation (architecture, library, publishing, FIT format, cleaning algorithms, power model, CLI, web app, history storage, UI palette). Read it before touching a subsystem; update it when behavior changes.
 
-Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends on nothing above it.
+Dependency direction is one-way: `refit-cli` and `web` depend on `refit-core` **only through its package entries** (`refit-core`, `refit-core/fit`, `refit-core/node` — never a relative path into `packages/refit-core/src`); `refit-core` depends on nothing in the repository. In-repo consumers resolve the core from source via the `source` export condition (Vite `resolve.conditions`, tsconfig `customConditions`, `bun --conditions=source`) — no build is needed for dev, lint or type-check; `dist/` exists only for publishing (`docs/publishing.md`).
 
 ---
 
@@ -32,15 +32,15 @@ Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends 
 
 ## Language
 
-- **Everything in the repo is English**: code comments, docs (`docs/*.md`, README, TODO), commit messages. UI texts live in i18n dictionaries (`src/i18n/`, see docs/i18n.md): `en/*` is the source of truth, `src/i18n/ru/*` is the only place with Russian text. Never hardcode a user-visible string in a component — add a key to both dictionaries.
+- **Everything in the repo is English**: code comments, docs (`docs/*.md`, README, TODO), commit messages. UI texts live in i18n dictionaries (`packages/web/src/i18n/`, see docs/i18n.md): `en/*` is the source of truth, `packages/web/src/i18n/ru/*` is the only place with Russian text. Never hardcode a user-visible string in a component — add a key to both dictionaries.
 - **Chat replies follow the developer's language**: answer in whatever language they write to you (Russian message → Russian reply).
 
 ---
 
 ## Documentation (mandatory)
 
-- **Every code change ends with a documentation pass.** After any edit, update the affected `docs/*.md` (and CLAUDE.md if layout or conventions changed); if a change introduces a new subsystem, write a new doc in `docs/` and link it from the table in `docs/architecture.md`, from `public/llms.txt` (Docs section), and from the `SOURCES` list in `scripts/build-llms-full.ts`.
-- **Formulas live in four places** — `docs/*.md`, the web Help page (`src/components/help/`), `README.md`, and the metric-tile tooltips (`src/components/dashboard/metric-help.ts`). Changing any algorithm or constant (cleaning thresholds, power model, CdA/Crr tables, NP/FTP/TSS/zones) means updating all of them in the same change.
+- **Every code change ends with a documentation pass.** After any edit, update the affected `docs/*.md` (and CLAUDE.md if layout or conventions changed); if a change introduces a new subsystem, write a new doc in `docs/` and link it from the table in `docs/architecture.md`, from `packages/web/public/llms.txt` (Docs section), and from the `SOURCES` list in `scripts/build-llms-full.ts`.
+- **Formulas live in four places** — `docs/*.md`, the web Help page (`packages/web/src/components/help/`), `README.md`, and the metric-tile tooltips (`packages/web/src/components/dashboard/metric-help.ts`). Changing any algorithm or constant (cleaning thresholds, power model, CdA/Crr tables, NP/FTP/TSS/zones) means updating all of them in the same change.
 - Link between docs instead of duplicating content.
 - A task is not done while docs contradict the code.
 
@@ -59,7 +59,7 @@ Dependency direction is one-way: `cli` and `src` depend on `lib`; `lib` depends 
 
 ## Exports
 
-- **No `index.ts` barrel files.** Import directly from the source file. (Executable entry points like `lib/index.ts` are the one exception — the ban is on re-export barrels.)
+- **No `index.ts` barrel files.** Import directly from the source file. The one exception is the three package entries of `refit-core` (`packages/refit-core/src/{index,fit,node}.ts`): zero declarations, explicit named re-exports only, and they may mix re-exported functions, constants and `export type`s. Every new public symbol of the core must be added to the right entry — consumers never deep-import `packages/refit-core/src`.
 - **No `export * from "..."`** — all exports must be explicit.
 
 ## Types conventions

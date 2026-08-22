@@ -1,7 +1,9 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./packages/refit-core" },
+    { "path": "./packages/refit-cli" },
+    { "path": "./packages/web/tsconfig.app.json" },
+    { "path": "./packages/web/tsconfig.node.json" }
   ]
 }

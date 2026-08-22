@@ -1,6 +1,6 @@
-# Web app (`src/`)
+# Web app (`packages/web/`)
 
-An SPA on Vite + React 19 (React Compiler via babel-plugin) on top of `lib`. **No backend, no auth**: the whole pipeline — FIT decode, track cleaning, power calculation — runs right in the browser; history is stored in IndexedDB ([history-storage.md](history-storage.md)). Charts — Recharts, icons — lucide-react, routing — react-router-dom, map — Leaflet (react-leaflet, OpenStreetMap tiles).
+An SPA on Vite + React 19 (React Compiler via babel-plugin) on top of `refit-core` ([library.md](library.md)). **No backend, no auth**: the whole pipeline — FIT decode, track cleaning, power calculation — runs right in the browser; history is stored in IndexedDB ([history-storage.md](history-storage.md)). Charts — Recharts, icons — lucide-react, routing — react-router-dom, map — Leaflet (react-leaflet, OpenStreetMap tiles).
 
 Run: `bun run dev`, build: `bun run build`, lint: `bun run lint`.
 
@@ -86,7 +86,7 @@ Components are pure render; computation lives in hooks:
 | `use-combined-series` | one merged `{t, power?, heartRate?, cadence?, elevation?, speed?}` series for `CombinedChart` |
 | `use-drag-zoom` | drag-to-select zoom state for a numeric X axis (selection → domain, reset) |
 | `use-power-settings` | last calculation settings from the `settings` store: read on mount, write on change |
-| `use-power-curve` | power curve (`lib/power/power-curve`) |
+| `use-power-curve` | power curve (`powerCurve` from `refit-core`) |
 | `use-route-points` | accepted point coordinates in degrees for the map (with downsampling) |
 | `use-ftp` | the FTP the app runs on: manual from Settings wins, otherwise the estimate from the curve; returns `{ watts, source }` ([ftp-estimation.md](ftp-estimation.md)) |
 | `use-manual-ftp` | manual FTP from the `settings` store: read on mount, save/delete on change |
