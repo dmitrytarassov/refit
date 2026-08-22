@@ -45,4 +45,4 @@ jobs:
 
       - run: mkdir -p artifacts && cd packages/refit-core && bun pm pack --destination ../../artifacts
 
-      - run: npm publish artifacts/refit-core-*.tgz --provenance --access public
+      - run: npm publish ./artifacts/refit-core-*.tgz --provenance --access public

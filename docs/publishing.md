@@ -42,8 +42,8 @@ git push origin main --tags
 ```bash
 bun test && bun run typecheck && bun run lint
 bun run --filter refit-core build
-cd packages/refit-core && bun pm pack --destination /tmp/refit-pack && tar -tzf /tmp/refit-pack/refit-core-*.tgz
-npm publish /tmp/refit-pack/refit-core-*.tgz --dry-run --access public
+cd packages/refit-core && bun pm pack --destination /tmp/refit-pack && cd /tmp/refit-pack && tar -tzf refit-core-*.tgz
+npm publish ./refit-core-*.tgz --dry-run --access public
 ```
 
 The tarball must contain `dist/**`, `src/**`, `package.json`, `README.md`, `LICENSE` and nothing from `test/`. To try the package as a consumer, `bun add /tmp/refit-pack/refit-core-*.tgz` in a scratch project and import from all three entries (`refit-core`, `refit-core/fit`, `refit-core/node`) — both `tsc --noEmit` under `module: nodenext` and a plain `node` import should work.
