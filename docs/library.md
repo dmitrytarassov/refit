@@ -69,6 +69,17 @@ if (ftp) {
 
 What each function computes is documented in [track-cleaning.md](track-cleaning.md), [power-estimation.md](power-estimation.md) and [ftp-estimation.md](ftp-estimation.md); the file model in [fit-format.md](fit-format.md).
 
+## Licensing
+
+The core is MIT, but its FIT I/O relies on [`@garmin/fitsdk`](https://www.npmjs.com/package/@garmin/fitsdk), which Garmin ships under the proprietary, royalty-free [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt). How `refit-core` stays on the right side of it:
+
+- the published tarball contains no Garmin code — only our `src/` and `dist/`; the SDK is a plain `dependencies` entry that consumers install from Garmin's own npm package, accepting its license themselves (the license forbids redistributing or sublicensing the SDK, so it must never be bundled into `dist/`);
+- only `refit-core/fit` (directly) and `refit-core/node` (through `decodeFit`/`encodeFit`) import the SDK; the root `refit-core` entry — pipeline, power model, metrics — has no dependencies at all;
+- our MIT license imposes no source-disclosure requirement on dependencies, which the Garmin license explicitly rules out for copyleft licenses — do not relicense the project under GPL-style terms;
+- the web app bundles the SDK into a lazy chunk served from GitHub Pages, the ordinary way a browser app uses Garmin's JavaScript SDK.
+
+This is a reading of the license text, not legal advice.
+
 ## Package layout and build
 
 - `package.json`: `"type": "module"`, `exports` with three subpaths, `sideEffects: false`, `files: ["dist", "src"]` (sources ship so `declarationMap` points at real files), `engines.node >= 20`. The only runtime dependency is `@garmin/fitsdk`.

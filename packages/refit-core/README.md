@@ -34,4 +34,8 @@ Three entry points:
 | `refit-core/fit` | `@garmin/fitsdk` | `decodeFit`, `encodeFit`, `applyEnhancements` |
 | `refit-core/node` | `node:fs` | `readFit`, `writeFit` |
 
-Full API and the algorithms: [docs/library.md](https://github.com/dmitrytarassov/refit/blob/main/docs/library.md), [docs/track-cleaning.md](https://github.com/dmitrytarassov/refit/blob/main/docs/track-cleaning.md), [docs/power-estimation.md](https://github.com/dmitrytarassov/refit/blob/main/docs/power-estimation.md). MIT.
+Full API and the algorithms: [docs/library.md](https://github.com/dmitrytarassov/refit/blob/main/docs/library.md), [docs/track-cleaning.md](https://github.com/dmitrytarassov/refit/blob/main/docs/track-cleaning.md), [docs/power-estimation.md](https://github.com/dmitrytarassov/refit/blob/main/docs/power-estimation.md).
+
+## Licensing
+
+`refit-core` itself is MIT. The FIT decoder/encoder comes from [`@garmin/fitsdk`](https://www.npmjs.com/package/@garmin/fitsdk), which Garmin distributes under its own [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt) (proprietary, royalty-free, not open source). This package does not bundle or redistribute any Garmin code: the SDK is a regular npm dependency that your package manager fetches from Garmin's package, and by installing it you accept Garmin's license. Only the `refit-core/fit` entry imports the SDK; the root `refit-core` entry (cleaning pipeline, power model, metrics) has no dependencies and is MIT through and through.

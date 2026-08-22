@@ -186,4 +186,4 @@ Releasing `refit-core` to npm: [docs/publishing.md](docs/publishing.md).
 
 ## License
 
-[MIT](LICENSE). The Garmin sample referenced by the example button is © Garmin and stays under their [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt) — it is fetched from Garmin's repository at runtime, not distributed here.
+[MIT](LICENSE). FIT decoding and encoding use [`@garmin/fitsdk`](https://www.npmjs.com/package/@garmin/fitsdk) under Garmin's proprietary [FIT Protocol License](https://github.com/garmin/fit-javascript-sdk/blob/main/LICENSE.txt); neither this repository nor the `refit-core` package redistributes Garmin code — the SDK is an npm dependency every consumer installs from Garmin's own package (details in [docs/library.md](docs/library.md#licensing)). The Garmin sample referenced by the example button is © Garmin under the same license — it is fetched from Garmin's repository at runtime, not distributed here.
