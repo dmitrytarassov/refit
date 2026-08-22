@@ -1,6 +1,6 @@
 {
   "name": "refit-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Clean GPS outliers in cycling .fit files and estimate power, NP, FTP, TSS and zones from physics. Runs in Node, Bun and the browser.",
   "license": "MIT",
   "type": "module",
