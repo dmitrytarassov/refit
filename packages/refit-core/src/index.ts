@@ -33,8 +33,12 @@ export { DEFAULT_DRIVETRAIN_EFFICIENCY } from "./power/drivetrain-efficiency.js"
 export type { CdaSelector } from "./power/cda-selector.js";
 export type { RiderPosition } from "./power/rider-position.js";
 export { CDA_BY_POSITION } from "./power/cda-by-position.js";
+export { resolveCda } from "./power/resolve-cda.js";
 export type { RollingResistance } from "./power/rolling-resistance.js";
 export type { Surface } from "./power/surface.js";
 export type { TireType } from "./power/tire-type.js";
 export type { TirePressure } from "./power/tire-pressure.js";
 export { CRR_BY_SURFACE } from "./power/crr-by-surface.js";
+export { TIRE_FACTOR } from "./power/tire-factor.js";
+export { PRESSURE_FACTOR } from "./power/pressure-factor.js";
+export { resolveCrr } from "./power/resolve-crr.js";

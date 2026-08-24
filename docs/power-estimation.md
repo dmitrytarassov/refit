@@ -66,6 +66,8 @@ Config — `PowerConfig` (`packages/refit-core/src/power/power-config.ts`): `est
 
 Example: good asphalt + road tires + high pressure = 0.0045 × 1.0 × 0.9 ≈ 0.004.
 
+All four tables (`CDA_BY_POSITION`, `CRR_BY_SURFACE`, `TIRE_FACTOR`, `PRESSURE_FACTOR`) and both resolvers (`resolveCda`, `resolveCrr`) are part of the public entry since 0.1.3, so a consumer can show "you are being modelled in hoods, CdA 0.32" without a second implementation of the same rules.
+
 ## What gets written to the file
 
 - `record.power` — watts in every record that has speed (a standard FIT profile field, Strava/Garmin Connect understand it).
