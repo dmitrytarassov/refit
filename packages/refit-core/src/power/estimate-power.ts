@@ -1,3 +1,5 @@
+import { assertAutoCdaConfig } from "./assert-auto-cda-config.js";
+import { fillSeries } from "./fill-series.js";
 import { pointPowerW } from "./point-power.js";
 import type { PowerConfig } from "./power-config.js";
 
@@ -14,6 +16,10 @@ export function estimatePower(
   records: FitRecord[],
   cfg: PowerConfig,
 ): Array<number | undefined> {
+  if (typeof cfg.cda === "object") {
+    assertAutoCdaConfig(cfg.cda);
+  }
+
   const times = records.map((r) =>
     r.timestamp ? r.timestamp.getTime() / 1000 : undefined,
   );
@@ -24,6 +30,18 @@ export function estimatePower(
   // threshold yet blow up the central-difference acceleration.
   const speeds = median3(
     hampelSpeeds(records.map((r) => r.enhancedSpeed ?? r.speed)),
+  );
+  // Altitude and temperature drop out for seconds at a time (barometer glitch,
+  // lost GPS fix). A constant fallback would model those records at sea level:
+  // at 2000 m that overstates their power by about a quarter. Holes are
+  // interpolated from the neighbouring records instead.
+  const altitudes = fillSeries(
+    records.map((r) => r.enhancedAltitude ?? r.altitude),
+    times,
+  );
+  const temperatures = fillSeries(
+    records.map((r) => r.temperature),
+    times,
   );
 
   return records.map((r, i) => {
@@ -63,8 +81,8 @@ export function estimatePower(
         speedMps: speed,
         accelMps2: accel,
         gradePercent: r.grade ?? 0,
-        altitudeM: r.enhancedAltitude ?? r.altitude ?? 0,
-        tempC: r.temperature ?? 15,
+        altitudeM: altitudes[i] ?? 0,
+        tempC: temperatures[i] ?? 15,
       },
       cfg,
     );

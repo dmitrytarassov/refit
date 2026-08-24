@@ -22,11 +22,13 @@ A negative total (descending, braking) is clamped to 0 — you can't push negati
 | --- | --- | --- |
 | Speed v | `enhancedSpeed` → `speed` | m/s |
 | Grade | `grade` | %, from the bike computer |
-| Altitude | `enhancedAltitude` → `altitude` | for air density |
-| Temperature | `temperature` | for air density |
+| Altitude | `enhancedAltitude` → `altitude` → interpolated from the neighbouring records → 0 m | for air density |
+| Temperature | `temperature` → interpolated from the neighbouring records → 15 °C | for air density |
 | Cadence | `cadence` | coasting detector |
 
 **Air density** ρ (`air-density.ts`) — barometric formula from the point's temperature and altitude; gives a noticeable ±3–5% on the aero component compared to a constant.
+
+Both inputs drop out for seconds at a time (barometer glitch, lost GPS fix). Holes are filled from the neighbouring records instead of falling back to a constant (`fill-series.ts`): linear interpolation in time inside the track, the nearest known value at the edges. A constant would model those records at sea level, which at 2000 m overstates their power by about a quarter — inside one ride, on scattered points. The constants (0 m, 15 °C) are used only when the whole series is missing.
 
 **Speed cleaning** — device speed is not touched by the GPS cleaning pipeline, and a single glitched sample spikes both the aero term (~v³) and the acceleration derivative (a 2000 W artifact from one bad second). Before any use, the speed series goes through a two-sided Hampel filter (`packages/refit-core/src/filters/hampel-speed.ts`): a sample deviating from the ±5-record window median by more than 5 robust sigmas (σ = max(1.4826 · MAD, 0.5 m/s)) is replaced with that median. A real 1-s sprint surge survives; recording glitches do not. On a clean series the filter is a no-op (verified on the reference file: avg/NP/max unchanged). The Hampel output then goes through a 3-point rolling median (`packages/refit-core/src/filters/median3.ts`): one-sample V-dips small enough to stay under the sigma threshold (e.g. a 2 m/s single-second dip at 30 km/h ≈ a fake +700 W inertia spike on recovery) are flattened, while monotonic runs — real accelerations and sprints — pass through unchanged by construction (the median of an ordered triple is its middle element).
 
@@ -42,7 +44,7 @@ Config — `PowerConfig` (`packages/refit-core/src/power/power-config.ts`): `est
 
 ### CdA — position selector
 
-`CdaSelector` = a fixed riding position or `"auto"` (`resolve-cda.ts`).
+`CdaSelector` = a fixed riding position, a measured CdA in m² (`cda: 0.245` — wind tunnel or aero pod), `"auto"`, or a speed ladder of your own (`AutoCdaConfig`); resolved in `resolve-cda.ts`.
 
 | Position | CdA, m² |
 | --- | --- |
@@ -51,7 +53,17 @@ Config — `PowerConfig` (`packages/refit-core/src/power/power-config.ts`): `est
 | `drops` (drops) | 0.28 |
 | `aero` (time-trial) | 0.23 |
 
-`"auto"` mode: speed above 33 km/h → `drops`, below → `hoods` (the "hide from the wind at speed" heuristic).
+`"auto"` mode is a ladder of positions keyed by speed — the "hide from the wind at speed" heuristic. The default (`DEFAULT_AUTO_CDA`) is a road bike: `hoods` up to 33 km/h, `drops` above.
+
+Around every boundary the two CdA values are blended linearly over `blendBandMps` (`DEFAULT_AUTO_BLEND_MPS` = 4 km/h), so the default ladder runs 0.32 at 31 km/h → 0.30 at 33 → 0.28 at 35. Without the band a rider oscillating around the threshold gets a 17–20 W step in the per-second series on every crossing, and the step propagates into NP, the power curve and the zones: 32.9 km/h cost 185 W while 33.1 km/h cost 168 W. Set `blendBandMps: 0` to get exactly that pre-0.2.0 hard switch back.
+
+**The band has a lower bound.** Blending always makes power continuous, but monotonic only if the band is wide enough: inside it the aero term is CdA(v)·v³ with CdA falling, so power grows only while `CdA'(v)·v + 3·CdA(v) > 0`, which gives
+
+```
+blendBandMps > ΔCdA · boundary / (3 · cdaNext − ΔCdA/2)
+```
+
+`minBlendBandMps()` computes it, and `assertAutoCdaConfig()` rejects a ladder that violates it — a 4 km/h band is plenty for the default `hoods → drops` at 33 km/h (0.45 m/s needed) but far too narrow for, say, `hoods → aero` at 45 km/h (1.74 m/s needed), where power would start falling as speed rises. `estimatePower` runs that validation once per ride; `resolveCda` itself never does, it runs per record.
 
 ### Crr — three typed parameters
 

@@ -127,7 +127,10 @@ F_inertia = m · a
       </table>
       <p>
         In auto mode the position is picked per record: above 33 km/h — drops,
-        below — hoods (&laquo;at speed you hide from the wind&raquo;).
+        below — hoods (&laquo;at speed you hide from the wind&raquo;). The two
+        values are blended over a 4 km/h band around the threshold (0.32 at 31
+        km/h, 0.30 at 33, 0.28 at 35), so crossing it does not step the power up
+        and down.
       </p>
 
       <h4>Crr — rolling resistance</h4>

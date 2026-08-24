@@ -34,6 +34,13 @@ export type { CdaSelector } from "./power/cda-selector.js";
 export type { RiderPosition } from "./power/rider-position.js";
 export { CDA_BY_POSITION } from "./power/cda-by-position.js";
 export { resolveCda } from "./power/resolve-cda.js";
+export type { AutoCdaConfig, AutoCdaStep } from "./power/auto-cda-config.js";
+export {
+  DEFAULT_AUTO_CDA,
+  DEFAULT_AUTO_BLEND_MPS,
+} from "./power/auto-cda-defaults.js";
+export { assertAutoCdaConfig } from "./power/assert-auto-cda-config.js";
+export { minBlendBandMps } from "./power/min-blend-band.js";
 export type { RollingResistance } from "./power/rolling-resistance.js";
 export type { Surface } from "./power/surface.js";
 export type { TireType } from "./power/tire-type.js";

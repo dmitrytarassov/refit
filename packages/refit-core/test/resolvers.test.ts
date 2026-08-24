@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { DEFAULT_AUTO_BLEND_MPS } from "../src/power/auto-cda-defaults.js";
 import { CDA_BY_POSITION } from "../src/power/cda-by-position.js";
 import { CRR_BY_SURFACE } from "../src/power/crr-by-surface.js";
 import { PRESSURE_FACTOR } from "../src/power/pressure-factor.js";
@@ -55,10 +56,20 @@ describe("resolveCda", () => {
     }
   });
 
-  test("auto switches from hoods to drops above 33 km/h", () => {
+  test("auto blends from hoods to drops around 33 km/h", () => {
     const threshold = 33 / 3.6;
-    expect(resolveCda("auto", threshold - 0.01)).toBe(CDA_BY_POSITION.hoods);
-    expect(resolveCda("auto", threshold)).toBe(CDA_BY_POSITION.hoods);
-    expect(resolveCda("auto", threshold + 0.01)).toBe(CDA_BY_POSITION.drops);
+    const half = DEFAULT_AUTO_BLEND_MPS / 2;
+    expect(resolveCda("auto", threshold - half - 0.01)).toBe(
+      CDA_BY_POSITION.hoods,
+    );
+    expect(resolveCda("auto", threshold)).toBeCloseTo(0.3, 12);
+    expect(resolveCda("auto", threshold + half + 0.01)).toBe(
+      CDA_BY_POSITION.drops,
+    );
+  });
+
+  test("a measured CdA is used as it is", () => {
+    expect(resolveCda(0.245, 5)).toBe(0.245);
+    expect(resolveCda(0.245, 20)).toBe(0.245);
   });
 });

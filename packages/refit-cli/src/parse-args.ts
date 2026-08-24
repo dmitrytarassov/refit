@@ -28,7 +28,7 @@ export function parseArgs(argv: string[]): CliOptions {
         "  --rider-mass <kg>              (default 82)\n" +
         "  --gear-mass <kg>               (default 2)\n" +
         "  --bottles <ml,ml,...>          bottle volumes, counted full (default none)\n" +
-        "  --cda auto|tops|hoods|drops|aero   (default auto: drops above 33 km/h, else hoods)\n" +
+        "  --cda auto|tops|hoods|drops|aero   (default auto: hoods below 33 km/h, drops above, blended)\n" +
         "  --surface good-asphalt|rough-asphalt|gravel  (default good-asphalt)\n" +
         "  --tires road|endurance|gravel|mtb            (default road)\n" +
         "  --pressure high|medium|low                   (default high)",

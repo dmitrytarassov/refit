@@ -35,7 +35,7 @@ Runs from the repository (the CLI is not on npm yet). Writes `<name>.out.fit` ne
 | `--rider-mass` | kg | 82 | rider mass |
 | `--gear-mass` | kg | 2 | gear mass — everything the rider carries (helmet, shoes, phone, bike computer…) |
 | `--bottles` | ml,ml,… | none | bottle volumes, counted full for the whole ride (1 L ≈ 1 kg) |
-| `--cda` | `auto` \| `tops` \| `hoods` \| `drops` \| `aero` | `auto` | riding position; `auto`: > 33 km/h → `drops`, else `hoods` |
+| `--cda` | `auto` \| `tops` \| `hoods` \| `drops` \| `aero` | `auto` | riding position; `auto`: `hoods` below 33 km/h, `drops` above, blended over 4 km/h |
 | `--surface` | `good-asphalt` \| `rough-asphalt` \| `gravel` | `good-asphalt` | surface (Crr base) |
 | `--tires` | `road` \| `endurance` \| `gravel` \| `mtb` | `road` | tire type (Crr multiplier) |
 | `--pressure` | `high` \| `medium` \| `low` | `high` | pressure (Crr multiplier) |
