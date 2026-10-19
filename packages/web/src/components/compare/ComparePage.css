@@ -1,0 +1,65 @@
+.compare-page {
+  .compare-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--text-primary);
+  }
+
+  .compare-change {
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .compare-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: start;
+
+    @media (max-width: 640px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .compare-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .compare-status {
+    margin: 0;
+    padding: 24px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .compare-error {
+    color: var(--danger-text);
+  }
+}

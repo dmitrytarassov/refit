@@ -1,0 +1,49 @@
+.compare-picker {
+  min-width: 0;
+
+  .compare-picker-title {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .compare-picker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .compare-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--border-strong);
+      background: var(--surface-subtle);
+
+      .compare-picker-row-icon {
+        color: var(--ink);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: -2px;
+    }
+  }
+
+  .compare-picker-row-icon {
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+}

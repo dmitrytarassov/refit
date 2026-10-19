@@ -11,6 +11,7 @@ export const HISTORY_RU = {
     estFtp: "Оценка FTP",
     tss: "TSS",
   },
+  compareAria: (fileName: string): string => `Сравнить ${fileName}`,
   deleteConfirm: "Удалить?",
   deleteAria: (fileName: string): string => `Удалить ${fileName}`,
   confirmDeleteAria: (fileName: string): string =>

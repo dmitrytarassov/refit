@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  cleanTrack,
-  estimatePower,
-  type FitRecord,
-  sessionPowerStats,
-} from "refit-core";
+import { estimatePower, sessionPowerStats } from "refit-core";
 
 import { useT } from "./use-translation";
 
@@ -18,38 +13,11 @@ import { saveLastSettings } from "../db/save-last-settings";
 import { saveRide } from "../db/save-ride";
 import { saveRideTitle } from "../db/save-ride-title";
 import { updateRide } from "../db/update-ride";
+import { decodeActivity } from "../fit/decode-activity";
 import { POWER_DEFAULTS } from "../fit/power-defaults";
 import type { Activity } from "../types/activity";
 import type { ProcessingState } from "../types/processing-state";
 import type { RideSettings } from "../types/ride-settings";
-
-async function decodeActivity(
-  buffer: ArrayBuffer,
-  fileName: string,
-  settings: RideSettings,
-): Promise<Activity> {
-  const { decodeFit } = await import("refit-core/fit");
-  const fit = decodeFit(new Uint8Array(buffer));
-  const records: FitRecord[] = fit.messages.recordMesgs ?? [];
-  const { verdicts, report } = cleanTrack(records);
-  const powers = estimatePower(records, {
-    ...POWER_DEFAULTS,
-    mass: settings.mass ?? POWER_DEFAULTS.mass,
-    cda: settings.cda,
-    crr: settings.crr,
-  });
-  const powerStats = sessionPowerStats(records, powers);
-  return {
-    fileName,
-    fit,
-    records,
-    verdicts,
-    report,
-    powers,
-    powerStats,
-    settings,
-  };
-}
 
 export function useFitProcessing(): {
   state: ProcessingState;

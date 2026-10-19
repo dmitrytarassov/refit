@@ -1,0 +1,142 @@
+.compare-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  @media (max-width: 640px) {
+    padding: 8px;
+  }
+
+  .compare-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 50%);
+    border: none;
+    padding: 0;
+  }
+
+  .compare-modal-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 960px;
+    max-height: 100%;
+    min-width: 0;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+
+    @media (max-width: 640px) {
+      padding: 12px;
+    }
+  }
+
+  .compare-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+  }
+
+  .compare-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--surface-subtle);
+    }
+  }
+
+  .compare-modal-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    min-height: 0;
+    overflow-y: auto;
+
+    @media (max-width: 640px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .compare-slot {
+    min-width: 0;
+  }
+
+  .compare-slot-title {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .compare-slot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .compare-slot-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    font: inherit;
+    background: var(--surface-page);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      border-color: var(--border-strong);
+      background: var(--surface-subtle);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: -2px;
+    }
+
+    &.is-selected {
+      border-color: var(--ink);
+      background: var(--ink-tint);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .compare-slot-row-icon {
+    flex-shrink: 0;
+    color: var(--ink);
+  }
+}

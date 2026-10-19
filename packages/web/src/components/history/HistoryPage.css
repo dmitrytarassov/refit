@@ -44,6 +44,27 @@
     }
   }
 
+  .history-actions {
+    white-space: nowrap;
+  }
+
+  .history-compare {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    margin-right: 4px;
+    color: var(--text-muted);
+    border-radius: 6px;
+    vertical-align: middle;
+
+    &:hover {
+      color: var(--ink);
+      background: var(--ink-tint);
+    }
+  }
+
   .history-delete {
     display: inline-flex;
     align-items: center;

@@ -1,5 +1,6 @@
 import { CHARTS_EN } from "./en/charts";
 import { COMMON_EN } from "./en/common";
+import { COMPARE_EN } from "./en/compare";
 import { DASHBOARD_EN } from "./en/dashboard";
 import { ERRORS_EN } from "./en/errors";
 import { HELP_EN } from "./en/help";
@@ -22,6 +23,7 @@ export const EN = {
   metricHelp: METRIC_HELP_EN,
   charts: CHARTS_EN,
   history: HISTORY_EN,
+  compare: COMPARE_EN,
   settings: SETTINGS_EN,
   share: SHARE_EN,
   powerSettings: POWER_SETTINGS_EN,

@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { Suspense, lazy } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { DashboardPanel } from "./components/dashboard/DashboardPanel";
@@ -10,6 +11,15 @@ import { SettingsPage } from "./components/settings/SettingsPage";
 import { SidebarInfoCards } from "./components/sidebar/SidebarInfoCards";
 import { SidebarPanel } from "./components/sidebar/SidebarPanel";
 import { useFitProcessing } from "./hooks/use-fit-processing";
+import { useT } from "./hooks/use-translation";
+
+// Carries recharts through the power curve card — kept out of the main chunk
+// like the dashboard.
+const ComparePage = lazy(() =>
+  import("./components/compare/ComparePage").then((m) => ({
+    default: m.ComparePage,
+  })),
+);
 
 export function AppContent(): ReactElement {
   const {
@@ -21,18 +31,31 @@ export function AppContent(): ReactElement {
     reset,
     discard,
   } = useFitProcessing();
+  const { t } = useT();
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
-  const activeView =
-    view === "history" || view === "help" || view === "settings"
-      ? view
-      : "dashboard";
+  let activeView: "dashboard" | "history" | "help" | "settings" = "dashboard";
+  if (view === "history" || view === "compare") {
+    activeView = "history";
+  } else if (view === "help" || view === "settings") {
+    activeView = view;
+  }
 
   let content: ReactElement;
   if (view === "history") {
     content = (
       <main className="app-main">
         <HistoryPage />
+      </main>
+    );
+  } else if (view === "compare") {
+    content = (
+      <main className="app-main">
+        <Suspense
+          fallback={<p className="compare-status">{t.common.loading}</p>}
+        >
+          <ComparePage />
+        </Suspense>
       </main>
     );
   } else if (view === "help") {

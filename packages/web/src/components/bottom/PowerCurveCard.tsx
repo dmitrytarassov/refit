@@ -23,10 +23,13 @@ import "./PowerCurveCard.css";
 
 interface PowerCurveCardProps {
   activity: Activity;
+  /** Cards sharing an id mirror each other's cursor and tooltip (Compare page). */
+  syncId?: string;
 }
 
 export function PowerCurveCard({
   activity,
+  syncId,
 }: PowerCurveCardProps): ReactElement {
   const { t } = useT();
   const curve = usePowerCurve(activity);
@@ -50,6 +53,8 @@ export function PowerCurveCard({
             <AreaChart
               data={curve}
               margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+              syncId={syncId}
+              syncMethod="value"
             >
               <defs>
                 <ChartFillGradient

@@ -1,6 +1,7 @@
 export const CHARTS_RU = {
   titles: {
     power: "Мощность",
+    powerOriginal: "Мощность (оригинал)",
     heartRate: "Пульс",
     cadence: "Каденс",
     elevation: "Высота",

@@ -1,6 +1,7 @@
 export const CHARTS_EN = {
   titles: {
     power: "Power",
+    powerOriginal: "Power (Original)",
     heartRate: "Heart Rate",
     cadence: "Cadence",
     elevation: "Elevation",

@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
 import {
   Area,
   Brush,
@@ -24,6 +23,7 @@ import { formatDuration } from "../../fit/format-metrics";
 import { useCombinedSeries } from "../../hooks/use-combined-series";
 import { useDragZoom } from "../../hooks/use-drag-zoom";
 import { useIsMobile } from "../../hooks/use-is-mobile";
+import { useSeriesVisibility } from "../../hooks/use-series-visibility";
 import { useTheme } from "../../hooks/use-theme";
 import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
@@ -48,12 +48,19 @@ export function CombinedChart({
   const palette = CHART_PALETTE[mode];
   const zoom = useDragZoom();
   const isMobile = useIsMobile();
-  const [visible, setVisible] = useState<Record<string, boolean>>(() => ({
+  // The recorded power rides on the estimate's axis, so the Power card opens
+  // with both series on, as on the card itself.
+  const { visible, toggle } = useSeriesVisibility({
     [initial]: true,
-  }));
+    powerOriginal: initial === "power",
+  });
+  const hasOriginal = points.some((p) => p.powerOriginal != null);
+  const metrics = COMBINED_METRICS.filter(
+    (m) => m.key !== "powerOriginal" || hasOriginal,
+  );
 
   const units = Object.fromEntries(
-    COMBINED_METRICS.map((m) => [m.key, t.common.units[m.unitKey]]),
+    metrics.map((m) => [m.key, t.common.units[m.unitKey]]),
   );
   const axisWidth = isMobile ? 52 : 64;
 
@@ -88,13 +95,15 @@ export function CombinedChart({
           onMouseLeave={zoom.onUp}
         >
           <defs>
-            {COMBINED_METRICS.filter((m) => m.gradient).map((m) => (
-              <ChartFillGradient
-                key={m.key}
-                id={`combined-${m.key}-fill`}
-                color={palette[m.paletteKey]}
-              />
-            ))}
+            {metrics
+              .filter((m) => m.gradient)
+              .map((m) => (
+                <ChartFillGradient
+                  key={m.key}
+                  id={`combined-${m.key}-fill`}
+                  color={palette[m.paletteKey]}
+                />
+              ))}
           </defs>
           <CartesianGrid
             vertical={false}
@@ -112,27 +121,27 @@ export function CombinedChart({
             axisLine={false}
             minTickGap={32}
           />
-          {COMBINED_METRICS.map((m) => (
-            <YAxis
-              key={m.key}
-              yAxisId={m.key}
-              hide={m.key !== initial}
-              unit={` ${t.common.units[m.unitKey]}`}
-              width={m.key !== initial ? 0 : axisWidth}
-              tick={{ fill: palette.axis, fontSize: isMobile ? 10 : 12 }}
-              tickLine={false}
-              axisLine={false}
-            />
-          ))}
+          {metrics
+            .filter((m) => m.axisKey === m.key)
+            .map((m) => (
+              <YAxis
+                key={m.key}
+                yAxisId={m.key}
+                hide={m.key !== initial}
+                includeHidden
+                unit={` ${t.common.units[m.unitKey]}`}
+                width={m.key !== initial ? 0 : axisWidth}
+                tick={{ fill: palette.axis, fontSize: isMobile ? 10 : 12 }}
+                tickLine={false}
+                axisLine={false}
+              />
+            ))}
           <Tooltip
             content={(props) => <ChartTooltip {...props} units={units} />}
             cursor={{ stroke: palette.grid }}
           />
           <Legend
-            onClick={(item) => {
-              const key = String(item.dataKey);
-              setVisible((v) => ({ ...v, [key]: !v[key] }));
-            }}
+            onClick={(item) => toggle(String(item.dataKey))}
             formatter={(value, entry) => (
               <span
                 className={
@@ -154,12 +163,12 @@ export function CombinedChart({
               fillOpacity={0.15}
             />
           )}
-          {COMBINED_METRICS.map((m) =>
+          {metrics.map((m) =>
             m.gradient ? (
               <Area
                 key={m.key}
                 dataKey={m.key}
-                yAxisId={m.key}
+                yAxisId={m.axisKey}
                 name={t.charts.titles[m.key]}
                 hide={!visible[m.key]}
                 stroke={palette[m.paletteKey]}
@@ -173,11 +182,12 @@ export function CombinedChart({
               <Line
                 key={m.key}
                 dataKey={m.key}
-                yAxisId={m.key}
+                yAxisId={m.axisKey}
                 name={t.charts.titles[m.key]}
                 hide={!visible[m.key]}
                 stroke={palette[m.paletteKey]}
                 strokeWidth={m.key === initial ? 2 : 1.5}
+                strokeDasharray={m.dashed ? "4 3" : undefined}
                 dot={false}
                 connectNulls
                 isAnimationActive={false}

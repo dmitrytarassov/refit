@@ -17,9 +17,12 @@ export function useCombinedSeries(activity: Activity): CombinedPoint[] {
     if (r.distance != null) {
       p.d = r.distance;
     }
-    const power = activity.powers[i] ?? r.power;
+    const power = activity.powers[i];
     if (power != null) {
       p.power = power;
+    }
+    if (r.power != null) {
+      p.powerOriginal = r.power;
     }
     if (typeof r.heartRate === "number") {
       p.heartRate = r.heartRate;
@@ -37,6 +40,7 @@ export function useCombinedSeries(activity: Activity): CombinedPoint[] {
     }
     const hasMetric =
       p.power != null ||
+      p.powerOriginal != null ||
       p.heartRate != null ||
       p.cadence != null ||
       p.elevation != null ||

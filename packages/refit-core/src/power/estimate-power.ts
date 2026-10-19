@@ -1,4 +1,5 @@
 import { assertAutoCdaConfig } from "./assert-auto-cda-config.js";
+import { deriveGrades } from "./derive-grades.js";
 import { fillSeries } from "./fill-series.js";
 import { pointPowerW } from "./point-power.js";
 import type { PowerConfig } from "./power-config.js";
@@ -43,6 +44,13 @@ export function estimatePower(
     records.map((r) => r.temperature),
     times,
   );
+  // Virtual trainers (MyWhoosh, Zwift) write altitude but no grade. With a
+  // flat 0 % the course's climbs read as braking and its descents as inertia
+  // spikes; the slope is derived from altitude over distance instead.
+  const grades = deriveGrades(
+    altitudes,
+    records.map((r) => r.distance),
+  );
 
   return records.map((r, i) => {
     const speed = speeds[i];
@@ -80,7 +88,7 @@ export function estimatePower(
       {
         speedMps: speed,
         accelMps2: accel,
-        gradePercent: r.grade ?? 0,
+        gradePercent: r.grade ?? grades[i] ?? 0,
         altitudeM: altitudes[i] ?? 0,
         tempC: temperatures[i] ?? 15,
       },

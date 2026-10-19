@@ -10,6 +10,7 @@ import {
 } from "recharts";
 
 import { CombinedChart } from "./CombinedChart";
+import { PowerChartLegend } from "./PowerChartLegend";
 import { PowerZonesPanel } from "./PowerZonesPanel";
 import { ChartCard } from "./ui/ChartCard";
 import { ChartTooltip } from "./ui/ChartTooltip";
@@ -17,6 +18,7 @@ import { ChartTooltip } from "./ui/ChartTooltip";
 import { CHART_PALETTE } from "../../charts/chart-palette";
 import { formatDuration } from "../../fit/format-metrics";
 import { usePowerSeries } from "../../hooks/use-power-series";
+import { useSeriesVisibility } from "../../hooks/use-series-visibility";
 import { useTheme } from "../../hooks/use-theme";
 import { useT } from "../../hooks/use-translation";
 import type { Activity } from "../../types/activity";
@@ -34,43 +36,21 @@ export function PowerChartCard({
   const { mode } = useTheme();
   const palette = CHART_PALETTE[mode];
   const hasOriginal = points.some((p) => p.original != null);
-
-  const legend = (
-    <div className="power-chart-legend">
-      <span className="power-chart-legend-item">
-        <svg width="20" height="6" aria-hidden="true">
-          <line
-            x1="0"
-            y1="3"
-            x2="20"
-            y2="3"
-            stroke={palette.enhanced}
-            strokeWidth="2"
-          />
-        </svg>
-        {t.charts.legendEnhanced}
-      </span>
-      <span className="power-chart-legend-item">
-        <svg width="20" height="6" aria-hidden="true">
-          <line
-            x1="0"
-            y1="3"
-            x2="20"
-            y2="3"
-            stroke={palette.original}
-            strokeWidth="1.5"
-            strokeDasharray="4 3"
-          />
-        </svg>
-        {t.charts.legendOriginal}
-      </span>
-    </div>
-  );
+  const { visible, toggle } = useSeriesVisibility({
+    enhanced: true,
+    original: true,
+  });
 
   return (
     <ChartCard
       title={t.charts.titles.power}
-      aside={legend}
+      aside={
+        <PowerChartLegend
+          hasOriginal={hasOriginal}
+          visible={visible}
+          onToggle={toggle}
+        />
+      }
       expanded={<CombinedChart activity={activity} initial="power" />}
     >
       <div className="power-chart-body">
@@ -99,6 +79,7 @@ export function PowerChartCard({
                 <YAxis
                   unit={` ${t.common.units.w}`}
                   width={56}
+                  includeHidden
                   tick={{ fill: palette.axis, fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
@@ -113,6 +94,7 @@ export function PowerChartCard({
                   <Line
                     dataKey="original"
                     name={t.charts.seriesOriginal}
+                    hide={!visible.original}
                     stroke={palette.original}
                     strokeWidth={1.5}
                     strokeDasharray="4 3"
@@ -123,6 +105,7 @@ export function PowerChartCard({
                 <Line
                   dataKey="enhanced"
                   name={t.charts.seriesEnhanced}
+                  hide={!visible.enhanced}
                   stroke={palette.enhanced}
                   strokeWidth={2}
                   dot={false}

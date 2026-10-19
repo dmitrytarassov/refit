@@ -1,9 +1,10 @@
 import { deferCall } from "just-defer-call";
 import { shortenString } from "just-shorten";
-import { Trash2 } from "lucide-react";
+import { GitCompareArrows, Trash2 } from "lucide-react";
 import type { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
+import { buildCompareUrl } from "../../compare/build-compare-url";
 import type { RideRow } from "../../db/ride-row";
 import { formatDistance, formatDuration } from "../../fit/format-metrics";
 import { useT } from "../../hooks/use-translation";
@@ -68,7 +69,16 @@ export function HistoryTable({
                 : "—"}
             </td>
             <td>{ride.tss ?? "—"}</td>
-            <td>
+            <td className="history-actions">
+              {ride.id != null && (
+                <Link
+                  to={buildCompareUrl([ride.id])}
+                  className="history-compare"
+                  aria-label={t.history.compareAria(ride.fileName)}
+                >
+                  <GitCompareArrows size={15} aria-hidden="true" />
+                </Link>
+              )}
               {ride.id != null && (
                 <button
                   type="button"

@@ -74,4 +74,37 @@ describe("estimatePower", () => {
     const sprint = makeRide({ n: 60, speedMps: 40 });
     expect(estimatePower(sprint, CFG)[30]).toBe(2000);
   });
+
+  test("missing grade is derived from altitude over distance; device grade wins", () => {
+    // 10 m/s, +0.5 m per record: a 5 % climb written without a grade field.
+    const climb = makeRide({ n: 60, speedMps: 10 }).map((r, i) => ({
+      ...r,
+      grade: undefined,
+      enhancedAltitude: 100 + i * 0.5,
+    }));
+    const withGrade = climb.map((r) => ({ ...r, grade: 5 }));
+    expect(estimatePower(climb, CFG)[30]).toBe(
+      estimatePower(withGrade, CFG)[30],
+    );
+    expect(estimatePower(climb, CFG)[30] ?? 0).toBeGreaterThan(
+      estimatePower(makeRide({ n: 60, speedMps: 10 }), CFG)[30] ?? 0,
+    );
+
+    // The device's own grade is trusted over the derived one.
+    const flatByDevice = climb.map((r) => ({ ...r, grade: 0 }));
+    expect(estimatePower(flatByDevice, CFG)[30]).toBe(
+      Math.round(
+        pointPowerW(
+          {
+            speedMps: 10,
+            accelMps2: 0,
+            gradePercent: 0,
+            altitudeM: 115,
+            tempC: 20,
+          },
+          CFG,
+        ),
+      ),
+    );
+  });
 });

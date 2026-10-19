@@ -1,5 +1,6 @@
 import { CHARTS_RU } from "./ru/charts";
 import { COMMON_RU } from "./ru/common";
+import { COMPARE_RU } from "./ru/compare";
 import { DASHBOARD_RU } from "./ru/dashboard";
 import { ERRORS_RU } from "./ru/errors";
 import { HELP_RU } from "./ru/help";
@@ -23,6 +24,7 @@ export const RU: Translation = {
   metricHelp: METRIC_HELP_RU,
   charts: CHARTS_RU,
   history: HISTORY_RU,
+  compare: COMPARE_RU,
   settings: SETTINGS_RU,
   share: SHARE_RU,
   powerSettings: POWER_SETTINGS_RU,
