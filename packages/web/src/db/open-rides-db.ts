@@ -1,6 +1,6 @@
 export function openRidesDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("refit", 2);
+    const request = indexedDB.open("refit", 3);
     request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains("rides")) {
@@ -12,6 +12,12 @@ export function openRidesDb(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains("settings")) {
         db.createObjectStore("settings");
+      }
+      if (!db.objectStoreNames.contains("workouts")) {
+        db.createObjectStore("workouts", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
       }
     };
     request.onsuccess = () => resolve(request.result);

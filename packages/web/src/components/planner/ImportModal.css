@@ -1,0 +1,31 @@
+.import-modal-text {
+  width: 100%;
+  min-height: 240px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-primary);
+  background: var(--surface-page);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  resize: vertical;
+
+  &:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 1px;
+  }
+}
+
+.import-modal-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--danger-text);
+}
+
+.import-modal-question {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}

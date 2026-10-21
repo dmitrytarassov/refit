@@ -1,0 +1,131 @@
+.planner-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  @media (max-width: 640px) {
+    padding: 8px;
+  }
+
+  .planner-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    background: rgb(0 0 0 / 50%);
+    border: none;
+  }
+
+  .planner-modal-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    max-height: 100%;
+    padding: 16px 20px 20px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    &.is-wide {
+      max-width: 560px;
+    }
+  }
+
+  .planner-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+  }
+
+  .planner-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--surface-subtle);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .planner-modal-text {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .planner-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .planner-modal-primary,
+  .planner-modal-secondary {
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .planner-modal-primary {
+    color: var(--ink-on);
+    background: var(--ink);
+    border: none;
+
+    &:hover:enabled {
+      background: var(--ink-hover);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  .planner-modal-secondary {
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+  }
+}

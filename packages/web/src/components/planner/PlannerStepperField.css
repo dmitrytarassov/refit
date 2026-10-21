@@ -1,0 +1,78 @@
+.planner-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-primary);
+
+  .planner-stepper-label {
+    white-space: nowrap;
+  }
+
+  .planner-stepper-control {
+    display: inline-flex;
+    align-items: stretch;
+    height: 40px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    overflow: hidden;
+
+    &:focus-within {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+    }
+  }
+
+  input {
+    width: 72px;
+    padding: 0 8px;
+    font: inherit;
+    font-size: 15px;
+    text-align: center;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    outline: none;
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  .planner-stepper-buttons {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border-strong);
+
+    button {
+      flex: 1;
+      width: 26px;
+      padding: 0;
+      font-size: 14px;
+      line-height: 1;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+
+      &:first-child {
+        border-bottom: 1px solid var(--border-strong);
+      }
+
+      &:hover:enabled {
+        color: var(--text-primary);
+        background: var(--surface-subtle);
+      }
+
+      &:disabled {
+        color: var(--text-muted);
+        cursor: default;
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.planner-page {
+  --zone-1: var(--border-strong);
+  --zone-2: color-mix(in srgb, var(--ink) 38%, var(--surface-card));
+  --zone-3: color-mix(in srgb, var(--ink) 52%, var(--surface-card));
+  --zone-4: color-mix(in srgb, var(--ink) 66%, var(--surface-card));
+  --zone-5: color-mix(in srgb, var(--ink) 82%, var(--surface-card));
+  --zone-6: var(--ink);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .planner-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
+.planner-status {
+  margin: 0;
+  padding: 24px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}

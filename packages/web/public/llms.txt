@@ -37,6 +37,7 @@ Key facts:
 - [Power estimation](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/power-estimation.md): the physics model, CdA/Crr tables, accuracy
 - [FTP estimation](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/ftp-estimation.md): lower-bound estimate and the manual override
 - [History storage](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/history-storage.md): IndexedDB schema and flows
+- [Workout planner](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/workout-planner.md): workout model, the step chart, planned TSS
 - [Theme](https://raw.githubusercontent.com/dmitrytarassov/refit/main/docs/theme.md): the "Ink and brass" UI palette
 
 ## Optional

@@ -17,6 +17,7 @@ const SOURCES = [
   "docs/power-estimation.md",
   "docs/ftp-estimation.md",
   "docs/history-storage.md",
+  "docs/workout-planner.md",
   "docs/theme.md",
 ];
 

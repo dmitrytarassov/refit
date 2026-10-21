@@ -16,6 +16,7 @@ Drop a `.fit` file onto the upload zone and get a dashboard: power / heart rate 
 - **History** — every processed ride is saved locally to IndexedDB (file + precomputed metrics); no accounts, no server.
 - **Ride settings** — riding position (CdA) and rolling-resistance parameters (surface / tires / pressure) are editable per ride under the file card; metrics recompute and persist on the fly. The last used values become defaults for the next ride (also editable on the **Settings** page).
 - **Help** — the same formulas as below, rendered in-app.
+- **Workout planner** (preview) — assemble a structured workout from zone / ramp / free-ride / repeat blocks, or paste a trainer-app text export, see it as zone-colored steps over time with FTP / weight inputs and the planned TSS, undo / redo, save it locally and download it as a `.zwo` for Zwift / MyWhoosh ([docs/workout-planner.md](docs/workout-planner.md)).
 
 Details: [docs/web-app.md](docs/web-app.md), [docs/history-storage.md](docs/history-storage.md), [docs/theme.md](docs/theme.md).
 

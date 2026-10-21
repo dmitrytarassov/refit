@@ -8,7 +8,7 @@ import { useT } from "../../hooks/use-translation";
 
 interface MobileNavDrawerProps {
   open: boolean;
-  activeView: "dashboard" | "history" | "help" | "settings";
+  activeView: "dashboard" | "history" | "planner" | "help" | "settings";
   onClose: () => void;
 }
 
@@ -54,6 +54,18 @@ export function MobileNavDrawer({
           aria-current={activeView === "history" ? "page" : undefined}
         >
           {t.nav.history}
+        </Link>
+        <Link
+          to="/?view=planner"
+          onClick={onClose}
+          className={
+            activeView === "planner"
+              ? "mobile-nav-drawer-link is-active"
+              : "mobile-nav-drawer-link"
+          }
+          aria-current={activeView === "planner" ? "page" : undefined}
+        >
+          {t.nav.planner}
         </Link>
         <Link
           to="/?view=settings"

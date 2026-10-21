@@ -1,6 +1,7 @@
 export const NAV_RU = {
   dashboard: "Дашборд",
   history: "История",
+  planner: "Планировщик",
   settings: "Настройки",
   help: "Справка",
   github: "Репозиторий на GitHub",

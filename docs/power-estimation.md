@@ -21,7 +21,7 @@ A negative total (descending, braking) is clamped to 0 — you can't push negati
 | Quantity | record field | Note |
 | --- | --- | --- |
 | Speed v | `enhancedSpeed` → `speed` | m/s |
-| Grade | `grade` | %, from the bike computer |
+| Grade | `grade` → derived from altitude over distance (±5 records) → 0 % | %, from the bike computer; virtual trainers write none |
 | Altitude | `enhancedAltitude` → `altitude` → interpolated from the neighbouring records → 0 m | for air density |
 | Temperature | `temperature` → interpolated from the neighbouring records → 15 °C | for air density |
 | Cadence | `cadence` | coasting detector |
@@ -29,6 +29,8 @@ A negative total (descending, braking) is clamped to 0 — you can't push negati
 **Air density** ρ (`air-density.ts`) — barometric formula from the point's temperature and altitude; gives a noticeable ±3–5% on the aero component compared to a constant.
 
 Both inputs drop out for seconds at a time (barometer glitch, lost GPS fix). Holes are filled from the neighbouring records instead of falling back to a constant (`fill-series.ts`): linear interpolation in time inside the track, the nearest known value at the edges. A constant would model those records at sea level, which at 2000 m overstates their power by about a quarter — inside one ride, on scattered points. The constants (0 m, 15 °C) are used only when the whole series is missing.
+
+**Grade** — virtual trainers (MyWhoosh, Zwift) write altitude but no `grade` field. With a flat 0 % the model attributes every speed change of the virtual course to the rider: its climbs read as braking (0 W) and its descents as 700–1000 W inertia spikes, on a ride the trainer held at a constant 156 W. A record without a grade gets one derived from altitude over cumulative distance across a ±5-record window (`derive-grades.ts`, `GRADE_WINDOW_HALF`), from the already interpolated altitude series; the window is needed because FIT altitude is quantised to 0.2 m, so a per-record difference is mostly noise. A window covering less than 5 m of travel (standstill) yields no grade, and the final fallback is 0 %. The device's own grade is always preferred when present, so a bike-computer recording is not affected. On the MyWhoosh reference ride (ERG at 156 W, course with ±6 % ramps) this takes the per-record error against the trainer's power meter from MAE 47 W / max 1016 W to MAE 15 W / max 337 W; the remainder is the simulator's own mass, CdA and Crr versus the model's.
 
 **Speed cleaning** — device speed is not touched by the GPS cleaning pipeline, and a single glitched sample spikes both the aero term (~v³) and the acceleration derivative (a 2000 W artifact from one bad second). Before any use, the speed series goes through a two-sided Hampel filter (`packages/refit-core/src/filters/hampel-speed.ts`): a sample deviating from the ±5-record window median by more than 5 robust sigmas (σ = max(1.4826 · MAD, 0.5 m/s)) is replaced with that median. A real 1-s sprint surge survives; recording glitches do not. On a clean series the filter is a no-op (verified on the reference file: avg/NP/max unchanged). The Hampel output then goes through a 3-point rolling median (`packages/refit-core/src/filters/median3.ts`): one-sample V-dips small enough to stay under the sigma threshold (e.g. a 2 m/s single-second dip at 30 km/h ≈ a fake +700 W inertia spike on recovery) are flattened, while monotonic runs — real accelerations and sprints — pass through unchanged by construction (the median of an ordered triple is its middle element).
 

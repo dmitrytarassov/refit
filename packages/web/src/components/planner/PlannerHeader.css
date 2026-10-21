@@ -1,0 +1,86 @@
+.planner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  padding: 16px 24px;
+  background: var(--surface-page);
+  border-bottom: 1px solid var(--border);
+
+  .planner-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 240px;
+  }
+
+  .planner-back,
+  .planner-rename {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--surface-subtle);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .planner-rename {
+    border-color: transparent;
+    border-radius: 8px;
+  }
+
+  .planner-name {
+    margin: 0;
+    min-width: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .planner-name-input {
+    flex: 1;
+    min-width: 0;
+    max-width: 420px;
+    padding: 4px 8px;
+    font: inherit;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--surface-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+    }
+  }
+
+  .planner-fields {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+}

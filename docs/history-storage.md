@@ -1,8 +1,9 @@
 # Ride history (IndexedDB)
 
-There is no auth — everything is stored locally in the browser, in IndexedDB (`src/db/`). Database `refit` (renamed from `dot-fit` on 2026-08-04; the old database's data was not migrated — history saved before the rename remains in the orphaned `dot-fit` database), version 2, two stores:
+There is no auth — everything is stored locally in the browser, in IndexedDB (`src/db/`). Database `refit` (renamed from `dot-fit` on 2026-08-04; the old database's data was not migrated — history saved before the rename remains in the orphaned `dot-fit` database), version 3, three stores:
 
 - `rides` — rides (autoIncrement `id`, index on `fileName`);
+- `workouts` — planned workouts from the Workout planner (autoIncrement `id`; v3 added the store) — see [Workouts](#workouts) below;
 - `settings` — key-value: the `power` key holds the last selected calculation settings (`cda` position + `crr` surface/tires/pressure, **without** mass) — the next loaded ride is initialized with them; the `ftp` key holds the manual FTP in watts (absent when not set — deleting the value removes the key, [ftp-estimation.md](ftp-estimation.md)); the `mass` key holds the **default** `MassConfig { riderKg, bikeKg, gearKg?, bottlesMl? }` for new rides (absent → defaults 82/8/2 + no bottles are used and the dashboard shows a reminder; a missing `gearKg` in stored data falls back to 2 in `total-mass.ts`); the `language` key holds the UI language (`"en" | "ru"`, absent until the user picks one — [i18n.md](i18n.md)); the `routePalette` key holds the route line palette (`RoutePaletteKey`, see [theme.md](theme.md#route-line); absent or unknown → `classic`).
 
 ## Row (`RideRow`)
@@ -14,12 +15,21 @@ Metrics live in separate columns so History doesn't parse FIT on every render: `
 - **New ride**: after parsing and enrichment (`useFitProcessing`) — if no file with that `fileName` exists yet, `buildRideRow` computes the columns and `saveRide` writes the row; the URL gets `?record=id` (`setSearchParams` with `replace`, no reload).
 - **`/?record=id`**: `useFitProcessing` reacts to the parameter (`useSearchParams`) — the file is taken from the database (`getRide`) and run through the same pipeline whether it's a first page load or a client-side navigation; the dashboard doesn't care where the buffer came from.
 - **`/?view=history`**: the History page (`HistoryPage` + `useRideHistory` → `listRides`, the file is not loaded into the list) — a table with columns from the database (ride cards with a route thumbnail on mobile), clicking a file/card is a client-side navigation (`<Link>`) to `/?record=id`.
+- **`/?view=compare&rides[]=a&rides[]=b`**: the Compare page — each column loads its ride with `getRide` and runs it through the same pipeline (`useRideActivity` → `decodeActivity`); the picker column lists rides with `listRides`, like History. Nothing is written.
 - **Deleting a ride** — two entry points: the trash button in the History table (two-step inline confirm — first click arms the button, second deletes; optimistic list update) and the dashboard eraser's "Delete" option for the currently open ride. Both go through `deleteRide` erasing the row from the `rides` store. No undo — the file is gone from the database. A stale `/?record=id` link to a deleted ride shows the existing "Ride #N not found in history" error.
 - **Changing calculation settings** (`PowerSettingsBar` → `updateSettings` in `useFitProcessing`): power and metrics are recomputed in place (no re-decode), the ride row is overwritten (`updateRide`) with the new metrics and settings (including this ride's `mass` — the gear panel's `RideMassFields` edit it per ride); `cda`/`crr` (without mass) are written to the `settings` store as the latest — the weight defaults change only on the Settings page.
 - **Renaming for the share image** (`ShareTitleField` → `updateTitle` in `useFitProcessing`): `activity.title` is updated in state and `saveRideTitle` rewrites the row with the trimmed name (an empty string removes the field). `buildRideRow` carries `title` over, so a later settings change doesn't drop it. Example rides aren't saved, so their name lives only in memory.
 - **Settings resolution on load** (`resolveRideSettings`): stored ride settings, else the last `power` settings; a missing `mass` is filled from the `mass` default key, else stays unset (→ built-in 82/8 at compute time).
 
+## Workouts
+
+`WorkoutRow` (`src/db/workout-row.ts`): `name` (may be empty — the UI shows "New workout"), `createdAt` / `updatedAt` (ms), `ftp` (the FTP the targets were edited against, restored with the workout), `durationSec`, `tss` (rounded planned TSS), `blocks` (the planner's `WorkoutBlock[]` as is — fractions of FTP, repeats included). Functions: `saveWorkout` (`put`: adds without an id, overwrites with one; returns the key), `getWorkout`, `listWorkouts` (newest `updatedAt` first), `deleteWorkout`.
+
+- **Save** (`PlannerToolbar` → `persist` in `useSavedWorkout`): a new workout is added and its id goes into the URL as `?workout=id` (`replace`); a workout opened from the list is overwritten in place, `createdAt` kept. The page does not re-read the row it just wrote, so the undo history survives a save.
+- **`/?view=planner&workout=id`**: `useSavedWorkout` fetches the row and the planner resets its state (name, blocks, FTP) from it; an unknown id leaves the planner empty.
+- **`/?view=workouts`**: the list (`WorkoutsPage` + `useWorkoutList` → `listWorkouts`): date, name, duration, TSS; a name is a `<Link>` to the planner; the trash button deletes with the same two-step inline confirm as History (`deleteWorkout`, optimistic). The page is reached from the planner's back arrow or by URL — it has no nav link.
+
 ## Limitations
 
 - Deduplication is by file name only: the same ride under a different name gets saved twice.
-- The upgrade in `open-rides-db.ts` only creates missing stores (v1 → v2 added `settings`); new optional `RideRow` fields need no migration, but on an incompatible row change, bump the version and write a proper upgrade.
+- The upgrade in `open-rides-db.ts` only creates missing stores (v1 → v2 added `settings`, v2 → v3 `workouts`); new optional `RideRow` fields need no migration, but on an incompatible row change, bump the version and write a proper upgrade.

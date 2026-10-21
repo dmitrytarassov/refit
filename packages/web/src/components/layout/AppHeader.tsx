@@ -9,7 +9,7 @@ import { AppLogo } from "./ui/AppLogo";
 import { useT } from "../../hooks/use-translation";
 
 interface AppHeaderProps {
-  activeView: "dashboard" | "history" | "help" | "settings";
+  activeView: "dashboard" | "history" | "planner" | "help" | "settings";
 }
 
 export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
@@ -41,6 +41,17 @@ export function AppHeader({ activeView }: AppHeaderProps): ReactElement {
           aria-current={activeView === "history" ? "page" : undefined}
         >
           {t.nav.history}
+        </Link>
+        <Link
+          to="/?view=planner"
+          className={
+            activeView === "planner"
+              ? "app-header-link is-active"
+              : "app-header-link"
+          }
+          aria-current={activeView === "planner" ? "page" : undefined}
+        >
+          {t.nav.planner}
         </Link>
         <Link
           to="/?view=settings"

@@ -1,0 +1,114 @@
+.planner-step-editor {
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border);
+
+  .planner-step-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+
+  .planner-step-editor-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--surface-subtle);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .planner-step-editor-fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 24px;
+  }
+
+  .planner-step-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    > span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  }
+
+  .planner-step-field-inputs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .planner-step-unit {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  input {
+    padding: 6px 8px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--surface-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 1px;
+    }
+  }
+
+  input[type="number"] {
+    width: 72px;
+  }
+
+  .planner-step-note {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1 1 240px;
+
+    > span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    padding: 12px 12px 16px;
+  }
+}

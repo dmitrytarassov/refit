@@ -6,7 +6,7 @@ import { MobileNavBar } from "./MobileNavBar";
 import { MobileNavDrawer } from "./MobileNavDrawer";
 
 interface MobileNavProps {
-  activeView: "dashboard" | "history" | "help" | "settings";
+  activeView: "dashboard" | "history" | "planner" | "help" | "settings";
 }
 
 export function MobileNav({ activeView }: MobileNavProps): ReactElement {

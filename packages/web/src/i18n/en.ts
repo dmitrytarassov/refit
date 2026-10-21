@@ -8,10 +8,12 @@ import { HISTORY_EN } from "./en/history";
 import { LANGUAGE_EN } from "./en/language";
 import { METRIC_HELP_EN } from "./en/metric-help";
 import { NAV_EN } from "./en/nav";
+import { PLANNER_EN } from "./en/planner";
 import { POWER_SETTINGS_EN } from "./en/power-settings";
 import { SETTINGS_EN } from "./en/settings";
 import { SHARE_EN } from "./en/share";
 import { SIDEBAR_EN } from "./en/sidebar";
+import { WORKOUTS_EN } from "./en/workouts";
 
 export const EN = {
   locale: "en-US",
@@ -24,6 +26,8 @@ export const EN = {
   charts: CHARTS_EN,
   history: HISTORY_EN,
   compare: COMPARE_EN,
+  planner: PLANNER_EN,
+  workouts: WORKOUTS_EN,
   settings: SETTINGS_EN,
   share: SHARE_EN,
   powerSettings: POWER_SETTINGS_EN,

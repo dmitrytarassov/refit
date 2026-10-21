@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useT } from "../../hooks/use-translation";
 
 interface MobileNavBarProps {
-  activeView: "dashboard" | "history" | "help" | "settings";
+  activeView: "dashboard" | "history" | "planner" | "help" | "settings";
   onOpenMenu: () => void;
 }
 

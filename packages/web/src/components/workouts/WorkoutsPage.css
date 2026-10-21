@@ -1,0 +1,100 @@
+.workouts-page {
+  .workouts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--text-primary);
+  }
+
+  .workouts-new {
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-on);
+    background: var(--ink);
+    border-radius: 8px;
+    text-decoration: none;
+
+    &:hover {
+      background: var(--ink-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+  }
+
+  .workouts-empty {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .workouts-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 12px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+  }
+
+  .workouts-link {
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .workouts-actions {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .workouts-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--danger);
+      background: var(--danger-tint);
+    }
+
+    &.is-armed {
+      color: var(--danger-text);
+      background: var(--danger-tint);
+    }
+  }
+}

@@ -1,6 +1,7 @@
 export const NAV_EN = {
   dashboard: "Dashboard",
   history: "History",
+  planner: "Planner",
   settings: "Settings",
   help: "Help",
   github: "GitHub repository",
